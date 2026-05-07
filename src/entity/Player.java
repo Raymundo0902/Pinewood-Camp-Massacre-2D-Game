@@ -351,6 +351,10 @@ public class Player extends Entity{
         }
     }
 
+    public void takeDamage() {
+        curLife--;
+    }
+
     public void raking() {
 
         spriteCounter++;
@@ -569,16 +573,14 @@ public class Player extends Entity{
                     case "bed":
                         if(gp.currentTask == TaskState.GO_TO_SLEEP) {
                             slept = true;
+                            gp.obj[i].interactable = false;
                             gp.ui.checkmarks[6][0] = true;
                             gp.gameState = gp.transitionState;
-                            gp.currentTask = TaskState.READ_LOG_BOOK;
+                            gp.currentTask = TaskState.INVESTIGATE;
                         }
                         break;
                     case "logbook":
                         gp.gameState = gp.logBookState;
-                        if(gp.currentTask == TaskState.READ_LOG_BOOK) {
-                            gp.currentTask = TaskState.GET_TOOLS;
-                        }
                         break;
                 }
             }
@@ -805,8 +807,10 @@ public class Player extends Entity{
         if(invincible) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)); // makes player look kinda invincible
         }
+        if(drawing == true) {
+            g2.drawImage(image, tempScreenX, tempScreenY,null);
+        }
 
-        g2.drawImage(image, tempScreenX, tempScreenY,null);
 
         // RESET ALPHA
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

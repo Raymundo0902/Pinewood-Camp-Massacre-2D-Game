@@ -21,6 +21,7 @@ public class MON_EVILBILL extends Entity {
         maxLife = 4;
         curLife = maxLife;
         type = TYPE_MONSTER;
+        sleep = true;
 
         solidArea = new Rectangle();
         solidArea.x = 8;

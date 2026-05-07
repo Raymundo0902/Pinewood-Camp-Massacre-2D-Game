@@ -226,7 +226,7 @@ public class UI {
 
                 String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
                 middleX = getXforCenteredText(curWord);
-                drawGlowText(g2, curWord, middleX, introDialogueY);
+                drawGlowText(g2, curWord, middleX, y);
                 if (wordEndTwo < lines[nextLineTwo].length()) {
                     wordEndTwoDelayer++;
                     if (wordEndTwoDelayer == 20) {
@@ -242,7 +242,7 @@ public class UI {
                 nextLineTwo = 0;
                 String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
                 middleX = getXforCenteredText(curWord);
-                drawGlowText(g2, curWord, middleX, introDialogueY);
+                drawGlowText(g2, curWord, middleX, y);
                 if (wordEndTwo >= 0) {
                     wordEndTwoDelayer++;
                     if (wordEndTwoDelayer == 20) {
@@ -618,7 +618,9 @@ public class UI {
         y += 40;
         g2.drawString("6. Do daily check-ins of campsites", x + gp.tileSize, y + gp.tileSize);
         y += 40;
-        g2.drawString("7. Have fun!", x + gp.tileSize, y + gp.tileSize);
+        g2.drawString("7. Keys for front entrance/exit of", x + gp.tileSize, y + gp.tileSize);
+        g2.drawString("   camp is at toolshed.. I think", x + gp.tileSize, y + gp.tileSize + 15);
+
         // Extra page
         y = gp.tileSize * 3 + 20;
         x += gp.tileSize * 5 + 53;
@@ -831,12 +833,16 @@ public class UI {
         checkmarks[i] = new boolean[1];
         i++;
 
-        currentTask[i] = "Read ranger log book";
+        currentTask[i] = "Investigate the problem";
         checkmarks[i] = new boolean[1];
         i++;
 
-        currentTask[i] = "Get tools from shed\nhelp camper with problem";
-        checkmarks[i] = new boolean[2];
+        currentTask[i] = "Find gate key";
+        checkmarks[i] = new boolean[1];
+        i++;
+
+        currentTask[i] = "Find entrance gate";
+        checkmarks[i] = new boolean[1];
         i++;
     }
 

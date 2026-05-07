@@ -31,6 +31,8 @@ public class Entity {
     public boolean path = false; // for trackingPath (pathfinding)
     public boolean resetPosition = false; // for resetting npc position
     public boolean interactable = true;
+    public boolean sleep = false;
+    public boolean drawing = true;
 
     // COUNTER - sprite animations
     public int spriteCounter = 0;
@@ -207,23 +209,25 @@ public class Entity {
 
     public void update() {
 
-        setAction();
-        checkCollision();
+        if(!sleep) {
+            setAction();
+            checkCollision();
 
 
-        // IF COLLISON IS FALSE, PLAYER CAN MOVE
-        if(collisionOn == false) {
-            switch(direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
+            // IF COLLISON IS FALSE, PLAYER CAN MOVE
+            if(collisionOn == false) {
+                switch(direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
             }
 
+            animate();
+            invincible();
         }
 
-        animate();
-        invincible();
     }
 
     public void animate() {

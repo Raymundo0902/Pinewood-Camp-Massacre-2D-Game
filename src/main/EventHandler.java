@@ -21,9 +21,8 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-        if(hit(22,56, "any") == true) {
-            // event happens: fire burns you-- remove hp, etc. USE METHOD IF YOU'RE GOING TO IMPLEMENT MULTIPLE EVENTS HERE
-        }
+        if(hit(20,56, "any") == true) { gp.player.takeDamage(); }
+        else if (hit(18, 18, "any") == true) { monsterAI();}
 
     }
 
@@ -50,6 +49,15 @@ public class EventHandler {
 
 
         return hit;
+    }
+
+    public void monsterAI() {
+
+        if(gp.monChaseOn == false) {
+            gp.gameState = gp.cutsceneState;
+            gp.sceneM.sceneNum = gp.sceneM.evilBill;
+        }
+
     }
 
 

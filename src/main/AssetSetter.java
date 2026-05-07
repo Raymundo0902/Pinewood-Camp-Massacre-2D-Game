@@ -197,15 +197,14 @@ public class AssetSetter {
         }
     }
 
-    public void setMonster() {
+    public void spawnMon() {
 
         // disabled for game testing
-//        if(gp.currentMap == gp.PINEWOOD_CAMP) {
-//            gp.monster[0] = new MON_EVILBILL(gp);
-//            gp.monster[0].worldX = gp.tileSize*26;
-//            gp.monster[0].worldY = gp.tileSize*43;
-//
-//        }
+        if(gp.currentMap == gp.PINEWOOD_CAMP) {
+            gp.monster[0] = new MON_EVILBILL(gp);
+            gp.monster[0].worldX = gp.tileSize*18;
+            gp.monster[0].worldY = gp.tileSize*11;
+        }
     }
 
     public void reseatAssets() {

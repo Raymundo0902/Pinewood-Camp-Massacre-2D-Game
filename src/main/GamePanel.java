@@ -64,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
     Config config = new Config(this);
     public ObjectManager objManager = new ObjectManager(this);
     public AStarPathFinder pFinder = new AStarPathFinder(this);
+    public CutsceneManager sceneM = new CutsceneManager(this);
     Thread gameThread; // thread is something you can start/stop. once thread started it keeps the program running
     public TaskState currentTask = TaskState.GET_SNACKS;
     Map map = new Map(this);
@@ -96,8 +97,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int computerState = 9; // FAKE OS
     public final int transitionState = 10;
     public final int logBookState = 11;
+    public final int cutsceneState = 12;
 
-    // CUTSCENE TRIGGER
     public boolean mapOn = false;
 
     // CONTROL VARIABLES FOR ONE TIME FUNCTIONS - LOADING SCREEN, DIALOGUE, ETC
@@ -110,6 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // EXTRA
     public boolean closeTaskList;
+    public boolean monChaseOn = false;
 
 
     public GamePanel () {
@@ -120,6 +122,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH); // this GamePanel will recognize the key input
         this.setFocusable(true); // with this, the GamePanel can be "focused" to receive key input.
         this.addMouseListener(mouseH);
+
+
     }
 
     public void setupGame() { // created this method so we can add other setup stuff in the future
@@ -145,7 +149,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.setDefaultPositionPinewood();
         player.restoreLifeAndAttributes();
         aSetter.setNPC();
-        aSetter.setMonster();
     }
 
     // NEW GAME AGAIN
@@ -168,7 +171,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.setItems();
         aSetter.setObject();
         aSetter.setNPC();
-        aSetter.setMonster();
 
         music.stop();
         playMusic(8);
@@ -250,6 +252,12 @@ public class GamePanel extends JPanel implements Runnable {
             tileM.loadMap("/maps/world01.txt");
 
             subMap = SUB_MAIN_WORLD;
+
+            // this means we've exited cabin to investigate -- need to make it where it does get escape key only after short cutscene of
+            // revealing monster
+            if(currentTask == TaskState.INVESTIGATE) {
+                aSetter.spawnMon();
+            }
         }
         // for transitioning into cabin
         else if (currentMap == PINEWOOD_CAMP && subMap == SUB_MAIN_WORLD) { // if transitioning map inside pinewood camp
@@ -267,7 +275,6 @@ public class GamePanel extends JPanel implements Runnable {
             aSetter.clearArray();
             aSetter.setObject();
             aSetter.setNPC();
-            aSetter.setMonster();
             player.setDialogue();
             stopMusic();
             playMusic(6);
@@ -343,11 +350,14 @@ public class GamePanel extends JPanel implements Runnable {
             if(currentTask == TaskState.GO_TO_SLEEP) {
                 ui.taskIndex = 7;
             }
-            if(currentTask == TaskState.READ_LOG_BOOK) {
+            if(currentTask == TaskState.INVESTIGATE) {
                 ui.taskIndex = 8;
             }
-            if(currentTask == TaskState.GET_TOOLS) {
+            if(currentTask == TaskState.GET_ESCAPE_KEYS) {
                 ui.taskIndex = 9;
+            }
+            if(currentTask == TaskState.ESCAPE) {
+                ui.taskIndex = 10;
             }
 
             if(mapOn) {player.freezePlayer = true;}
@@ -476,6 +486,7 @@ public class GamePanel extends JPanel implements Runnable {
             // TILE
             tileM.draw(g2); // put this above player because if not, background tiles will hide the player character
 
+
             // ADD ALL ENTITIES TO THE ARRAYLIST
             entityArrList.add(player);
 
@@ -524,13 +535,14 @@ public class GamePanel extends JPanel implements Runnable {
             // EMPTY ENTITY LIST - OTHERWISE THE entityArrList GETS LARGER IN EVERY LOOP.
             entityArrList.clear();
 
-            // ENVIRONMENT - Draw before UI or else darkness will apply to UI
-            // TEMP IF STATEMENT - FILL IT IN ONLY WHEN IN PINEWOOD CAMP IN SPECIFIC CASE LIKE IF YOU HEARD A STRANGE NOISE AND NEED TO CHECK AROUND THE CAMP AT 3 AM.
             if(currentMap == PINEWOOD_CAMP) {
                 eHandler.draw(g2);
             }
+
             // UI - SET IT BELOW tiles and player draw methods so it doesn't get covered
             ui.draw(g2);
+
+            sceneM.draw(g2);
 
            // show map
             if (mapOn == true) {
