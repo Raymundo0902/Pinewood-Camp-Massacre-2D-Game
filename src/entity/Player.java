@@ -62,6 +62,9 @@ public class Player extends Entity{
     public int pDialogueIndex = 0;
     public int pConvoIndex = 0;
     public String[][] playerDialogues = new String[20][]; // holds 20 convos
+    public int speakIncrement = 0; // Incremented when so the next time it matches for current setting
+    public int speakTimer = 0; // how long inner voice stays on screen
+
 
 
     public Player(GamePanel gp, KeyHandler keyH) { // SAME AS (gamePanel Reference, keyH Reference)
@@ -166,6 +169,19 @@ public class Player extends Entity{
             playerDialogues[mainOfficer] = new String[] {"Im sorry...", "okay", "i see", "great", "got it",};
 
         }
+    }
+
+    @Override
+    public void speak() {
+        // use a sub state so player can still move while showing inner dialogue.
+        gp.gameState = gp.innerDialogueState;
+        speakTimer++;
+
+        if(speakTimer < 180) {
+
+        }
+
+
     }
 
     // Gets the correct player response for the current npc player is interacting with.

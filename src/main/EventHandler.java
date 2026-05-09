@@ -1,5 +1,7 @@
 package main;
 
+import tasks.TaskState;
+
 import java.awt.*;
 
 public class EventHandler {
@@ -22,8 +24,8 @@ public class EventHandler {
 
     public void checkEvent() {
         if(hit(20,56, "any") == true) { gp.player.takeDamage(); }
-        else if (hit(18, 18, "any") == true) { monsterAI();}
-
+        else if (hit(18, 18, "any") == true && gp.subMap == gp.SUB_MAIN_WORLD &&
+                 gp.currentTask == TaskState.INVESTIGATE) { monsterAI();}
     }
 
     public boolean hit(int eventCol, int eventRow, String reqDirection) { // checks event collision
@@ -33,8 +35,8 @@ public class EventHandler {
         gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
         // GETTING EVENTRECT'S SOLIDAREA POSITION
-        eventRect.x = eventCol*gp.tileSize + eventRect.x; // eventCol/eventRow*gp.tileSize means its worldX/worldY coordinates
-        eventRect.y = eventRow*gp.tileSize + eventRect.y;
+        eventRect.x = eventCol * gp.tileSize + eventRect.x; // eventCol/eventRow*gp.tileSize means its worldX/worldY coordinates
+        eventRect.y = eventRow * gp.tileSize + eventRect.y;
         // CHECKING IF PLAYER'S SOLIDAREA IS COLLIDING WITH EVENTRECT'S SOLIDAREA
         if(gp.player.solidArea.intersects(eventRect)) {
             if(gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
@@ -46,7 +48,6 @@ public class EventHandler {
         gp.player.solidArea.y = gp.player.solidAreaDefaultY;
         eventRect.x = eventRectDefaultX;
         eventRect.y = eventRectDefaultY;
-
 
         return hit;
     }

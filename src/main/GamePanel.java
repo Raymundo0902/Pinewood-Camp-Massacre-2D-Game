@@ -56,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
     public KeyHandler keyH = new KeyHandler(this);
     public MouseHandler mouseH = new MouseHandler(this);
     Sound music = new Sound();
-    Sound se = new Sound(); // sound effect
+    Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public UI ui = new UI(this);
@@ -74,17 +74,16 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxObj = 30;
     public final int maxNpc = 10;
     public final int maxMonster = 1;
-    public Player player = new Player(this,keyH); // passes the gamepanel and keyhandler reference to objects inside the Player class. so Player class can get the things it needs from both classes.
-    public Entity obj[] = new Entity[maxObj]; // can display 10 objects at the same time. EX: if pickup object A then it disappears from screen and another object can fill in that vacant slot
+    public Player player = new Player(this,keyH);
+    public Entity obj[] = new Entity[maxObj];
     public Entity npc[] = new Entity[maxNpc];
-    public Entity monster[] = new Entity[maxMonster]; // num of monsters we can display at the same time not the total monsters we can create
+    public Entity monster[] = new Entity[maxMonster];
 
-    // ARRAYLISTS STORES OBJECTS ONLY, STRING OBJECTS, IN OUR CASE, ENTITY OBJECTS
     public ArrayList<Projectile> projectileList = new ArrayList<>();
     ArrayList<Entity> entityArrList = new ArrayList<>(); // store all entities: players, npc's, obj in this list.
 
     // GAME STATES
-    public int gameState; // game state is like a title screen state, play, pause, etc
+    public int gameState;
     public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
@@ -94,10 +93,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int optionsState = 6;
     public final int gameOverState = 7;
     public final int transitionMapState = 8;
-    public final int computerState = 9; // FAKE OS
+    public final int computerState = 9;
     public final int transitionState = 10;
     public final int logBookState = 11;
     public final int cutsceneState = 12;
+    // Substate, not a main state like most above.
+    public final int innerDialogueState = 13;
 
     public boolean mapOn = false;
 
