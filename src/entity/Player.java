@@ -60,6 +60,7 @@ public class Player extends Entity{
 
     // PLAYER DIALOGUE SYSTEM
     public int pDialogueIndex = 0;
+    public int pInnerDialogueIndex = 0;
     public int pConvoIndex = 0;
     public String[][] playerDialogues = new String[20][]; // holds 20 convos
     public int speakIncrement = 0; // Incremented when so the next time it matches for current setting
@@ -148,7 +149,7 @@ public class Player extends Entity{
 
     public void setDialogue() {
         // Use for internal dialogue
-        dialogues[0] = "n/a";
+        dialogues[0] = "I need to get out of here... I need to escape!";
         dialogues[1] = "n/a";
         dialogues[2] = "n/a";
         dialogues[3] = "n/a";
@@ -174,7 +175,6 @@ public class Player extends Entity{
     @Override
     public void speak() {
         // use a sub state so player can still move while showing inner dialogue.
-        gp.gameState = gp.innerDialogueState;
         speakTimer++;
 
         if(speakTimer < 180) {
@@ -567,7 +567,11 @@ public class Player extends Entity{
                         if(gp.currentTask == TaskState.GET_SNACKS) {
                             if(!gotDrink) {
                                 gp.playSE(18);
-                                gp.obj[i].interactable = false;
+                                for(int e = 0; e < gp.obj.length; e++) {
+                                    if(gp.obj[e] instanceof OBJ_Fridge) {
+                                        gp.obj[e].interactable = false;
+                                    }
+                                }
                                 snacksCollected++;
                                 gotDrink = true;
                                 gp.ui.checkmarks[0][0] = gotDrink;

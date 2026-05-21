@@ -61,8 +61,9 @@ public class UI {
     // OPTIONS MENU
     int subState = 0;
 
-    // EXTRA BOOLEANS/CONDITIONALS
+    // EXTRA BOOLEANS/CONDITIONALS/COUNTERS
     public boolean setToDay = false;
+    int innerDialogueCounter = 0;
 
     // COMPUTER OS
     BufferedImage pinewoodIcon, osIcon, recycleIcon, osBackground, speakerIcon, signInIcon, pinewoodHomePage, a1Cabin, j1Cabin, k4Cabin, folderIcon;
@@ -112,11 +113,14 @@ public class UI {
         // PLAY STATE
         else if(gp.gameState == gp.playState) {
             drawPlayerLife();
-            if(gp.player.interactableCollision == true) {
+            if(gp.player.interactableCollision) {
                 drawInteractButton();
             }
-            if(gp.closeTaskList == false) {
+            if(!gp.closeTaskList) {
                 drawCurrentTask();
+            }
+            if(gp.drawInnerDialogue) {
+                drawPlayerInnerDialogue();
             }
         }
         // DIALOGUE STATE
@@ -198,6 +202,64 @@ public class UI {
                 gp.gameState = gp.playState;
                 gp.oneTime = false; // can safely put it here that triggers only once
             }
+        }
+    }
+
+    public void drawPlayerInnerDialogue() {
+
+        innerDialogueCounter++;
+
+        // Styles
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80f));
+        String currLine = gp.player.dialogues[gp.player.pInnerDialogueIndex];
+        String[] lines = currLine.split("\n");
+        int middleX;
+
+        int y = gp.tileSize * 10;
+
+        // Main Text - keeps text on screen and aligned
+        for (int i = 0; i < nextLineTwo; i++) {
+            middleX = getXforCenteredText(lines[i]);
+            drawGlowText(g2, lines[i], middleX, y);
+        }
+
+        // Moving text animation
+        // Only do typewriter effect when nextLine(next index) is less than the length. Prevents exception errors.
+        if(innerDialogueCounter < 360) {
+            if (nextLineTwo < lines.length) {
+
+                String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+                middleX = getXforCenteredText(curWord);
+                drawGlowText(g2, curWord, middleX, y);
+                if (wordEndTwo < lines[nextLineTwo].length()) {
+                    wordEndTwoDelayer++;
+                    if (wordEndTwoDelayer == 3) {
+                        wordEndTwo++;
+                        wordEndTwoDelayer = 0;
+                    }
+                }
+            }
+        }
+
+        // Shorten the word length
+        else {
+            nextLineTwo = 0;
+            String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+            middleX = getXforCenteredText(curWord);
+            drawGlowText(g2, curWord, middleX, y);
+            if (wordEndTwo > 0) {
+                wordEndTwoDelayer++;
+                if (wordEndTwoDelayer == 3) {
+                    wordEndTwo--;
+                    wordEndTwoDelayer = 0;
+                }
+            } else{
+                // this is executed when all characters are off the screen.
+                gp.drawInnerDialogue = false;
+                gp.player.pInnerDialogueIndex++;
+            }
+
+
         }
     }
 

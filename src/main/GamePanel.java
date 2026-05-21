@@ -98,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int logBookState = 11;
     public final int cutsceneState = 12;
     // Substate, not a main state like most above.
-    public final int innerDialogueState = 13;
+
 
     public boolean mapOn = false;
 
@@ -113,6 +113,7 @@ public class GamePanel extends JPanel implements Runnable {
     // EXTRA
     public boolean closeTaskList;
     public boolean monChaseOn = false;
+    public boolean drawInnerDialogue;
 
 
     public GamePanel () {

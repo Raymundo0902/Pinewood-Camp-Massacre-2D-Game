@@ -73,6 +73,7 @@ public class CutsceneManager {
 
         // draw attention back to player creating that "gasp" feeling
         if(scenePhase == 3) {
+            System.out.println("SCENE PHASE 3");
             drawTimer++;
 
             if(drawTimer > 30) {
@@ -81,20 +82,22 @@ public class CutsceneManager {
                 for(int i = 0; i < gp.npc.length; i++) {
                     if(gp.npc[i] instanceof PlayerDummy) {
                         gp.npc[i] = null;
-                        break;
                     }
                 }
 
                 gp.monster[0].sleep = false;
                 drawTimer = 0;
-                gp.gameState = gp.playState;
+
                 gp.player.drawing = true;
                 gp.player.speak();
 
                 sceneNum = NA;
                 gp.player.worldX = 18 * gp.tileSize;
                 gp.player.worldY = 18 * gp.tileSize;
+                gp.gameState = gp.playState;
+                gp.drawInnerDialogue = true;
             }
+
             gp.player.worldY += 10;
         }
     }

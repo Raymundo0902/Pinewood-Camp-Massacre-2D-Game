@@ -16,6 +16,7 @@ public class NPC_Cashier extends Entity{
         name = "cashier";
         getNPCImage();
         setDialogue();
+        interactable = false; // cannot interact directly, must interact by colliding with front area of checkout desk.
 
         solidArea = new Rectangle(); // values below are what parts of the character will be solid
         solidArea.x = -gp.tileSize;
