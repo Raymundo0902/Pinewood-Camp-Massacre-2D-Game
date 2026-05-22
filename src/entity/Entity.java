@@ -114,7 +114,7 @@ public class Entity {
         gp.cChecker.checkEntity(this, gp.monster);
         boolean contactPlayer = gp.cChecker.checkPlayer(this); // if hits player, set collision = true
 
-        if(this.type == TYPE_MONSTER && contactPlayer == true) { attackPlayer(); }
+        if(this.type == TYPE_MONSTER && contactPlayer) { attackPlayer(); }
     }
 
     // Gets called 60x a second when path = true.

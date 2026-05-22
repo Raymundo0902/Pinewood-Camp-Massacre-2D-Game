@@ -110,10 +110,18 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean startDayCycle = false;
     public boolean drawTimeStamp = false;
 
+    // Sound control
+    public boolean chaseMusic = false;
+    public boolean stopChaseMusic = false;
+    public boolean isChaseMusicPlaying = false;
+    public int chaseMusicTimeTracker = 0; // once it reaches the end of music and player is still being chased, it will loop the music again
+
     // EXTRA
     public boolean closeTaskList;
     public boolean monChaseOn = false;
     public boolean drawInnerDialogue;
+
+
 
 
     public GamePanel () {
@@ -402,6 +410,23 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             eHandler.update();
+
+            // chase music
+            if(chaseMusic) {
+                if(!isChaseMusicPlaying) {
+                    stopMusic();
+                    playMusic(23);
+                    isChaseMusicPlaying = true;
+                }
+                chaseMusic = false;
+            } else if(stopChaseMusic) {
+                if(isChaseMusicPlaying) {
+                    stopMusic();
+                    playSE(24);
+                    isChaseMusicPlaying = false;
+                }
+                stopChaseMusic = false;
+            }
         }
 
         if(gameState == computerState) {

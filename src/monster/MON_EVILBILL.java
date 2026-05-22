@@ -54,10 +54,21 @@ public class MON_EVILBILL extends Entity {
         int yDistance = Math.abs(worldY - gp.player.worldY);
         int detectionRange = gp.tileSize * 7;
 
+        // detection range for chase (pathfinding)
         if(xDistance <= detectionRange && yDistance <= detectionRange) {
             path = true;
+            if(!sleep) { // only activates when monster is actually awake and active.
+                gp.chaseMusic = true;
+                gp.stopChaseMusic = false;
+            }
         }
-        else { path = false; }
+        else {
+            path = false;
+            if(!sleep) {
+                gp.stopChaseMusic = true;
+                gp.chaseMusic = false;
+            }
+        }
     }
 
     public void setAction() {
@@ -68,9 +79,7 @@ public class MON_EVILBILL extends Entity {
                 int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
                 int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
 
-                // Better?
-//            int goalCol = (gp.player.worldX + gp.player.solidArea.x + gp.player.solidArea.width/2) / gp.tileSize;
-//            int goalRow = (gp.player.worldY + gp.player.solidArea.y + gp.player.solidArea.height/2) / gp.tileSize;
+
 
                 // gets called 60x a second
                 System.out.println("CALL SEARCHPATH");
