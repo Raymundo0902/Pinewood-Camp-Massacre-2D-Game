@@ -37,11 +37,12 @@ public class UI {
     int introDialogueY = 96;
     public boolean finishedTyping = false;
 
-    // Other Dialogue Mechanics
+    // Other Dialogue Mechanics - inner dialogue, etc
     public int npcIndex = 0;
     int wordEndTwo = 0;
     int nextLineTwo = 0;
     int wordEndTwoDelayer = 0;
+    int innerDialogueY = 480;
 
     // Task UI dialogue
     public String[] currentTask = new String[20];
@@ -210,17 +211,17 @@ public class UI {
         innerDialogueCounter++;
 
         // Styles
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50f));
         String currLine = gp.player.dialogues[gp.player.pInnerDialogueIndex];
         String[] lines = currLine.split("\n");
         int middleX;
 
-        int y = gp.tileSize * 10;
+
 
         // Main Text - keeps text on screen and aligned
         for (int i = 0; i < nextLineTwo; i++) {
             middleX = getXforCenteredText(lines[i]);
-            drawGlowText(g2, lines[i], middleX, y);
+            drawGlowText(g2, lines[i], middleX, innerDialogueY);
         }
 
         // Moving text animation
@@ -230,7 +231,7 @@ public class UI {
 
                 String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
                 middleX = getXforCenteredText(curWord);
-                drawGlowText(g2, curWord, middleX, y);
+                drawGlowText(g2, curWord, middleX, innerDialogueY);
                 if (wordEndTwo < lines[nextLineTwo].length()) {
                     wordEndTwoDelayer++;
                     if (wordEndTwoDelayer == 3) {
@@ -238,27 +239,51 @@ public class UI {
                         wordEndTwoDelayer = 0;
                     }
                 }
+                else {
+                    nextLineTwo++;
+                    innerDialogueY += 40;
+                    wordEndTwo = 0;
+                }
+            }
+            else{ // reached end of array
+                wordEndTwo = lines[nextLineTwo - 1].length();
+                nextLineTwo = lines.length - 1;
             }
         }
 
         // Shorten the word length
         else {
-            nextLineTwo = 0;
-            String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
-            middleX = getXforCenteredText(curWord);
-            drawGlowText(g2, curWord, middleX, y);
-            if (wordEndTwo > 0) {
-                wordEndTwoDelayer++;
-                if (wordEndTwoDelayer == 3) {
-                    wordEndTwo--;
-                    wordEndTwoDelayer = 0;
+
+            if(nextLineTwo >= 0) {
+
+                String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+                middleX = getXforCenteredText(curWord);
+                drawGlowText(g2, curWord, middleX, innerDialogueY);
+
+                if (wordEndTwo > 0) {
+                    wordEndTwoDelayer++;
+                    if (wordEndTwoDelayer == 3) {
+                        wordEndTwo--;
+                        wordEndTwoDelayer = 0;
+                    }
                 }
-            } else{
-                // this is executed when all characters are off the screen.
+                else {
+                    // this is executed when all characters are off the screen.
+                    nextLineTwo--;
+                    innerDialogueY -= 40;
+                    if(nextLineTwo >= 0) {
+                        wordEndTwo = lines[nextLineTwo].length() - 1;
+                    }
+
+                }
+            }
+            else{ // everything finished, reset values for next inner dialogue
                 gp.drawInnerDialogue = false;
                 gp.player.pInnerDialogueIndex++;
+                innerDialogueY = gp.tileSize * 10;
+                wordEndTwo = 0;
+                nextLineTwo = 0;
             }
-
 
         }
     }

@@ -149,7 +149,7 @@ public class Player extends Entity{
 
     public void setDialogue() {
         // Use for internal dialogue
-        dialogues[0] = "I need to get out of here... I need to escape!";
+        dialogues[0] = "I need to get out of here...\nI need to escape!";
         dialogues[1] = "n/a";
         dialogues[2] = "n/a";
         dialogues[3] = "n/a";

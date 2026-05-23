@@ -336,39 +336,40 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == playState) {
 
             // TASK UPDATE
-            if(currentTask == TaskState.GET_SNACKS) {
-                ui.taskIndex = 0;
-            }
-            if(currentTask == TaskState.TALK_TO_CASHIER) {
-                ui.taskIndex = 1;
-            }
-            if(currentTask == TaskState.EXIT_STORE) {
-                ui.taskIndex = 2;
-            }
-            if(currentTask == TaskState.CHECK_IN_FRONT_OFFICE) {
-                ui.taskIndex = 3;
-            }
-            if(currentTask == TaskState.GO_TO_COMPUTER) {
-                ui.taskIndex = 4;
-            }
-            if(currentTask == TaskState.GET_CABIN_KEYS) {
-                ui.taskIndex = 5;
-            }
-            if(currentTask == TaskState.GO_TO_CABIN) {
-                ui.taskIndex = 6;
-            }
-            if(currentTask == TaskState.GO_TO_SLEEP) {
-                ui.taskIndex = 7;
-            }
-            if(currentTask == TaskState.INVESTIGATE) {
-                ui.taskIndex = 8;
-            }
-            if(currentTask == TaskState.GET_ESCAPE_KEYS) {
-                ui.taskIndex = 9;
-            }
-            if(currentTask == TaskState.ESCAPE) {
-                ui.taskIndex = 10;
-            }
+            updateTasks();
+//            if(currentTask == TaskState.GET_SNACKS) {
+//                ui.taskIndex = 0;
+//            }
+//            if(currentTask == TaskState.TALK_TO_CASHIER) {
+//                ui.taskIndex = 1;
+//            }
+//            if(currentTask == TaskState.EXIT_STORE) {
+//                ui.taskIndex = 2;
+//            }
+//            if(currentTask == TaskState.CHECK_IN_FRONT_OFFICE) {
+//                ui.taskIndex = 3;
+//            }
+//            if(currentTask == TaskState.GO_TO_COMPUTER) {
+//                ui.taskIndex = 4;
+//            }
+//            if(currentTask == TaskState.GET_CABIN_KEYS) {
+//                ui.taskIndex = 5;
+//            }
+//            if(currentTask == TaskState.GO_TO_CABIN) {
+//                ui.taskIndex = 6;
+//            }
+//            if(currentTask == TaskState.GO_TO_SLEEP) {
+//                ui.taskIndex = 7;
+//            }
+//            if(currentTask == TaskState.INVESTIGATE) {
+//                ui.taskIndex = 8;
+//            }
+//            if(currentTask == TaskState.GET_ESCAPE_KEYS) {
+//                ui.taskIndex = 9;
+//            }
+//            if(currentTask == TaskState.ESCAPE) {
+//                ui.taskIndex = 10;
+//            }
 
             if(mapOn) {player.freezePlayer = true;}
             else {player.freezePlayer = false;}
@@ -423,6 +424,7 @@ public class GamePanel extends JPanel implements Runnable {
                 if(isChaseMusicPlaying) {
                     stopMusic();
                     playSE(24);
+                    playMusic(6); // return back to normal forest ambience
                     isChaseMusicPlaying = false;
                 }
                 stopChaseMusic = false;
@@ -619,6 +621,42 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics g = getGraphics();
         g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
         g.dispose();
+    }
+
+    public void updateTasks() {
+        if(currentTask == TaskState.GET_SNACKS) {
+            ui.taskIndex = 0;
+        }
+        if(currentTask == TaskState.TALK_TO_CASHIER) {
+            ui.taskIndex = 1;
+        }
+        if(currentTask == TaskState.EXIT_STORE) {
+            ui.taskIndex = 2;
+        }
+        if(currentTask == TaskState.CHECK_IN_FRONT_OFFICE) {
+            ui.taskIndex = 3;
+        }
+        if(currentTask == TaskState.GO_TO_COMPUTER) {
+            ui.taskIndex = 4;
+        }
+        if(currentTask == TaskState.GET_CABIN_KEYS) {
+            ui.taskIndex = 5;
+        }
+        if(currentTask == TaskState.GO_TO_CABIN) {
+            ui.taskIndex = 6;
+        }
+        if(currentTask == TaskState.GO_TO_SLEEP) {
+            ui.taskIndex = 7;
+        }
+        if(currentTask == TaskState.INVESTIGATE) {
+            ui.taskIndex = 8;
+        }
+        if(currentTask == TaskState.GET_ESCAPE_KEYS) {
+            ui.taskIndex = 9;
+        }
+        if(currentTask == TaskState.ESCAPE) {
+            ui.taskIndex = 10;
+        }
     }
 
 
