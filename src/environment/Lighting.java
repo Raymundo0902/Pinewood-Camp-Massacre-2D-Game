@@ -13,14 +13,12 @@ public class Lighting {
     GamePanel gp;
     BufferedImage darknessFilter;
     int dayCounter;
-    float filterAlpha = 0.90f;
+    float filterAlpha = 0.50f;
 
     // day states
-    final int day = 0;
     final int sunset = 1;
     final int night = 2;
-    final int sunrise = 3;
-    int dayState = night; // default start
+    int dayState = sunset; // default start
 
     public Lighting(GamePanel gp) {
         this.gp = gp;
@@ -96,43 +94,16 @@ public class Lighting {
             gp.player.lightUpdated = false;
         }
 
-        if(gp.ui.setToDay == true) {
-            dayCounter = 0;
-            filterAlpha = 0f;
-            dayState = day;
-            gp.ui.setToDay = false;
-        }
-
         // day cycle only starts when player first sleeps after arriving to cabin
-        if(gp.startDayCycle == true) {
+
             if (gp.subMap == gp.SUB_MAIN_WORLD) {
                 // Check for different state of the day
+
                 if (dayState == night) {
 
-                    dayCounter++;
 
-                    if (dayCounter > 600) {
-                        dayState = sunrise;
-                        dayCounter = 0;
-                    }
-                } else if (dayState == sunrise) { // transition to day
-                    // filterAlpha -= 0.0005f; default one
-                    filterAlpha -= 0.001f; // for quick tests
-
-                    if (filterAlpha < 0f) {
-                        filterAlpha = 0f;
-                        dayState = day;
-                    }
-                } else if (dayState == day) {
-
-                    dayCounter++;
-
-                    if (dayCounter > 600) {
-                        dayState = sunset;
-                        dayCounter = 0;
-                    }
-                } else if (dayState == sunset) { // transition to night
-//                filterAlpha += 0.0005f; default one
+                }
+                else if (dayState == sunset) { // transition to night
                     filterAlpha += 0.001f; // for quick tests
                     if (filterAlpha > 0.90f) {
                         filterAlpha = 0.90f;
@@ -140,7 +111,7 @@ public class Lighting {
                     }
                 }
             }
-        }
+
     }
 
     public void draw(Graphics2D g2) {

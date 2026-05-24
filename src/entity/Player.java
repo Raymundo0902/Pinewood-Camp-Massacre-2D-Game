@@ -530,7 +530,7 @@ public class Player extends Entity{
 
             String objName = gp.obj[i].name;
 
-            if(keyH.ePressed == true) {
+            if(keyH.ePressed) {
                 switch (objName) {
 
                     case "snackShelf":
@@ -688,8 +688,8 @@ public class Player extends Entity{
 
     // used to update player's 2d dialogue array & npc's dialogue. makes it memory efficient
     private void updateDialogue(int i) {
-        playerDialogues[mainOfficer] = new String[] {"alright cool", "where at", "sounds easy"};
-        gp.npc[i].dialogues = new String[] {"Alright ma'am, you're all set-- here's your keys.", "And remember, you may not make it out alive....", "HAHAHA THE LOOK ON YOUR FACE! it's just a joke...", " "};
+        playerDialogues[mainOfficer] = new String[] {"alright cool", "where at", "sounds easy", "okay then"};
+        gp.npc[i].dialogues = new String[] {"Alright ma'am, you're all set-- here's your keys.", "And remember, you may not make it out alive....", "HAHAHA THE LOOK ON YOUR FACE! it's just a joke...", "Also, make sure to lock the main gate at 8:00pm\nthe keys are usually in one of the 4 tool sheds here..", ""};
     }
 
 

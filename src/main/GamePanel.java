@@ -337,39 +337,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             // TASK UPDATE
             updateTasks();
-//            if(currentTask == TaskState.GET_SNACKS) {
-//                ui.taskIndex = 0;
-//            }
-//            if(currentTask == TaskState.TALK_TO_CASHIER) {
-//                ui.taskIndex = 1;
-//            }
-//            if(currentTask == TaskState.EXIT_STORE) {
-//                ui.taskIndex = 2;
-//            }
-//            if(currentTask == TaskState.CHECK_IN_FRONT_OFFICE) {
-//                ui.taskIndex = 3;
-//            }
-//            if(currentTask == TaskState.GO_TO_COMPUTER) {
-//                ui.taskIndex = 4;
-//            }
-//            if(currentTask == TaskState.GET_CABIN_KEYS) {
-//                ui.taskIndex = 5;
-//            }
-//            if(currentTask == TaskState.GO_TO_CABIN) {
-//                ui.taskIndex = 6;
-//            }
-//            if(currentTask == TaskState.GO_TO_SLEEP) {
-//                ui.taskIndex = 7;
-//            }
-//            if(currentTask == TaskState.INVESTIGATE) {
-//                ui.taskIndex = 8;
-//            }
-//            if(currentTask == TaskState.GET_ESCAPE_KEYS) {
-//                ui.taskIndex = 9;
-//            }
-//            if(currentTask == TaskState.ESCAPE) {
-//                ui.taskIndex = 10;
-//            }
 
             if(mapOn) {player.freezePlayer = true;}
             else {player.freezePlayer = false;}
@@ -389,6 +356,11 @@ public class GamePanel extends JPanel implements Runnable {
             for(int i = 0; i < monster.length; i++) {
                 if(monster[i] != null) {
                     monster[i].update();
+                    if(currentTask == TaskState.INVESTIGATE) {
+                        if(!monster[i].sleep) {
+                            currentTask = TaskState.GET_ESCAPE_KEYS;
+                        }
+                    }
                 }
             }
 
@@ -479,7 +451,6 @@ public class GamePanel extends JPanel implements Runnable {
                 // set all variables so time stamp of 3:15 AM can draw, and day cycle begins.
                 if (player.slept) {
                     drawTimeStamp = true;
-                    startDayCycle = true;
                     ui.setToDay = true;
                     player.slept = false;
                 }
@@ -596,6 +567,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
+
         // DEBUG
         if(keyH.checkDebugText == true) {
             long drawEnd = System.nanoTime();
@@ -650,6 +622,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if(currentTask == TaskState.INVESTIGATE) {
             ui.taskIndex = 8;
+
         }
         if(currentTask == TaskState.GET_ESCAPE_KEYS) {
             ui.taskIndex = 9;

@@ -253,7 +253,7 @@ public class Entity {
 
     public void attackPlayer() {
 
-        if(gp.player.invincible == false) {
+        if(!gp.player.invincible) {
             // GIVE PLAYER DAMAGE
             gp.playSE(11);
             gp.player.curLife -= 1;
