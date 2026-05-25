@@ -3,6 +3,7 @@ package main;
 import entity.*;
 import monster.MON_EVILBILL;
 import object.*;
+import tasks.TaskState;
 
 public class AssetSetter {
 
@@ -74,91 +75,100 @@ public class AssetSetter {
         }
         else if(gp.currentMap == gp.PINEWOOD_CAMP) {
 
-            gp.obj[2] = new OBJ_K4Door(gp);
-            gp.obj[2].worldX = 14 * gp.tileSize;
-            gp.obj[2].worldY = 15 * gp.tileSize;
+            if(gp.currentTask != TaskState.INVESTIGATE) {
 
-            gp.obj[3] = new OBJ_TallGrass(gp);
-            gp.obj[3].worldX = 14 * gp.tileSize;
-            gp.obj[3].worldY = 74 * gp.tileSize;
+                gp.obj[2] = new OBJ_K4Door(gp);
+                gp.obj[2].worldX = 14 * gp.tileSize;
+                gp.obj[2].worldY = 15 * gp.tileSize;
 
-            gp.obj[4] = new OBJ_TallGrass(gp);
-            gp.obj[4].worldX = 15 * gp.tileSize;
-            gp.obj[4].worldY = 74 * gp.tileSize;
+                gp.obj[3] = new OBJ_TallGrass(gp);
+                gp.obj[3].worldX = 14 * gp.tileSize;
+                gp.obj[3].worldY = 74 * gp.tileSize;
 
-            gp.obj[5] = new OBJ_Door2(gp); // faces horizontally
-            gp.obj[5].worldX = 36 * gp.tileSize;
-            gp.obj[5].worldY = 63 * gp.tileSize;
-            gp.obj[5].collision = true;
+                gp.obj[4] = new OBJ_TallGrass(gp);
+                gp.obj[4].worldX = 15 * gp.tileSize;
+                gp.obj[4].worldY = 74 * gp.tileSize;
 
-            gp.obj[6] = new OBJ_Door(gp);
-            gp.obj[6].worldX = 20 * gp.tileSize;
-            gp.obj[6].worldY = 38 * gp.tileSize;
+                gp.obj[5] = new OBJ_Door2(gp); // faces horizontally
+                gp.obj[5].worldX = 36 * gp.tileSize;
+                gp.obj[5].worldY = 63 * gp.tileSize;
+                gp.obj[5].collision = true;
 
-            gp.obj[7] = new OBJ_TallGrass(gp);
-            gp.obj[7].worldX = 13 * gp.tileSize;
-            gp.obj[7].worldY = 74 * gp.tileSize;
+                gp.obj[6] = new OBJ_Door(gp);
+                gp.obj[6].worldX = 20 * gp.tileSize;
+                gp.obj[6].worldY = 38 * gp.tileSize;
 
-            gp.obj[8] = new OBJ_TallGrass(gp);
-            gp.obj[8].worldX = 13 * gp.tileSize;
-            gp.obj[8].worldY = 75 * gp.tileSize;
+                gp.obj[7] = new OBJ_TallGrass(gp);
+                gp.obj[7].worldX = 13 * gp.tileSize;
+                gp.obj[7].worldY = 74 * gp.tileSize;
 
-            gp.obj[9] = new OBJ_TallGrass(gp);
-            gp.obj[9].worldX = 14 * gp.tileSize;
-            gp.obj[9].worldY = 75 * gp.tileSize;
+                gp.obj[8] = new OBJ_TallGrass(gp);
+                gp.obj[8].worldX = 13 * gp.tileSize;
+                gp.obj[8].worldY = 75 * gp.tileSize;
 
-            gp.obj[10] = new OBJ_TallGrass(gp);
-            gp.obj[10].worldX = 15 * gp.tileSize;
-            gp.obj[10].worldY = 75 * gp.tileSize;
+                gp.obj[9] = new OBJ_TallGrass(gp);
+                gp.obj[9].worldX = 14 * gp.tileSize;
+                gp.obj[9].worldY = 75 * gp.tileSize;
 
-            gp.obj[11] = new OBJ_TallGrass(gp);
-            gp.obj[11].worldX = 12 * gp.tileSize;
-            gp.obj[11].worldY = 75 * gp.tileSize;
+                gp.obj[10] = new OBJ_TallGrass(gp);
+                gp.obj[10].worldX = 15 * gp.tileSize;
+                gp.obj[10].worldY = 75 * gp.tileSize;
 
-            gp.obj[12] = new OBJ_Rock(gp);
-            gp.obj[12].worldX = 21 * gp.tileSize;
-            gp.obj[12].worldY = 52 * gp.tileSize;
+                gp.obj[11] = new OBJ_TallGrass(gp);
+                gp.obj[11].worldX = 12 * gp.tileSize;
+                gp.obj[11].worldY = 75 * gp.tileSize;
 
-            gp.obj[13] = new OBJ_Rock(gp);
-            gp.obj[13].worldX = 23 * gp.tileSize;
-            gp.obj[13].worldY = 54 * gp.tileSize;
+                gp.obj[12] = new OBJ_Rock(gp);
+                gp.obj[12].worldX = 21 * gp.tileSize;
+                gp.obj[12].worldY = 52 * gp.tileSize;
 
-            gp.obj[14] = new OBJ_Rock(gp);
-            gp.obj[14].worldX = 24 * gp.tileSize;
-            gp.obj[14].worldY = 54 * gp.tileSize;
+                gp.obj[13] = new OBJ_Rock(gp);
+                gp.obj[13].worldX = 23 * gp.tileSize;
+                gp.obj[13].worldY = 54 * gp.tileSize;
 
-            gp.obj[15] = new OBJ_Rock(gp);
-            gp.obj[15].worldX = 24 * gp.tileSize;
-            gp.obj[15].worldY = 55 * gp.tileSize;
+                gp.obj[14] = new OBJ_Rock(gp);
+                gp.obj[14].worldX = 24 * gp.tileSize;
+                gp.obj[14].worldY = 54 * gp.tileSize;
 
-            gp.obj[16] = new OBJ_Campfire(gp);
-            gp.obj[16].worldX = 21 * gp.tileSize;
-            gp.obj[16].worldY = 56 * gp.tileSize;
+                gp.obj[15] = new OBJ_Rock(gp);
+                gp.obj[15].worldX = 24 * gp.tileSize;
+                gp.obj[15].worldY = 55 * gp.tileSize;
 
-            gp.obj[17] = new OBJ_Campfire(gp);
-            gp.obj[17].worldX = 13 * gp.tileSize;
-            gp.obj[17].worldY = 77 * gp.tileSize;
+                gp.obj[16] = new OBJ_Campfire(gp);
+                gp.obj[16].worldX = 21 * gp.tileSize;
+                gp.obj[16].worldY = 56 * gp.tileSize;
 
-            gp.obj[18] = new OBJ_Campfire(gp);
-            gp.obj[18].worldX = 48 * gp.tileSize;
-            gp.obj[18].worldY = 39 * gp.tileSize;
+                gp.obj[17] = new OBJ_Campfire(gp);
+                gp.obj[17].worldX = 13 * gp.tileSize;
+                gp.obj[17].worldY = 77 * gp.tileSize;
 
-            // goes in tool shed near player's cabin
+                gp.obj[18] = new OBJ_Campfire(gp);
+                gp.obj[18].worldX = 48 * gp.tileSize;
+                gp.obj[18].worldY = 39 * gp.tileSize;
+
+                // goes in tool shed near player's cabin
 //            gp.obj[19] = new OBJ_Rake(gp);
 //            gp.obj[19].worldX = 20 * gp.tileSize;
 //            gp.obj[19].worldY = 12 * gp.tileSize;
 
-            gp.obj[21] = new OBJ_Desk(gp);
-            gp.obj[21].worldX = 40 * gp.tileSize;
-            gp.obj[21].worldY = (59 * gp.tileSize) - 10;
+                gp.obj[21] = new OBJ_Desk(gp);
+                gp.obj[21].worldX = 40 * gp.tileSize;
+                gp.obj[21].worldY = (59 * gp.tileSize) - 10;
 
-            gp.obj[22] = new OBJ_frontDeskCounter(gp);
-            gp.obj[22].worldX = 45 * gp.tileSize;
-            gp.obj[22].worldY = (61 * gp.tileSize);
+                gp.obj[22] = new OBJ_frontDeskCounter(gp);
+                gp.obj[22].worldX = 45 * gp.tileSize;
+                gp.obj[22].worldY = (61 * gp.tileSize);
 
-            gp.obj[23] = new OBJ_CabinDesk(gp);
-            gp.obj[23].worldX = 17 * gp.tileSize;
-            gp.obj[23].worldY = 14 * gp.tileSize;
+                gp.obj[23] = new OBJ_CabinDesk(gp);
+                gp.obj[23].worldX = 17 * gp.tileSize;
+                gp.obj[23].worldY = 14 * gp.tileSize;
+            }
+            else if(gp.currentTask == TaskState.INVESTIGATE) {
+                gp.obj[24] = new OBJ_Key(gp);
+                gp.obj[24].worldX = 34 * gp.tileSize;
+                gp.obj[24].worldY = 20 * gp.tileSize;
+            }
+
 
         }
     }

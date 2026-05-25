@@ -122,8 +122,6 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean drawInnerDialogue;
 
 
-
-
     public GamePanel () {
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -132,8 +130,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH); // this GamePanel will recognize the key input
         this.setFocusable(true); // with this, the GamePanel can be "focused" to receive key input.
         this.addMouseListener(mouseH);
-
-
     }
 
     public void setupGame() { // created this method so we can add other setup stuff in the future
@@ -155,7 +151,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     // maybe use this for if player reaches a checkpoint in game?
     public void retry() {
-
         player.setDefaultPositionPinewood();
         player.restoreLifeAndAttributes();
         aSetter.setNPC();
@@ -200,7 +195,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGameThread() {
-
         gameThread = new Thread(this); // this = the GamePanel class. So we're passing the GamePanel class to the thread constructor. This is how you instantiate a Thread.
         gameThread.start(); // automatically call run method
     }
@@ -297,7 +291,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
 
-
         if(gameState == initialDialogueState) {
 
             if(canTypeSound) {
@@ -338,6 +331,16 @@ public class GamePanel extends JPanel implements Runnable {
             // TASK UPDATE
             updateTasks();
 
+            if(monster[0] != null) {
+                if (currentTask == TaskState.INVESTIGATE) {
+                    if (!monster[0].sleep) {
+                        aSetter.setObject();
+                        currentTask = TaskState.GET_ESCAPE_KEYS;
+                    }
+                }
+            }
+
+
             if(mapOn) {player.freezePlayer = true;}
             else {player.freezePlayer = false;}
 
@@ -356,11 +359,7 @@ public class GamePanel extends JPanel implements Runnable {
             for(int i = 0; i < monster.length; i++) {
                 if(monster[i] != null) {
                     monster[i].update();
-                    if(currentTask == TaskState.INVESTIGATE) {
-                        if(!monster[i].sleep) {
-                            currentTask = TaskState.GET_ESCAPE_KEYS;
-                        }
-                    }
+
                 }
             }
 
@@ -430,7 +429,7 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[ui.npcIndex].resetPosition = true;
                 }
             }
-            if(keyH.enterPressed == true) {
+            if(keyH.enterPressed) {
 
                 player.pDialogueIndex++;
                 npc[ui.npcIndex].speak();
@@ -545,12 +544,12 @@ public class GamePanel extends JPanel implements Runnable {
             sceneM.draw(g2);
 
            // show map
-            if (mapOn == true) {
+            if (mapOn) {
                 map.drawMap(g2);
             }
 
             // Intro dialogue transition to game.
-            if(drawBlackScreen == true) {
+            if(drawBlackScreen) {
                 if(j > 0) {
                     g2.setColor(Color.black);
 
@@ -569,7 +568,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         // DEBUG
-        if(keyH.checkDebugText == true) {
+        if(keyH.checkDebugText) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 

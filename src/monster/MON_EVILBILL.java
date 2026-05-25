@@ -79,15 +79,13 @@ public class MON_EVILBILL extends Entity {
                 int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
                 int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
 
-
-
                 // gets called 60x a second
                 System.out.println("CALL SEARCHPATH");
                 searchPath(goalCol, goalRow);
 
-
         }
         else {
+
             actionLockCounter++;
             if (actionLockCounter == 120) {
 

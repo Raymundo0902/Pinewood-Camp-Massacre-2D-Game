@@ -54,7 +54,7 @@ public class EventHandler {
 
     public void monsterAI() {
 
-        if(gp.monChaseOn == false) {
+        if(!gp.monChaseOn) {
             gp.gameState = gp.cutsceneState;
             gp.sceneM.sceneNum = gp.sceneM.evilBill;
         }
