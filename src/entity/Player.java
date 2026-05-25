@@ -57,6 +57,7 @@ public class Player extends Entity{
     public boolean slept = false;
     public boolean freezePlayer = false;
     public boolean interactableCollision = false;
+    public boolean isStill = false;
 
     // PLAYER DIALOGUE SYSTEM
     public int pDialogueIndex = 0;
@@ -98,11 +99,11 @@ public class Player extends Entity{
 
     public void setDefaultValues() {
         setDefaultPositionGasStation();
-        speed = 10;
+        speed = 4;
         type = TYPE_PLAYER;
 
         // PLAYER STATUS
-        maxLife = 4; // 2 lifes = one full heart
+        maxLife = 50; // 2 lifes = one full heart
         curLife = maxLife; // players current life
         currentItem = new OBJ_Hands(gp);
         defaultCurrentItem = currentItem;
@@ -125,6 +126,7 @@ public class Player extends Entity{
         worldY = gp.tileSize * 62;
         direction = "down";
     }
+
     public void setPosAfterCabin() {
         worldX = gp.tileSize * 14;
         worldY = gp.tileSize * 16;
@@ -228,6 +230,8 @@ public class Player extends Entity{
                 keyH.leftPressed || keyH.rightPressed ||
                 keyH.ePressed){
 
+            isStill = false;
+
             if(keyH.upPressed) {
                 direction = "up";
             }
@@ -245,10 +249,10 @@ public class Player extends Entity{
             if(keyH.shiftPressed) {
                 sprintCounter++;
                 if(sprintCounter < 180) { // if sprintCounter is less than 3 seconds then sprint
-                    speed = 15;
+                    speed = 6;
                 }
                 else if (sprintCounter > 180 && sprintCounter < 360){ // BE TIRED FOR 3 SECONDS
-                    speed = 15; // STAYS AT NORMAL SPEED DURING TIRED DURATION
+                    speed = 4; // STAYS AT NORMAL SPEED DURING TIRED DURATION
                 }
                 else if (sprintCounter > 360) { // ONCE PLAYER RESTED FOR 3 SECONDS, START RUNNING
                     sprintCounter = 0;
@@ -258,7 +262,7 @@ public class Player extends Entity{
                 if(sprintCounter > 0) { // MAKES SURE SPRINT COUNTER < 0 BECAUSE THAT WOULD BREAK THE SPRINT AND TIRED PERIODS
                     sprintCounter--;
                 }
-                speed = 15;
+                speed = 4;
             }
 
             // CHECK TILE COLLISION - collisionOn = false  will be set to true if in the collision methods above detect collision.
@@ -318,6 +322,9 @@ public class Player extends Entity{
 
         // If player is standing still
         else {
+
+            isStill = true;
+
             standCounter++; // this starts to increment by one once there's no wasd or arrow key detection.
 
             if(standCounter == 20) { // standCounter and this if statement helps stop awkward reset when its making the sprite switchover animation--

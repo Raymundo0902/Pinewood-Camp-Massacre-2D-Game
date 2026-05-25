@@ -27,11 +27,9 @@ public class ObjectManager {
         // the current col and row of the pathfinder's current node array index and if it encounters the objcampfire then set
         // that node to solid
         objectMap[21][56] =  new OBJ_Campfire(gp);
+        objectMap[13][77] =  new OBJ_Campfire(gp);
+        objectMap[48][39] =  new OBJ_Campfire(gp);
 
-        objectMap[21][52] =  new OBJ_Rock(gp);
-        objectMap[23][54] =  new OBJ_Rock(gp);
-        objectMap[24][54] =  new OBJ_Rock(gp);
-        objectMap[24][55] =  new OBJ_Rock(gp);
     }
 
 }

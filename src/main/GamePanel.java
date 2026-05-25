@@ -328,6 +328,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         if(gameState == playState) {
 
+
             // TASK UPDATE
             updateTasks();
 

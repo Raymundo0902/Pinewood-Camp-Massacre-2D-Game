@@ -9,7 +9,11 @@ import java.util.Random;
 public class MON_EVILBILL extends Entity {
 
     GamePanel gp;
-    int pathTimer = 0;
+    int invisibleLock = 0;
+    int randNum = 0;
+    Random rand = new Random();
+    boolean cloak = false;
+
 
     public MON_EVILBILL(GamePanel gp) {
         super(gp);
@@ -52,7 +56,7 @@ public class MON_EVILBILL extends Entity {
 
         int xDistance = Math.abs(worldX - gp.player.worldX);
         int yDistance = Math.abs(worldY - gp.player.worldY);
-        int detectionRange = gp.tileSize * 7;
+        int detectionRange = gp.tileSize * 10;
 
         // detection range for chase (pathfinding)
         if(xDistance <= detectionRange && yDistance <= detectionRange) {
@@ -69,21 +73,56 @@ public class MON_EVILBILL extends Entity {
                 gp.chaseMusic = false;
             }
         }
+
+        invisibilityCloak();
+
+
     }
 
     public void setAction() {
 
-        // For testing, this toggles to true when player takes damage
-        if(path == true) {
-            // follow player
-                int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
-                int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+        if(path) {
 
-                // gets called 60x a second
-                System.out.println("CALL SEARCHPATH");
-                searchPath(goalCol, goalRow);
+            int tileDx = (worldX - gp.player.worldX) / gp.tileSize;
+            int tileDy = (worldY - gp.player.worldY) / gp.tileSize;
 
+
+            // FAR AWAY = USE A* (use tile based here)
+            if(Math.abs(tileDx) > 1 || Math.abs(tileDy) > 1) {
+//                System.out.println(Math.abs(tileDx) + " " + Math.abs(tileDy));
+                System.out.println("GO TO PLAYER");
+                // CHASE PLAYER
+                chasePlayer();
+            }
+            else {
+                System.out.println("TOGGLE LOCK");
+                // DISABLE PATHFINDING HERE TO MITIGATE JITTERING WHEN CLOSE TO PLAYER.
+
+                // LOCK ON PLAYER (use pixel based here)
+                if (gp.player.isStill) {
+
+                    int dx = gp.player.worldX - worldX;
+                    int dy = gp.player.worldY - worldY;
+
+                    // only move if not already overlapping
+                    if(Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+                        if(Math.abs(dx) >= Math.abs(dy)) {
+                            direction = dx > 0 ? "right" : "left";
+                        } else {
+                            direction = dy > 0 ? "down" : "up";
+                        }
+
+                        // if that direction is blocked, fall back to A*
+                        checkCollision();
+                        if(collisionOn) {
+                            chasePlayer();
+                        }
+                    }
+                }
+            }
         }
+
+        // WANDER
         else {
 
             actionLockCounter++;
@@ -105,6 +144,56 @@ public class MON_EVILBILL extends Entity {
                     direction = "right";
                 }
                 actionLockCounter = 0;
+            }
+        }
+    }
+
+    private void chasePlayer(){
+        // gets called 60x a second
+//                System.out.println("CALL SEARCHPATH");
+        int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
+        int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+        searchPath(goalCol,goalRow);
+    }
+
+    private void invisibilityCloak() {
+
+        // do run / invisibility abilities every 10+ seconds.
+        if(path) {
+            // only when there's no lock activated.
+            if(!cloak) {
+                randNum = rand.nextInt(180);
+                if(randNum == 70) {
+                    cloak = true;
+                    System.out.println("ACTIVATE CLOAK");
+                }
+            }
+            else{
+                invisibleLock++;
+                // do invisibility cloak here
+                invincible = true;
+                speed = 6;
+                if(invisibleLock >= 40) {
+                    invisibleLock = 0;
+                    invincible = false;
+                    randNum = 0;
+                    cloak = false;
+                    speed = 4;
+                }
+            }
+        }
+        else {
+            if(cloak)
+            invisibleLock++;
+            // do invisibility cloak here
+            invincible = true;
+            speed = 6;
+            if(invisibleLock >= 40) {
+                invisibleLock = 0;
+                invincible = false;
+                randNum = 0;
+                cloak = false;
+                speed = 4;
             }
         }
     }
