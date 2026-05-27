@@ -58,6 +58,7 @@ public class Player extends Entity{
     public boolean freezePlayer = false;
     public boolean interactableCollision = false;
     public boolean isStill = false;
+    public boolean unlockedGate = false;
 
     // PLAYER DIALOGUE SYSTEM
     public int pDialogueIndex = 0;
@@ -99,7 +100,7 @@ public class Player extends Entity{
 
     public void setDefaultValues() {
         setDefaultPositionGasStation();
-        speed = 4;
+        speed = 20;
         type = TYPE_PLAYER;
 
         // PLAYER STATUS
@@ -107,7 +108,6 @@ public class Player extends Entity{
         curLife = maxLife; // players current life
         currentItem = new OBJ_Hands(gp);
         defaultCurrentItem = currentItem;
-        hasKey++;
     }
 
     // Helpful to use when retrying after "Game Over"
@@ -151,7 +151,7 @@ public class Player extends Entity{
 
     public void setDialogue() {
         // Use for internal dialogue
-        dialogues[0] = "I need to get out of here...\nI need to escape!";
+        dialogues[0] = "I need to find the entrance key...\nand escape like now!";
         dialogues[1] = "n/a";
         dialogues[2] = "n/a";
         dialogues[3] = "n/a";
@@ -182,8 +182,6 @@ public class Player extends Entity{
         if(speakTimer < 180) {
 
         }
-
-
     }
 
     // Gets the correct player response for the current npc player is interacting with.
@@ -262,7 +260,7 @@ public class Player extends Entity{
                 if(sprintCounter > 0) { // MAKES SURE SPRINT COUNTER < 0 BECAUSE THAT WOULD BREAK THE SPRINT AND TIRED PERIODS
                     sprintCounter--;
                 }
-                speed = 4;
+                speed = 20;
             }
 
             // CHECK TILE COLLISION - collisionOn = false  will be set to true if in the collision methods above detect collision.
@@ -608,6 +606,12 @@ public class Player extends Entity{
                         break;
                     case "logbook":
                         gp.gameState = gp.logBookState;
+                        break;
+                    case "gate2":
+                        if(hasKey > 0) {
+                            hasKey--;
+                            unlockedGate = true;
+                        }
                         break;
                 }
             }

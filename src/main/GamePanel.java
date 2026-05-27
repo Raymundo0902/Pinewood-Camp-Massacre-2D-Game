@@ -71,7 +71,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EnvironmentHandler eHandler = new EnvironmentHandler(this);
 
     // ENTITIES AND OBJECTS
-    public final int maxObj = 30;
+    public final int maxObj = 40;
     public final int maxNpc = 10;
     public final int maxMonster = 1;
     public Player player = new Player(this,keyH);
@@ -114,7 +114,6 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean chaseMusic = false;
     public boolean stopChaseMusic = false;
     public boolean isChaseMusicPlaying = false;
-    public int chaseMusicTimeTracker = 0; // once it reaches the end of music and player is still being chased, it will loop the music again
 
     // EXTRA
     public boolean closeTaskList;
@@ -248,7 +247,7 @@ public class GamePanel extends JPanel implements Runnable {
             if(subMap == SUB_PLAYER_CABIN) {
                 player.setPosAfterCabin();
             } else if(subMap == SUB_FRONT_OFFICE) {
-                playSE(22);
+//                playSE(22);
                 player.setPosAfterOffice();
             }
 
@@ -328,9 +327,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         if(gameState == playState) {
 
-
             // TASK UPDATE
             updateTasks();
+
+            if(player.unlockedGate) {
+                aSetter.setUnlockedGate();
+            }
 
             if(monster[0] != null) {
                 if (currentTask == TaskState.INVESTIGATE) {

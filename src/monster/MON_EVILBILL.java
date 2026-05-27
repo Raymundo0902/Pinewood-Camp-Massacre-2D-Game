@@ -17,7 +17,6 @@ public class MON_EVILBILL extends Entity {
 
     public MON_EVILBILL(GamePanel gp) {
         super(gp);
-
         this.gp = gp; // did it only on this class since its in a different package than the entity one
 
         name = "Evil Bill";
@@ -36,11 +35,9 @@ public class MON_EVILBILL extends Entity {
         solidAreaDefaultY = solidArea.y;
 
         getImage();
-
     }
 
     public void getImage() { // load and scale monster images
-
         up1 = setup("/monster/monster_up1", gp.tileSize, gp.tileSize);
         up2 = setup("/monster/monster_up2", gp.tileSize, gp.tileSize);
         down1 = setup("/monster/monster_down1", gp.tileSize, gp.tileSize);
@@ -75,8 +72,6 @@ public class MON_EVILBILL extends Entity {
         }
 
         invisibilityCloak();
-
-
     }
 
     public void setAction() {
@@ -97,26 +92,23 @@ public class MON_EVILBILL extends Entity {
             else {
                 System.out.println("TOGGLE LOCK");
                 // DISABLE PATHFINDING HERE TO MITIGATE JITTERING WHEN CLOSE TO PLAYER.
-
                 // LOCK ON PLAYER (use pixel based here)
-                if (gp.player.isStill) {
 
-                    int dx = gp.player.worldX - worldX;
-                    int dy = gp.player.worldY - worldY;
+                int dx = gp.player.worldX - worldX;
+                int dy = gp.player.worldY - worldY;
 
-                    // only move if not already overlapping
-                    if(Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-                        if(Math.abs(dx) >= Math.abs(dy)) {
-                            direction = dx > 0 ? "right" : "left";
-                        } else {
-                            direction = dy > 0 ? "down" : "up";
-                        }
+                // only move if not already overlapping
+                if(Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+                    if(Math.abs(dx) >= Math.abs(dy)) {
+                        direction = dx > 0 ? "right" : "left";
+                    } else {
+                        direction = dy > 0 ? "down" : "up";
+                    }
 
-                        // if that direction is blocked, fall back to A*
-                        checkCollision();
-                        if(collisionOn) {
-                            chasePlayer();
-                        }
+                    // if that direction is blocked, fall back to A*
+                    checkCollision();
+                    if(collisionOn) {
+                        chasePlayer();
                     }
                 }
             }
@@ -127,22 +119,13 @@ public class MON_EVILBILL extends Entity {
 
             actionLockCounter++;
             if (actionLockCounter == 120) {
-
                 Random random = new Random();
                 int i = random.nextInt(100) + 1; // get random number from 1-100. +1 because it picks from 0-99.
 
-                if (i <= 25) {
-                    direction = "up";
-                }
-                if (i > 25 && i <= 50) {
-                    direction = "down";
-                }
-                if (i > 50 && i <= 75) {
-                    direction = "left";
-                }
-                if (i > 75 && i <= 100) {
-                    direction = "right";
-                }
+                if (i <= 25) direction = "up";
+                if (i > 25 && i <= 50) direction = "down";
+                if (i > 50 && i <= 75) direction = "left";
+                if (i > 75 && i <= 100) direction = "right";
                 actionLockCounter = 0;
             }
         }

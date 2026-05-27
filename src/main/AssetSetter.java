@@ -98,26 +98,6 @@ public class AssetSetter {
                 gp.obj[6].worldX = 20 * gp.tileSize;
                 gp.obj[6].worldY = 38 * gp.tileSize;
 
-                gp.obj[7] = new OBJ_TallGrass(gp);
-                gp.obj[7].worldX = 13 * gp.tileSize;
-                gp.obj[7].worldY = 74 * gp.tileSize;
-
-                gp.obj[8] = new OBJ_TallGrass(gp);
-                gp.obj[8].worldX = 13 * gp.tileSize;
-                gp.obj[8].worldY = 75 * gp.tileSize;
-
-                gp.obj[9] = new OBJ_TallGrass(gp);
-                gp.obj[9].worldX = 14 * gp.tileSize;
-                gp.obj[9].worldY = 75 * gp.tileSize;
-
-                gp.obj[10] = new OBJ_TallGrass(gp);
-                gp.obj[10].worldX = 15 * gp.tileSize;
-                gp.obj[10].worldY = 75 * gp.tileSize;
-
-                gp.obj[11] = new OBJ_TallGrass(gp);
-                gp.obj[11].worldX = 12 * gp.tileSize;
-                gp.obj[11].worldY = 75 * gp.tileSize;
-
                 gp.obj[16] = new OBJ_Campfire(gp);
                 gp.obj[16].worldX = 21 * gp.tileSize;
                 gp.obj[16].worldY = 56 * gp.tileSize;
@@ -130,11 +110,6 @@ public class AssetSetter {
                 gp.obj[18].worldX = 48 * gp.tileSize;
                 gp.obj[18].worldY = 39 * gp.tileSize;
 
-                // goes in tool shed near player's cabin
-//            gp.obj[19] = new OBJ_Rake(gp);
-//            gp.obj[19].worldX = 20 * gp.tileSize;
-//            gp.obj[19].worldY = 12 * gp.tileSize;
-
                 gp.obj[21] = new OBJ_Desk(gp);
                 gp.obj[21].worldX = 40 * gp.tileSize;
                 gp.obj[21].worldY = (59 * gp.tileSize) - 10;
@@ -146,15 +121,66 @@ public class AssetSetter {
                 gp.obj[23] = new OBJ_CabinDesk(gp);
                 gp.obj[23].worldX = 17 * gp.tileSize;
                 gp.obj[23].worldY = 14 * gp.tileSize;
+
+                // EXIT GATE
+
+                gp.obj[25] = new OBJ_Gate(gp, 3);
+                gp.obj[25].worldX = 33 * gp.tileSize;
+                gp.obj[25].worldY = 7 * gp.tileSize;
+
+                gp.obj[26] = new OBJ_Gate(gp, 1);
+                gp.obj[26].worldX = 34 * gp.tileSize;
+                gp.obj[26].worldY = 7 * gp.tileSize;
+
+                gp.obj[27] = new OBJ_Gate(gp, 1);
+                gp.obj[27].worldX = 35 * gp.tileSize;
+                gp.obj[27].worldY = 7 * gp.tileSize;
+
+                gp.obj[28] = new OBJ_Gate(gp, 2);
+                gp.obj[28].worldX = 36 * gp.tileSize;
+                gp.obj[28].worldY = 7 * gp.tileSize;
+
+                gp.obj[29] = new OBJ_Gate(gp, 1);
+                gp.obj[29].worldX = 37 * gp.tileSize;
+                gp.obj[29].worldY = 7 * gp.tileSize;
+
+                gp.obj[30] = new OBJ_Gate(gp, 1);
+                gp.obj[30].worldX = 38 * gp.tileSize;
+                gp.obj[30].worldY = 7 * gp.tileSize;
+
+                gp.obj[31] = new OBJ_Gate(gp, 4);
+                gp.obj[31].worldX = 39 * gp.tileSize;
+                gp.obj[31].worldY = 7 * gp.tileSize;
+
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
                 gp.obj[24] = new OBJ_Key(gp);
-                gp.obj[24].worldX = 34 * gp.tileSize;
-                gp.obj[24].worldY = 20 * gp.tileSize;
+                gp.obj[24].worldX = 12 * gp.tileSize;
+                gp.obj[24].worldY = 74 * gp.tileSize;
             }
-
-
         }
+    }
+
+    public void setUnlockedGate() {
+
+        // CLEAR UNECESSARY GATE OBJECTS
+        clearGate();
+
+        gp.obj[26] = new OBJ_Gate(gp, 5);
+        gp.obj[26].worldX = 33 * gp.tileSize;
+        gp.obj[26].worldY = 8 * gp.tileSize;
+
+        gp.obj[27] = new OBJ_Gate(gp, 5);
+        gp.obj[27].worldX = 33 * gp.tileSize;
+        gp.obj[27].worldY = 9 * gp.tileSize;
+
+        gp.obj[28] = new OBJ_Gate(gp, 5);
+        gp.obj[28].worldX = 39 * gp.tileSize;
+        gp.obj[28].worldY = 8 * gp.tileSize;
+
+        gp.obj[29] = new OBJ_Gate(gp, 5);
+        gp.obj[29].worldX = 39 * gp.tileSize;
+        gp.obj[29].worldY = 9 * gp.tileSize;
     }
 
     public void setNPC() {
@@ -222,5 +248,11 @@ public class AssetSetter {
         gp.npc = new Entity[gp.maxNpc];
         gp.obj = new Entity[gp.maxObj];
         gp.monster = new Entity[gp.maxMonster];
+    }
+
+    private void clearGate() {
+        for(int i = 26; i < 31; i++) {
+            gp.obj[i] = null;
+        }
     }
 }
