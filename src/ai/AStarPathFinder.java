@@ -89,10 +89,13 @@ public class AStarPathFinder {
             }
             // solids do get detected but entity sometimes doesnt know to adjust itself well
 //           better way than just checking columns? -- i believe this is is working 100% run a few more test cases where entity is approaching from each possible position where it needs to go through campfire
-            if(gp.objManager.objectMap[col][row] != null) {
-                if (gp.objManager.objectMap[col][row].collision == true) {
-                    node[col][row].solid = true;
-                }
+//            if(gp.objManager.objectMap[col][row] != null) {
+//                if (gp.objManager.objectMap[col][row].collision) {
+//                    node[col][row].solid = true;
+//                }
+//            }
+            if (gp.objManager.objectMap[col][row]) {
+                node[col][row].solid = true;
             }
 
             // Set cost

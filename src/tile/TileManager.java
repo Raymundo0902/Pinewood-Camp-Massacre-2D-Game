@@ -50,25 +50,31 @@ public class TileManager {
             setup(13, "retroWall1", true);
             setup(14, "darkTree", true);
             setup(15, "gravelRoad1", false);
-            setup(16, "k4cabin12", true);
             setup(17, "16xTile", false);
-            setup(18, "k4cabin7", true);
-            setup(19, "k4cabin10", true);
             setup(20, "bottomMainWall", true);
             setup(21, "verticalTwoWalls", true);
-            setup(22, "k4cabin1", true);
             setup(23, "bLeftCornerWall", true);
             setup(24, "bRightCornerWall", true);
             setup(25, "tLeftCornerWall", true);
             setup(26, "tRightCornerWall", true);
+
+            // PLAYER CABIN TILES
+            setup(22, "k4cabin1", true);
             setup(27, "k4cabin8", true);
             setup(28, "k4cabin10", true);
             setup(29, "k4cabin2", true);
             setup(30, "k4cabin3", true);
             setup(31, "k4cabin9", true);
-            setup(32, "gasStationWall", true);
+            setup(18, "k4cabin7", true);
+            setup(19, "k4cabin10", true);
             setup(33, "k4cabin4", true);
             setup(34, "k4cabin5", true);
+            setup(46, "k4cabin6", true);
+            setup(89, "k4cabin11", true);
+            setup(90, "k4cabin13", true);
+            setup(16, "k4cabin12", true);
+
+            setup(32, "gasStationWall", true);
             setup(35, "darkgrass2", false);
             setup(36, "leftGravelRoad", false);
             setup(37, "rightGravelRoad", false);
@@ -80,7 +86,6 @@ public class TileManager {
             setup(43, "tLeftCornerGravelRoad", false);
             setup(44, "tRightCornerGravelRoad", false);
             setup(45, "bottomMainWall", true);
-            setup(46, "k4cabin6", true);
             setup(47, "topWater", true);
             setup(48, "bottomWater", true);
             setup(49, "bLeftWaterCorner", true);
@@ -123,8 +128,6 @@ public class TileManager {
             setup(86, "vent", false);
             setup(87, "missingperson1", true);
             setup(88, "missingperson2", true);
-            setup(89, "k4cabin11", true);
-            setup(90, "k4cabin13", true);
             setup(91, "blackTile", true);
 
 

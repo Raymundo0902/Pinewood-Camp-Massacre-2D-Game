@@ -78,25 +78,13 @@ public class AssetSetter {
             if(gp.currentTask != TaskState.INVESTIGATE) {
 
                 gp.obj[2] = new OBJ_K4Door(gp);
-                gp.obj[2].worldX = 14 * gp.tileSize;
+                gp.obj[2].worldX = 15 * gp.tileSize;
                 gp.obj[2].worldY = 15 * gp.tileSize;
-
-                gp.obj[3] = new OBJ_TallGrass(gp);
-                gp.obj[3].worldX = 14 * gp.tileSize;
-                gp.obj[3].worldY = 74 * gp.tileSize;
-
-                gp.obj[4] = new OBJ_TallGrass(gp);
-                gp.obj[4].worldX = 15 * gp.tileSize;
-                gp.obj[4].worldY = 74 * gp.tileSize;
 
                 gp.obj[5] = new OBJ_Door2(gp); // faces horizontally
                 gp.obj[5].worldX = 36 * gp.tileSize;
                 gp.obj[5].worldY = 63 * gp.tileSize;
                 gp.obj[5].collision = true;
-
-                gp.obj[6] = new OBJ_Door(gp);
-                gp.obj[6].worldX = 20 * gp.tileSize;
-                gp.obj[6].worldY = 38 * gp.tileSize;
 
                 gp.obj[16] = new OBJ_Campfire(gp);
                 gp.obj[16].worldX = 21 * gp.tileSize;
@@ -105,10 +93,6 @@ public class AssetSetter {
                 gp.obj[17] = new OBJ_Campfire(gp);
                 gp.obj[17].worldX = 13 * gp.tileSize;
                 gp.obj[17].worldY = 77 * gp.tileSize;
-
-                gp.obj[18] = new OBJ_Campfire(gp);
-                gp.obj[18].worldX = 48 * gp.tileSize;
-                gp.obj[18].worldY = 39 * gp.tileSize;
 
                 gp.obj[21] = new OBJ_Desk(gp);
                 gp.obj[21].worldX = 40 * gp.tileSize;
@@ -122,35 +106,41 @@ public class AssetSetter {
                 gp.obj[23].worldX = 17 * gp.tileSize;
                 gp.obj[23].worldY = 14 * gp.tileSize;
 
-                // EXIT GATE
 
+                // EXIT GATE
                 gp.obj[25] = new OBJ_Gate(gp, 3);
-                gp.obj[25].worldX = 33 * gp.tileSize;
+                gp.obj[25].worldX = 34 * gp.tileSize;
                 gp.obj[25].worldY = 7 * gp.tileSize;
 
                 gp.obj[26] = new OBJ_Gate(gp, 1);
-                gp.obj[26].worldX = 34 * gp.tileSize;
+                gp.obj[26].worldX = 35 * gp.tileSize;
                 gp.obj[26].worldY = 7 * gp.tileSize;
 
                 gp.obj[27] = new OBJ_Gate(gp, 1);
-                gp.obj[27].worldX = 35 * gp.tileSize;
+                gp.obj[27].worldX = 36 * gp.tileSize;
                 gp.obj[27].worldY = 7 * gp.tileSize;
 
                 gp.obj[28] = new OBJ_Gate(gp, 2);
-                gp.obj[28].worldX = 36 * gp.tileSize;
+                gp.obj[28].worldX = 37 * gp.tileSize;
                 gp.obj[28].worldY = 7 * gp.tileSize;
 
                 gp.obj[29] = new OBJ_Gate(gp, 1);
-                gp.obj[29].worldX = 37 * gp.tileSize;
+                gp.obj[29].worldX = 38 * gp.tileSize;
                 gp.obj[29].worldY = 7 * gp.tileSize;
 
                 gp.obj[30] = new OBJ_Gate(gp, 1);
-                gp.obj[30].worldX = 38 * gp.tileSize;
+                gp.obj[30].worldX = 39 * gp.tileSize;
                 gp.obj[30].worldY = 7 * gp.tileSize;
 
                 gp.obj[31] = new OBJ_Gate(gp, 4);
-                gp.obj[31].worldX = 39 * gp.tileSize;
+                gp.obj[31].worldX = 40 * gp.tileSize;
                 gp.obj[31].worldY = 7 * gp.tileSize;
+
+
+
+                gp.obj[32] = new OBJ_PORTAPOTTY(gp);
+                gp.obj[32].worldX = 46 * gp.tileSize;
+                gp.obj[32].worldY = 28 * gp.tileSize;
 
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
@@ -167,19 +157,19 @@ public class AssetSetter {
         clearGate();
 
         gp.obj[26] = new OBJ_Gate(gp, 5);
-        gp.obj[26].worldX = 33 * gp.tileSize;
+        gp.obj[26].worldX = 34 * gp.tileSize;
         gp.obj[26].worldY = 8 * gp.tileSize;
 
         gp.obj[27] = new OBJ_Gate(gp, 5);
-        gp.obj[27].worldX = 33 * gp.tileSize;
+        gp.obj[27].worldX = 34 * gp.tileSize;
         gp.obj[27].worldY = 9 * gp.tileSize;
 
         gp.obj[28] = new OBJ_Gate(gp, 5);
-        gp.obj[28].worldX = 39 * gp.tileSize;
+        gp.obj[28].worldX = 40 * gp.tileSize;
         gp.obj[28].worldY = 8 * gp.tileSize;
 
         gp.obj[29] = new OBJ_Gate(gp, 5);
-        gp.obj[29].worldX = 39 * gp.tileSize;
+        gp.obj[29].worldX = 40 * gp.tileSize;
         gp.obj[29].worldY = 9 * gp.tileSize;
     }
 
