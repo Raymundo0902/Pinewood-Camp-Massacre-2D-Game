@@ -103,8 +103,8 @@ public class AssetSetter {
                 gp.obj[22].worldY = (61 * gp.tileSize);
 
                 gp.obj[23] = new OBJ_CabinDesk(gp);
-                gp.obj[23].worldX = 17 * gp.tileSize;
-                gp.obj[23].worldY = 14 * gp.tileSize;
+                gp.obj[23].worldX = 22 * gp.tileSize;
+                gp.obj[23].worldY = 17 * gp.tileSize;
 
 
                 // EXIT GATE
@@ -136,11 +136,18 @@ public class AssetSetter {
                 gp.obj[31].worldX = 40 * gp.tileSize;
                 gp.obj[31].worldY = 7 * gp.tileSize;
 
-
-
                 gp.obj[32] = new OBJ_PORTAPOTTY(gp);
                 gp.obj[32].worldX = 46 * gp.tileSize;
                 gp.obj[32].worldY = 28 * gp.tileSize;
+
+
+                gp.obj[33] = new OBJ_Carpet(gp);
+                gp.obj[33].worldX = 23 * gp.tileSize;
+                gp.obj[33].worldY = 20 * gp.tileSize;
+
+                gp.obj[34] = new OBJ_BookShelf(gp);
+                gp.obj[34].worldX = 18 * gp.tileSize;
+                gp.obj[34].worldY = 15 * gp.tileSize;
 
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
