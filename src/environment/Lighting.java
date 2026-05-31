@@ -86,9 +86,6 @@ public class Lighting {
 
     public void update() {
 
-        // DEBUG
-//        System.out.println(dayCounter);
-
         if(gp.player.lightUpdated == true) {
             setLightSource();
             gp.player.lightUpdated = false;
@@ -96,45 +93,25 @@ public class Lighting {
 
         // day cycle only starts when player first sleeps after arriving to cabin
 
-            if (gp.subMap == gp.SUB_MAIN_WORLD) {
-                // Check for different state of the day
+        if (gp.subMap == gp.SUB_MAIN_WORLD) {
+            // Check for different state of the day
 
-                if (dayState == night) {
-
-
-                }
-                else if (dayState == sunset) { // transition to night
-                    filterAlpha += 0.001f; // for quick tests
-                    if (filterAlpha > 0.90f) {
-                        filterAlpha = 0.90f;
-                        dayState = night;
-                    }
+            if (dayState == sunset) { // transition to night
+                filterAlpha += 0.0001f; // for quick tests
+                if (filterAlpha > 0.90f) {
+                    filterAlpha = 0.90f;
+                    dayState = night;
                 }
             }
-
+        }
     }
 
     public void draw(Graphics2D g2) {
-
         // Helps give illusion that there's light inside cabin and other buildings
         if(gp.subMap == gp.SUB_MAIN_WORLD) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
             g2.drawImage(darknessFilter, 0, 0, null);
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
-
-        // DEBUG INFO
-//        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40f));
-//        g2.setColor(Color.WHITE);
-//        String dayText = "";
-//        switch(dayState) {
-//            case night: dayText = "night"; break;
-//            case day: dayText = "day"; break;
-//            case sunset: dayText = "sunset"; break;
-//            case sunrise: dayText = "sunrise"; break;
-//        }
-//        g2.drawString(dayText, gp.tileSize, gp.tileSize * 7);
-
     }
-
 }

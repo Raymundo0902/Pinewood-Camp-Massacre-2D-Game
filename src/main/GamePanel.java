@@ -4,6 +4,8 @@ import ai.AStarPathFinder;
 import entity.*;
 import environment.EnvironmentHandler;
 
+import object.OBJ_Carpet;
+import object.OBJ_Key;
 import object.ObjectManager;
 import tasks.TaskState;
 import tile.Map;
@@ -119,6 +121,7 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean closeTaskList;
     public boolean monChaseOn = false;
     public boolean drawInnerDialogue;
+    public boolean hasntUnlockedYet = true;
 
 
     public GamePanel () {
@@ -238,16 +241,17 @@ public class GamePanel extends JPanel implements Runnable {
     // Transition to maps
     public void transitionMap() {
 
-        // for transitioning out of front office & cabin
+        // for transitioning out of front office or cabin
         if (currentMap == PINEWOOD_CAMP && subMap == SUB_PLAYER_CABIN || subMap == SUB_FRONT_OFFICE) { // if transitioning map inside pinewood camp
             // remove cabin/office objects
             aSetter.removeAssets();
+            aSetter.restoreCabinExteriorAssets();
 
             // setting positions
             if(subMap == SUB_PLAYER_CABIN) {
                 player.setPosAfterCabin();
             } else if(subMap == SUB_FRONT_OFFICE) {
-//                playSE(22);
+//                playSE(22);  UNCCOMMENT WHEN DONE WITH THE GAME
                 player.setPosAfterOffice();
             }
 
@@ -265,7 +269,9 @@ public class GamePanel extends JPanel implements Runnable {
         // for transitioning into cabin
         else if (currentMap == PINEWOOD_CAMP && subMap == SUB_MAIN_WORLD) { // if transitioning map inside pinewood camp
             // load in cabin objects
+            aSetter.removeOutsideAssets();
             aSetter.reseatAssets();
+            aSetter.hideCabinExteriorAssets(); // ADD THIS
             player.setPosInCabin();
             tileM.loadMap("/maps/playercabin.txt"); // load into player cabin
             subMap = SUB_PLAYER_CABIN;
@@ -330,8 +336,12 @@ public class GamePanel extends JPanel implements Runnable {
             // TASK UPDATE
             updateTasks();
 
-            if(player.unlockedGate) {
-                aSetter.setUnlockedGate();
+            // PREVENTS REPEATED CALLS
+            if(hasntUnlockedYet) {
+                if (player.unlockedGate) {
+                    aSetter.setUnlockedGate();
+                    hasntUnlockedYet = false;
+                }
             }
 
             if(monster[0] != null) {
@@ -523,7 +533,12 @@ public class GamePanel extends JPanel implements Runnable {
                 @Override
                 public int compare(Entity e1, Entity e2) { // acts as referee. returns: -1 if e1 is less than e2(put e1 earlier in list/draw first),
                     // 1 if e1 is greater than e2(put e1 later in list/draw last), 0 if e1 is equal to e2-- in this case, relative order doesn't change.
+
+                    // carpet should always stay below player
+                    if(e1 instanceof OBJ_Carpet) return -1;
+                    if(e2 instanceof OBJ_Carpet) return 1;
                     int result = Integer.compare(e1.worldY, e2.worldY);
+
                     return result;
                 }
             });

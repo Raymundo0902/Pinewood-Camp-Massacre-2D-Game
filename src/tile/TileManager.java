@@ -129,8 +129,7 @@ public class TileManager {
             setup(87, "missingperson1", true);
             setup(88, "missingperson2", true);
             setup(91, "blackTile", true);
-
-
+            setup(92, "woodwall", true);
     }
 
     public void setup(int index, String imageName, boolean collision) {

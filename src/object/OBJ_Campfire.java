@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 public class OBJ_Campfire extends Entity {
 
     BufferedImage fire1, fire2;
+    public int lightRadius = 200;
 
 
     public OBJ_Campfire(GamePanel gp) {

@@ -10,7 +10,7 @@ public class OBJ_Carpet extends Entity {
     public OBJ_Carpet(GamePanel gp) {
         super(gp);
         down1 = setup("/objects/redcarpet", gp.tileSize * 3, gp.tileSize * 3);
-        collision = true;
+        collision = false;
         name = "carpet";
     }
 

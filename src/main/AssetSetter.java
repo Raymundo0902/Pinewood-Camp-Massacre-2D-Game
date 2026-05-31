@@ -102,9 +102,6 @@ public class AssetSetter {
                 gp.obj[22].worldX = 45 * gp.tileSize;
                 gp.obj[22].worldY = (61 * gp.tileSize);
 
-                gp.obj[23] = new OBJ_CabinDesk(gp);
-                gp.obj[23].worldX = 22 * gp.tileSize;
-                gp.obj[23].worldY = 17 * gp.tileSize;
 
 
                 // EXIT GATE
@@ -142,12 +139,20 @@ public class AssetSetter {
 
 
                 gp.obj[33] = new OBJ_Carpet(gp);
-                gp.obj[33].worldX = 23 * gp.tileSize;
-                gp.obj[33].worldY = 20 * gp.tileSize;
+                gp.obj[33].worldX = 22 * gp.tileSize;
+                gp.obj[33].worldY = 13 * gp.tileSize;
+
+                gp.obj[23] = new OBJ_CabinDesk(gp);
+                gp.obj[23].worldX = 22 * gp.tileSize;
+                gp.obj[23].worldY = 17 * gp.tileSize;
 
                 gp.obj[34] = new OBJ_BookShelf(gp);
                 gp.obj[34].worldX = 18 * gp.tileSize;
-                gp.obj[34].worldY = 15 * gp.tileSize;
+                gp.obj[34].worldY = 13 * gp.tileSize;
+
+                gp.obj[35] = new OBJ_Barrel(gp);
+                gp.obj[35].worldX = 16 * gp.tileSize;
+                gp.obj[35].worldY = 14 * gp.tileSize;
 
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
@@ -155,6 +160,59 @@ public class AssetSetter {
                 gp.obj[24].worldX = 12 * gp.tileSize;
                 gp.obj[24].worldY = 74 * gp.tileSize;
             }
+        }
+    }
+
+    public void removeOutsideAssets(){
+        gp.obj[2] = null;
+    }
+
+    // Call when entering player cabin — hides outdoor-only objects
+    public void hideCabinExteriorAssets() {
+        gp.obj[2] = null;   // OBJ_K4Door
+        // null out all gate slots
+        for (int i = 25; i <= 31; i++) {
+            gp.obj[i] = null;
+        }
+    }
+
+    // Call when exiting player cabin — restores outdoor-only objects
+    public void restoreCabinExteriorAssets() {
+        gp.obj[2] = new OBJ_K4Door(gp);
+        gp.obj[2].worldX = 15 * gp.tileSize;
+        gp.obj[2].worldY = 15 * gp.tileSize;
+
+        if(!gp.player.unlockedGate) {
+
+            gp.obj[25] = new OBJ_Gate(gp, 3);
+            gp.obj[25].worldX = 34 * gp.tileSize;
+            gp.obj[25].worldY = 7 * gp.tileSize;
+
+            gp.obj[26] = new OBJ_Gate(gp, 1);
+            gp.obj[26].worldX = 35 * gp.tileSize;
+            gp.obj[26].worldY = 7 * gp.tileSize;
+
+            gp.obj[27] = new OBJ_Gate(gp, 1);
+            gp.obj[27].worldX = 36 * gp.tileSize;
+            gp.obj[27].worldY = 7 * gp.tileSize;
+
+            gp.obj[28] = new OBJ_Gate(gp, 2);
+            gp.obj[28].worldX = 37 * gp.tileSize;
+            gp.obj[28].worldY = 7 * gp.tileSize;
+
+            gp.obj[29] = new OBJ_Gate(gp, 1);
+            gp.obj[29].worldX = 38 * gp.tileSize;
+            gp.obj[29].worldY = 7 * gp.tileSize;
+
+            gp.obj[30] = new OBJ_Gate(gp, 1);
+            gp.obj[30].worldX = 39 * gp.tileSize;
+            gp.obj[30].worldY = 7 * gp.tileSize;
+
+            gp.obj[31] = new OBJ_Gate(gp, 4);
+            gp.obj[31].worldX = 40 * gp.tileSize;
+            gp.obj[31].worldY = 7 * gp.tileSize;
+        } else {
+            setUnlockedGate();
         }
     }
 
@@ -224,21 +282,47 @@ public class AssetSetter {
         }
     }
 
+    // Call when transitioning maps to reseat obj's that should only show when in a specific map
     public void reseatAssets() {
-        // Call when transitioning maps to reseat obj's that should only show when in a specific map
         gp.obj[20] = new OBJ_Bed(gp);
-        gp.obj[20].worldX = 20 * gp.tileSize;
-        gp.obj[20].worldY = 12 * gp.tileSize;
+        gp.obj[20].worldX = 25 * gp.tileSize;
+        gp.obj[20].worldY = 13 * gp.tileSize;
 
         gp.obj[23] = new OBJ_CabinDesk(gp);
-        gp.obj[23].worldX = 17 * gp.tileSize;
-        gp.obj[23].worldY = 14 * gp.tileSize;
+        gp.obj[23].worldX = 22 * gp.tileSize;
+        gp.obj[23].worldY = 17 * gp.tileSize;
+
+        gp.obj[33] = new OBJ_Carpet(gp);
+        gp.obj[33].worldX = 22 * gp.tileSize;
+        gp.obj[33].worldY = 13 * gp.tileSize;
+
+        gp.obj[34] = new OBJ_BookShelf(gp);
+        gp.obj[34].worldX = 18 * gp.tileSize;
+        gp.obj[34].worldY = 13 * gp.tileSize;
+
+        gp.obj[35] = new OBJ_Barrel(gp);
+        gp.obj[35].worldX = 16 * gp.tileSize;
+        gp.obj[35].worldY = 14 * gp.tileSize;
+
     }
 
+    // Call when transitioning maps to remove obj's that shouldn't show in specific maps.
     public void removeAssets() {
-        // Call when transitioning maps to remove obj's that shouldn't show in specific maps.
+        // Mostly, if not all, from player cabin
         gp.obj[20] = null;
         gp.obj[23] = null;
+        gp.obj[33] = null;
+        gp.obj[34] = null;
+        gp.obj[35] = null;
+
+
+
+        // front desk cabin
+        gp.obj[21] = null;
+        gp.obj[22] = null;
+        gp.obj[5] = null;
+
+
     }
 
     public void clearArray() {

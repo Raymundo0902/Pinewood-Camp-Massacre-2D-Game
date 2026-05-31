@@ -26,6 +26,10 @@ public class EventHandler {
         if(hit(20,56, "any") == true) { gp.player.takeDamage(); }
         else if (hit(18, 18, "any") == true && gp.subMap == gp.SUB_MAIN_WORLD &&
                  gp.currentTask == TaskState.INVESTIGATE) { monsterAI();}
+        else if(hit(24, 17, "any") == true) {
+            gp.player.exitMap = true;
+            gp.gameState = gp.transitionState;
+        }
     }
 
     public boolean hit(int eventCol, int eventRow, String reqDirection) { // checks event collision

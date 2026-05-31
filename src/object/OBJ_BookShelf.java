@@ -11,6 +11,8 @@ public class OBJ_BookShelf extends Entity {
         super(gp);
         down1 = setup("/objects/bookshelf", gp.tileSize * 2, gp.tileSize * 2);
         collision = true;
+        solidArea.height = (int) (gp.tileSize * 1.5);
+        solidArea.width = gp.tileSize * 2;
         name = "bookshelf";
     }
 
