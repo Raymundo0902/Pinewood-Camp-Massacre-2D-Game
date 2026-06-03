@@ -385,7 +385,7 @@ public class GamePanel extends JPanel implements Runnable {
             eHandler.update();
 
 
-            handleMusic();
+
         }
 
         if(gameState == computerState) {
@@ -444,6 +444,8 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if(gameState == pausedState) {}
+
+        handleMusic();
     }
 
     private void handleMusic() {
@@ -453,7 +455,7 @@ public class GamePanel extends JPanel implements Runnable {
             // Wait 5 seconds before playing
             if(!knockingStarted) {
                 knockingStartTime++;
-                if(knockingStartTime >= 200) {
+                if(knockingStartTime > 140) {
 
                     if(subMap == SUB_PLAYER_CABIN) {
                         playMusic(25);
