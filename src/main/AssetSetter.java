@@ -118,6 +118,7 @@ public class AssetSetter {
                 gp.obj[28] = new OBJ_Gate(gp, 2);
                 gp.obj[28].worldX = 37 * gp.tileSize;
                 gp.obj[28].worldY = 7 * gp.tileSize;
+                gp.obj[28].gateWithLock = true;
 
                 gp.obj[29] = new OBJ_Gate(gp, 1);
                 gp.obj[29].worldX = 38 * gp.tileSize;
@@ -163,6 +164,10 @@ public class AssetSetter {
                 gp.obj[38] = new OBJ_BookShelf(gp);
                 gp.obj[38].worldX = 37 * gp.tileSize;
                 gp.obj[38].worldY =  (58 * gp.tileSize) + 30;
+
+                gp.obj[39] = new OBJ_Door2(gp);
+                gp.obj[39].worldX = 15 * gp.tileSize;
+                gp.obj[39].worldY =  17 * gp.tileSize;
 
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
@@ -214,6 +219,7 @@ public class AssetSetter {
             gp.obj[28] = new OBJ_Gate(gp, 2);
             gp.obj[28].worldX = 37 * gp.tileSize;
             gp.obj[28].worldY = 7 * gp.tileSize;
+            gp.obj[28].gateWithLock = true;
 
             gp.obj[29] = new OBJ_Gate(gp, 1);
             gp.obj[29].worldX = 38 * gp.tileSize;
@@ -292,6 +298,7 @@ public class AssetSetter {
 
         // disabled for game testing
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
+
             gp.monster[0] = new MON_EVILBILL(gp);
             gp.monster[0].worldX = gp.tileSize*16;
             gp.monster[0].worldY = gp.tileSize*9;
@@ -320,18 +327,21 @@ public class AssetSetter {
         gp.obj[35].worldX = 16 * gp.tileSize;
         gp.obj[35].worldY = 13 * gp.tileSize;
 
+        gp.obj[39] = new OBJ_Door2(gp);
+        gp.obj[39].worldX = 15 * gp.tileSize;
+        gp.obj[39].worldY =  17 * gp.tileSize;
+
     }
 
     // Call when transitioning maps to remove obj's that shouldn't show in specific maps.
     public void removeAssets() {
-        // Mostly, if not all, from player cabin
+        // Mostly, from player cabin
         gp.obj[20] = null;
         gp.obj[23] = null;
         gp.obj[33] = null;
         gp.obj[34] = null;
         gp.obj[35] = null;
-
-
+        gp.obj[39] = null;
 
         // front desk cabin
         gp.obj[21] = null;
@@ -340,8 +350,6 @@ public class AssetSetter {
         gp.obj[36] = null;
         gp.obj[37] = null;
         gp.obj[38] = null;
-
-
     }
 
     public void clearArray() {

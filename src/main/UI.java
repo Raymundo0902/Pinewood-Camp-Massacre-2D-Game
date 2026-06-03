@@ -113,27 +113,28 @@ public class UI {
         // PLAY STATE
         else if(gp.gameState == gp.playState) {
             drawPlayerLife();
-            if(gp.player.interactableCollision) {
-                drawInteractButton();
-            }
-            if(!gp.closeTaskList) {
-                drawCurrentTask();
-            }
-            if(gp.drawInnerDialogue) {
-                drawPlayerInnerDialogue();
-            }
+            drawPlayerStamina();
+
+            if(gp.player.interactableCollision) drawInteractButton();
+            if(!gp.closeTaskList) drawCurrentTask();
+            if(gp.drawInnerDialogue) drawPlayerInnerDialogue();
         }
         // DIALOGUE STATE
         else if(gp.gameState == gp.dialogueState) {
             drawPlayerLife();
+            drawPlayerStamina();
             drawDialogueScreen();
         }
         // CHARACTER STATE
-        else if(gp.gameState == gp.characterState) {
+        else if(gp.gameState == gp.inventoryState) {
+            drawPlayerStamina();
+            drawPlayerLife();
             drawInventory();
         }
         // OPTIONS/PAUSE STATE
-        else if(gp.gameState == gp.optionsState){
+        else if(gp.gameState == gp.pausedState){
+            drawPlayerLife();
+            drawPlayerStamina();
             drawPausedMenu();
         }
         // GAME OVER STATE
@@ -155,6 +156,8 @@ public class UI {
         }
         else if(gp.gameState == gp.logBookState) {
             drawLogBook();
+            drawPlayerStamina();
+            drawPlayerLife();
         }
     }
 
@@ -203,6 +206,41 @@ public class UI {
                 gp.oneTime = false; // can safely put it here that triggers only once
             }
         }
+    }
+
+    public void drawPlayerStamina() {
+        int x = gp.tileSize;
+        int y = gp.tileSize * 2 + 5;
+
+        int barWidth = gp.tileSize * 4;
+        int barHeight = 20;
+
+        int maxStamina = 180; // your sprint limit before tired phase
+
+        int stamina = maxStamina - gp.player.sprintCounter;
+
+        if(stamina < 0) {
+            stamina = 0;
+        }
+        if(stamina > maxStamina) {
+            stamina = maxStamina;
+        }
+
+        int staminaWidth = (int)((double)stamina / maxStamina * barWidth);
+
+        // OUTLINE
+        g2.setColor(Color.BLACK);
+        g2.fillRect(x - 2, (y / 2) - 2, barWidth + 4, barHeight + 4);
+
+        // EMPTY BAR BACKGROUND
+        g2.setColor(new Color(60, 60, 60));
+        g2.fillRect(x, y / 2, barWidth, barHeight);
+
+        // STAMINA BAR
+        g2.setColor(new Color(15, 57, 224));
+        g2.fillRect(x, y / 2, staminaWidth, barHeight);
+
+
     }
 
     public void drawPlayerInnerDialogue() {
@@ -931,7 +969,7 @@ public class UI {
         checkmarks[i] = new boolean[1];
         i++;
 
-        currentTask[i] = "Find entrance gate";
+        currentTask[i] = "Escape";
         checkmarks[i] = new boolean[1];
         i++;
     }
@@ -1113,6 +1151,11 @@ public class UI {
             y += 40;
         }
 
+        // SKIP DIALOGUE TEXT
+        int skipX = gp.tileSize * 16;
+        int skipY = gp.tileSize * 11;
+        drawGlowText(g2, "ESC TO SKIP", skipX, skipY);
+
 
         // Skip dialogue
         if(skipDialogue == true) {
@@ -1280,10 +1323,12 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(32F));
 
         // Window
+
         int frameX = gp.tileSize * 6;
         int frameY = gp.tileSize * 3;
-        int frameWidth = gp.tileSize*8;
-        int frameHeight = gp.tileSize*4;
+        int frameWidth = gp.tileSize * 8;
+        int frameHeight = gp.tileSize * 6;
+        if(subState == 2) frameHeight += gp.tileSize * 2;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         // Switch between different screens of the pause menu.
@@ -1310,11 +1355,11 @@ public class UI {
         textX = getXforCenteredText(title);
         textY = frameY + gp.tileSize;
         g2.drawString(title, textX, textY);
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 28));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32));
 
         // Resume Game
         textX = gp.tileSize*7;
-        textY += 32;
+        textY += 48;
         g2.drawString("Resume", textX, textY);
         if(commandNum == 0) {
             g2.drawString(">", textX - gp.tileSize/2, textY);
@@ -1328,7 +1373,7 @@ public class UI {
         g2.drawString("Options", textX, textY);
         if(commandNum == 1) {
             g2.drawString(">", textX - gp.tileSize/2, textY);
-            if(gp.keyH.enterPressed == true) {
+            if(gp.keyH.enterPressed) {
                 subState = 1;
                 commandNum = 0;
             }
@@ -1361,10 +1406,7 @@ public class UI {
 
     public void optionsScreen(int frameX, int frameY) {
 
-        // Window
-        int frameWidth = gp.tileSize*8;
-        int frameHeight = gp.tileSize*4;
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
         // Make text uniform.
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40));
         int textX = getXforCenteredText("Options");
@@ -1408,6 +1450,7 @@ public class UI {
 
         // Back
         textY += 32;
+        g2.setColor(Color.ORANGE);
         g2.drawString("Back", textX, textY);
         if(commandNum == 3) {
             g2.drawString(">", textX - gp.tileSize/2, textY);
@@ -1509,6 +1552,7 @@ public class UI {
 
     public void drawOptionMenuButtons() {
 
+
         // Coordinates & styling
         int shapeX = gp.tileSize*11;
         int shapeY = (gp.tileSize*4) + 12;
@@ -1536,30 +1580,56 @@ public class UI {
     public void drawControlMenu(int frameX, int frameY) {
 
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 28));
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24));
         int textX = (frameX + gp.tileSize) - gp.tileSize/2;
         int textY = (frameY + gp.tileSize) - 12;
 
-        g2.drawString("Move", textX, textY);
-        g2.drawString("WASD", textX+gp.tileSize*5, textY);
+        g2.drawString("Move cursor", textX, textY);
+        g2.drawString("WASD", textX + gp.tileSize * 5, textY);
 
-        textY += 24;
-        g2.drawString("Pause", textX, textY);
-        g2.drawString("Esc", textX+gp.tileSize*5, textY);
+        textY += 28;
+        g2.drawString("Adjust Volume", textX, textY);
+        g2.drawString("A & D", textX + gp.tileSize * 5, textY);
 
-        textY += 24;
-        g2.drawString("Throw", textX, textY);
-        g2.drawString("F", textX+gp.tileSize*5, textY);
+        textY += 28;
+        g2.drawString("Pause Game", textX, textY);
+        g2.drawString("Esc", textX + gp.tileSize * 5, textY);
 
-        textY += 24;
-        g2.drawString("Interact/Select", textX, textY);
-        g2.drawString("ENTER", textX+gp.tileSize*5, textY);
+        textY += 28;
+        g2.drawString("View Map", textX, textY);
+        g2.drawString("M", textX + gp.tileSize * 5, textY);
 
-        textY += 24;
-        g2.drawString("Inventory", textX, textY);
-        g2.drawString("C", textX+gp.tileSize*5, textY);
+        textY += 28;
+        g2.drawString("Interact", textX, textY);
+        g2.drawString("E", textX + gp.tileSize * 5, textY);
 
-        textY += 32;
+        textY += 28;
+        g2.drawString("Open / Hide Inventory", textX, textY);
+        g2.drawString("C", textX + gp.tileSize * 5, textY);
+
+        textY += 28;
+        g2.drawString("Select Item", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 5, textY);
+
+        textY += 28;
+        g2.drawString("Confirm / Back", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 5, textY);
+
+        textY += 28;
+        g2.drawString("Continue Dialogue", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 5, textY);
+
+        textY += 28;
+        g2.drawString("Sprint", textX, textY);
+        g2.drawString("SHIFT", textX + gp.tileSize * 5, textY);
+
+        textY += 28;
+        g2.drawString("Hide tasks", textX, textY);
+        g2.drawString("G", textX + gp.tileSize * 5, textY);
+
+        textY += 48;
+        g2.setColor(Color.ORANGE);
         g2.drawString("Back", textX, textY);
         if(commandNum == 0) {
             g2.drawString(">", textX - 12, textY);
@@ -1602,6 +1672,7 @@ public class UI {
 
         // Back
         textY += 32;
+        g2.setColor(Color.ORANGE);
         g2.drawString("Back", middleText, textY);
         if(commandNum == 1){
             g2.drawString(">", textX+gp.tileSize, textY);
@@ -1629,6 +1700,7 @@ public class UI {
 
         // Back
         textY += 32;
+        g2.setColor(Color.ORANGE);
         g2.drawString("Back", textX, textY);
         if(commandNum == 0) {
             g2.drawString(">", textX-20, textY);
@@ -1648,7 +1720,7 @@ public class UI {
         g2.drawRoundRect(x, y, width+1, height+1, 5, 5);
 
         // ACTUAL RECTANGLE
-        c = new Color(0,0,0, 230);
+        c = new Color(0,0,0, 250);
         g2.setColor(c);
         g2.fillRoundRect(x, y, width, height, 5, 5);
 

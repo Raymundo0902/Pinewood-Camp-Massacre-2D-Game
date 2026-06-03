@@ -9,7 +9,7 @@ import java.security.Key;
 
 public class KeyHandler implements KeyListener { // must add the key: typed, pressed and released methods when implementing KeyListener
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed, enterPressed, throwPressed, ePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed, enterPressed, ePressed;
     public StringBuilder inputText;
     // DEBUG
     boolean checkDebugText = false;
@@ -25,7 +25,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
     public void keyTyped(KeyEvent e) { // don't use this method but for the bottom two we will.
 
         // For computer state
-        if(gp.mouseH.clickOnPasswordBox == true) {
+        if(gp.mouseH.clickOnPasswordBox) {
 
             char c = e.getKeyChar();
 
@@ -41,51 +41,18 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
     // RUNS ONCE FOR EVERY KEY INPUT
     @Override
     public void keyPressed(KeyEvent e) {
-
         int code = e.getKeyCode(); // returns integer KeyCode associated with the key in this event. (returns num of the key that was pressed) google the cheat sheet if you need help-- for ex: A is VK_A
 
-        // TITLE STATE
-        if(gp.gameState == gp.titleState) { // check current titleState substate inside this if statement
-            titleState(code);
-        }
-        else if(gp.gameState == gp.initialDialogueState) {
-            initDialogueState(code);
-        }
-        // PLAY STATE
-        else if(gp.gameState == gp.playState) {
-            playState(code);
-        }
-        // PAUSE STATE
-        else if(gp.gameState == gp.pauseState) {
-           pauseState(code);
-        }
-
-        // DIALOGUE STATE
-        else if(gp.gameState == gp.dialogueState) {
-            dialogueState(code);
-        }
-
-        // CHARACTER STATE
-        else if(gp.gameState == gp.characterState) {
-           inventoryState(code);
-        }
-        // OPTIONS STATE
-        else if(gp.gameState == gp.optionsState) {
-            optionsState(code);
-        }
-        // GAME OVER STATE
-        else if(gp.gameState == gp.gameOverState) {
-            gameOverState(code);
-        }
-        else if(gp.gameState == gp.transitionMapState) {
-            transitionMapState(code);
-        }
-        else if(gp.gameState == gp.computerState) {
-            computerState(code);
-        }
-        else if(gp.gameState == gp.logBookState) {
-            logBookState(code);
-        }
+        if(gp.gameState == gp.titleState) titleState(code);
+        else if(gp.gameState == gp.initialDialogueState) initDialogueState(code);
+        else if(gp.gameState == gp.playState) playState(code);
+        else if(gp.gameState == gp.dialogueState) dialogueState(code);
+        else if(gp.gameState == gp.inventoryState) inventoryState(code);
+        else if(gp.gameState == gp.pausedState) pausedState(code);
+        else if(gp.gameState == gp.gameOverState) gameOverState(code);
+        else if(gp.gameState == gp.transitionMapState) transitionMapState(code);
+        else if(gp.gameState == gp.computerState) computerState(code);
+        else if(gp.gameState == gp.logBookState) logBookState(code);
     }
 
     public void titleState(int code) {
@@ -251,11 +218,8 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         if(code == KeyEvent.VK_SHIFT) { // SPRINTING
             shiftPressed = true;
         }
-        if(code == KeyEvent.VK_P) {
-            gp.gameState = gp.pauseState;
-        }
         if(code == KeyEvent.VK_C) {
-            gp.gameState = gp.characterState;
+            gp.gameState = gp.inventoryState;
         }
         if(code == KeyEvent.VK_E) {
             ePressed = true;
@@ -263,11 +227,8 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         if(code == KeyEvent.VK_ENTER) {
             enterPressed = true;
         }
-        if(code == KeyEvent.VK_F) {
-            throwPressed = true;
-        }
         if(code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.optionsState;
+            gp.gameState = gp.pausedState;
         }
         if(code == KeyEvent.VK_M) {
 
@@ -323,13 +284,6 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
             }
         }
     }
-
-    public void pauseState(int code) {
-        if(code == KeyEvent.VK_P) {
-            gp.gameState = gp.playState;
-        }
-    }
-
 
     public void dialogueState(int code) {
 
@@ -394,7 +348,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
 
     }
 
-    public void optionsState(int code) {
+    public void pausedState(int code) {
 
         // For main window
         int topCommandNum = 0;
@@ -518,9 +472,6 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         }
         if(code == KeyEvent.VK_SHIFT) {
             shiftPressed = false;
-        }
-        if(code == KeyEvent.VK_F) {
-            throwPressed = false;
         }
         if(code == KeyEvent.VK_ENTER) {
             enterPressed = false;

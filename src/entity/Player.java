@@ -15,21 +15,15 @@ public class Player extends Entity{
     public final int screenX; // screenX and Y indicate where we draw player on the screen and never change since its final. player always will be in the center of the camera.
     public final int screenY;
     public int hasKey = 0;
-    public int hasRock = 0;
     int standCounter = 0;
-    int sprintCounter = 0; // 2 seconds of sprinting till no more stamina
-    public BufferedImage rakeUp1, rakeDown1, rakeRight1, rakeLeft1;
+    public int sprintCounter = 0; // 2 seconds of sprinting till no more stamina
+    public boolean sprinting = false;
     public boolean rakeCanceled = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 12;
     public Entity defaultCurrentItem;
 
-
     // ITEM ENABLEMENT & INTERACTION - ONLY PLAYER WILL USE SO WE PUT IT HERE INSTEAD OF ITS PARENT
-    public boolean rakeSelect = false; // THIS WILL ONLY ALLOW PLAYER TO USE RAKE WHEN IT HAS BEEN SELECTED FROM INVENTORY
-    boolean raking = false;
-    boolean throwingRock = false;
-    public boolean itemDrop = false;
     public boolean lockOfficeDoor = false;
 
     // TASK MANAGER - Preventing spam, rolling over tasks
@@ -48,8 +42,6 @@ public class Player extends Entity{
     // For Pinewood camp map
     public final int aydenIndex = 0;
     public final int mainOfficer = 1;
-    public final int chadIndex = 2;
-    public final int geraldIndex = 3;
 
     // EXTRA BOOLEANS
     public boolean lightUpdated = false;
@@ -92,8 +84,6 @@ public class Player extends Entity{
 
         setDefaultValues();
         getPlayerImage();
-        getPlayerRakeImage();
-        getPlayerThrowImage();
         setItems();
         setDialogue();
     }
@@ -104,7 +94,7 @@ public class Player extends Entity{
         type = TYPE_PLAYER;
 
         // PLAYER STATUS
-        maxLife = 50; // 2 lifes = one full heart
+        maxLife = 4; // 2 lifes = one full heart
         curLife = maxLife; // players current life
         currentItem = new OBJ_Hands(gp);
         defaultCurrentItem = currentItem;
@@ -201,30 +191,10 @@ public class Player extends Entity{
         right2 = setup("/girl_player/sally_right2", gp.tileSize, gp.tileSize);
     }
 
-    public void getPlayerRakeImage() {
-
-        rakeUp1 = setup("/girl_player/sally_rake_up1", gp.tileSize, gp.tileSize*2);
-        rakeDown1 = setup("/girl_player/sally_rake_down1", gp.tileSize, gp.tileSize*2);
-        rakeLeft1 = setup("/girl_player/sally_rake_left1", gp.tileSize*2, gp.tileSize);
-        rakeRight1 = setup("/girl_player/sally_rake_right1", gp.tileSize*2, gp.tileSize);
-    }
-
-    public void getPlayerThrowImage() {
-
-        throwLeft1 = setup("/girl_player/throwRockLeft1", gp.tileSize, gp.tileSize);
-        throwRight1 = setup("/girl_player/throwRockRight1", gp.tileSize, gp.tileSize);
-        throwUp1 = setup("/girl_player/throwRockUp1", gp.tileSize, gp.tileSize);
-        throwDown1 = setup("/girl_player/throwRockDown1", gp.tileSize, gp.tileSize);
-    }
-
     public void update() { // this method gets called 60x per second
 
-        if(raking) { // bypass the else if key inputs if player is currently raking
-            raking();
-        }
-
         // without this, player will move without stopping && enterPressed here is for the purpose of checking npc collision when we just press enter key for dialogue without having to simultaneously move to npc and press enter.
-        else if (keyH.upPressed || keyH.downPressed ||
+        if (keyH.upPressed || keyH.downPressed ||
                 keyH.leftPressed || keyH.rightPressed ||
                 keyH.ePressed){
 
@@ -245,6 +215,7 @@ public class Player extends Entity{
 
             // SPRINTING MECHANICS
             if(keyH.shiftPressed) {
+                sprinting = true;
                 sprintCounter++;
                 if(sprintCounter < 180) { // if sprintCounter is less than 3 seconds then sprint
                     speed = 6;
@@ -256,8 +227,9 @@ public class Player extends Entity{
                     sprintCounter = 0;
                 }
             }
-            else { // IF SHIFT KEY NOT BEING PRESSED PLAYER SHOULD STILL BE RESTING
-                if(sprintCounter > 0) { // MAKES SURE SPRINT COUNTER < 0 BECAUSE THAT WOULD BREAK THE SPRINT AND TIRED PERIODS
+            else { // IF SHIFT KEY NOT BEING PRESSED PLAYER SHOULD BE RESTING
+                sprinting = false;
+                if(sprintCounter > 0) {
                     sprintCounter--;
                 }
                 speed = 20;
@@ -297,15 +269,6 @@ public class Player extends Entity{
                 }
             }
 
-            // statement 1
-            if(currentItem.type == TYPE_RAKE) {
-                if (keyH.ePressed && !rakeCanceled) {
-                    gp.playSE(9); // swinging rake SE
-                    raking = true;
-                }
-            }
-            rakeCanceled = false;
-
             if(!gp.keyH.ePressed) { // stops player to animate when holding down enter key
                 spriteCounter++;
                 if (spriteCounter > 12) { // this means player image changes every 12 frames
@@ -320,6 +283,11 @@ public class Player extends Entity{
 
         // If player is standing still
         else {
+
+            // need to still account for the sprinting here
+            if(sprintCounter > 0) { // MAKES SURE SPRINT COUNTER < 0 BECAUSE THAT WOULD BREAK THE SPRINT AND TIRED PERIODS
+                sprintCounter--;
+            }
 
             isStill = true;
 
@@ -336,28 +304,6 @@ public class Player extends Entity{
             objectInteractable(objIndex, npcIndex);
         }
 
-        if (gp.keyH.throwPressed && itemCooldown == 0 &&
-            hasRock > 0 && currentItem.type == TYPE_ROCK) { // START COOLDOWN
-
-            throwingRock = true;
-            spriteThrowCounter = 16;
-            itemCooldown = itemCooldownMax;
-            hasRock--;
-            Projectile projectile = new OBJ_Rock(gp);
-
-            projectile.setInfo(worldX, worldY, direction);
-            gp.projectileList.add(projectile); // PROJECTILE STORES REFERENCE TO OBJ_ROCK ADDRESS IN HEAP
-
-            inventory.remove(currentItem);
-            // RESET BACK TO HANDS TO AVOID THROWING THE OBJECT ROCK THAT WE ALREADY REMOVED FROM INVENTORY
-            currentItem = defaultCurrentItem;
-        }
-        // STOPS YOU FROM SPAMMING THROWS
-        if(itemCooldown > 0) itemCooldown--;
-        // PREVENTS FROM HOLDING DOWN THE THROW SPRITE ANIMATION WITH F KEY - NEED TO ONLY START DECREASING WHEN F PRESSED
-        if(spriteThrowCounter > 0) spriteThrowCounter--;
-        else throwingRock = false;
-
         // this needs to be outside key statement so counter increase even when player isn't moving
         if(invincible) {
             invincibleCounter++;
@@ -366,61 +312,13 @@ public class Player extends Entity{
                 invincibleCounter = 0;
             }
         }
+
         // Game over
-        if(curLife <= 0) {
-            gp.gameState = gp.gameOverState;
-        }
+        if(curLife <= 0) gp.gameState = gp.gameOverState;
     }
 
     public void takeDamage() {
         curLife--;
-    }
-
-    public void raking() {
-
-        spriteCounter++;
-
-        if(spriteCounter <= 5) { // peak of raking image (if want more detailed images)
-            spriteNum = 1;
-        }
-        if(spriteCounter > 5 && spriteCounter <= 25) { // full raking
-
-
-            spriteNum = 1; // set to 2 if you have more sprite raking animations
-
-            // Save the current worldX, worldY, solidArea
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
-            int solidAreaWidth = solidArea.width;
-            int solidAreaHeight = solidArea.height;
-
-            // Adjust player's worldX/Y for the rakeArea or else it will need player collision to cut grass even if tip of rake is already colliding with grass.
-            switch(direction) {
-                case "up": worldY -= rakeArea.height; break; // offset players worldX/Y by the rakeArea
-                case "down": worldY += rakeArea.height; break;
-                case "left": worldX -= rakeArea.width; break;
-                case "right": worldX += rakeArea.width; break;
-            }
-            // Modify players solidArea to the rakeArea and then check the grass object collision
-            solidArea.width = rakeArea.width;
-            solidArea.height = rakeArea.height;
-            // CHECK GRASS COLLISION WITH THE UPDATED WORLDX, WORLDY AND SOLIDAREA. DEBUG WITH THE CUT GRASS METHOD SO IT CAN WORK
-            int objectIndex = gp.cChecker.checkObject(this, true); // left off here
-            cutGrass(objectIndex);
-
-            // RESETS PLAYER BACK TO CURRENT COORDINATES OR ELSE PLAYER WILL GO FLYING AROUND
-            worldX = currentWorldX;
-            worldY = currentWorldY;
-            solidArea.width = solidAreaWidth;
-            solidArea.height = solidAreaHeight;
-
-        }
-        if(spriteCounter > 25) { // reset back to no raking
-            spriteNum = 1;
-            spriteCounter = 0;
-            raking = false;
-        }
-
     }
 
     // Update boolean - set to true if colliding with npc or objects below.
@@ -431,7 +329,7 @@ public class Player extends Entity{
                 gp.obj[objIndex] instanceof OBJ_SnackShelf || gp.obj[objIndex] instanceof OBJ_GlassDoor ||
                 gp.obj[objIndex] instanceof OBJ_Bed || gp.obj[objIndex] instanceof OBJ_FruitBox2 ||
                 gp.obj[objIndex] instanceof OBJ_Chest || gp.obj[objIndex] instanceof OBJ_Desk ||
-                gp.obj[objIndex] instanceof OBJ_CheckoutCounter) {
+                gp.obj[objIndex] instanceof OBJ_CheckoutCounter || (gp.obj[objIndex] instanceof OBJ_Gate && gp.obj[objIndex].gateWithLock)) {
                 if(gp.obj[objIndex].interactable) {
                     interactableCollision = true;
                 }
@@ -459,27 +357,11 @@ public class Player extends Entity{
 
             switch(objectName) { // objectName is the one being evaluated at which must be one of the following below. e.g. Key, Door, Chest, Boots, etc
 
-                case "Rake":
-                    gp.playSE(15); // find a better sound like pickup a tool sound effect
-                    gp.obj[i] = null;
-                    if(inventory.size() != maxInventorySize) {
-                        inventory.add(new OBJ_Rake(gp));
-                    }
-                    break;
-
-                case "Rock":
-                    gp.playSE(15);
-                    hasRock++;
-                    gp.obj[i] = null;
-                    if(inventory.size() != maxInventorySize) {
-                        inventory.add(new OBJ_Rock(gp));
-                    }
-                    break;
-
                 case "Key":
                     gp.playSE(1);
                     hasKey++;
                     gp.obj[i] = null;
+                    gp.currentTask = TaskState.ESCAPE;
                     if(inventory.size() != maxInventorySize) {
                         inventory.add(new OBJ_Key(gp));
                     }
@@ -503,13 +385,30 @@ public class Player extends Entity{
 
                 case "Door2": // horizontal door
                     // only can leave door and never go back in.
-                    if(gp.currentTask == TaskState.GO_TO_CABIN) {
-                        if (lockOfficeDoor == false) {
-                                exitMap = true;
-                                gp.gameState = gp.transitionState;
-                                lockOfficeDoor = true; // prevents going back in ranger office
-                                gp.playSE(4);
+//                    if(gp.currentTask == TaskState.GO_TO_CABIN) {
+//                        if (!lockOfficeDoor) {
+//                                exitMap = true;
+//                                gp.gameState = gp.transitionState;
+//                                lockOfficeDoor = true; // prevents going back in ranger office
+//                                gp.playSE(4);
+//                        }
+//                    }
+
+                    // Ranger office exit
+                    if(gp.subMap == gp.SUB_FRONT_OFFICE) {
+
+                        if(gp.currentTask == TaskState.GO_TO_CABIN && !lockOfficeDoor) {
+                            exitMap = true;
+                            gp.gameState = gp.transitionState;
+                            lockOfficeDoor = true;
+                            gp.playSE(4);
                         }
+                    }
+                    // Player cabin exit
+                    else if(gp.subMap == gp.SUB_PLAYER_CABIN) {
+                        exitMap = true;
+                        gp.gameState = gp.transitionState;
+                        gp.playSE(4);
                     }
                     break;
 
@@ -521,9 +420,12 @@ public class Player extends Entity{
                         removeFromInventory(OBJ_Key.class);
                         gp.currentTask = TaskState.GO_TO_SLEEP;
                     }
-                    exitMap = true;
-                    gp.gameState = gp.transitionState;
-                    gp.playSE(20);
+
+                    if(gp.currentTask != TaskState.GET_ESCAPE_KEYS && gp.currentTask != TaskState.ESCAPE) {
+                        exitMap = true;
+                        gp.gameState = gp.transitionState;
+                        gp.playSE(20);
+                    }
                     break;
             }
         }
@@ -602,6 +504,7 @@ public class Player extends Entity{
                             gp.ui.checkmarks[6][0] = true;
                             gp.gameState = gp.transitionState;
                             gp.currentTask = TaskState.INVESTIGATE;
+                            gp.knocking = true;
                         }
                         break;
                     case "logbook":
@@ -623,6 +526,7 @@ public class Player extends Entity{
         if(gp.keyH.ePressed) {
 
             System.out.println(gp.currentTask);
+
             if (i != 999) { // from the method that has the default index val, it only will change from 999 if collision was detected - NPC to Player
                 rakeCanceled = true;
                 String name = gp.npc[i].name;
@@ -727,23 +631,6 @@ public class Player extends Entity{
         }
     }
 
-    // DEBUG THIS SO IT WORKS GIVES ILLEGAL EXCEPTION
-    public void cutGrass(int i) {
-
-        if (i != 999 && gp.obj[i] instanceof OBJ_TallGrass) {
-            if(!gp.obj[i].invincible) {// put cutting grass functions here, like it'll take 3 attacks from rake to dissapear
-
-                gp.playSE(10); // enter grass cutting sound here
-                gp.obj[i].curLife -= 1;
-                gp.obj[i].invincible = true;
-
-                if(gp.obj[i].curLife <= 0) {
-                    gp.obj[i] = null;
-                }
-            }
-        }
-    }
-
     public void selectItem() {
 
         int itemIndex = gp.ui.getItemIndexOnSlot();
@@ -780,54 +667,20 @@ public class Player extends Entity{
 
         switch(direction) { // based on this direction we will pick an image from below
             case "up":
-                if(!raking) {
-                    if(spriteNum == 1) {image = up1;}
-                    if(spriteNum == 2) {image = up2;}
-                }
-                if(raking) {
-                    tempScreenY = screenY - gp.tileSize;
-                    if(spriteNum == 1) {image = rakeUp1;}
-                }
-                if(throwingRock) { // USE CONDITION THAT HAS A BOOLEAN VARIABLE THAT DEPENDS ON TIME
-                    if(spriteNum == 1) {image = throwUp1;}
-                }
+                if(spriteNum == 1) {image = up1;}
+                if(spriteNum == 2) {image = up2;}
                 break;
             case "down":
-                if(!raking) {
-                    if(spriteNum == 1) {image = down1;}
-                    if(spriteNum == 2) {image = down2;}
-                }
-                if(raking) {
-                    if(spriteNum == 1) {image = rakeDown1;}
-                }
-                if(throwingRock) { // USE CONDITION THAT HAS A BOOLEAN VARIABLE THAT DEPENDS ON TIME
-                    if(spriteNum == 1) {image = throwDown1;}
-                }
+                if(spriteNum == 1) {image = down1;}
+                if(spriteNum == 2) {image = down2;}
                     break;
             case "left":
-                if(!raking) {
-                    if(spriteNum == 1) {image = left1;}
-                    if(spriteNum == 2) {image = left2;}
-                }
-                if(raking) {
-                    tempScreenX = screenX - gp.tileSize;
-                    if(spriteNum == 1) {image = rakeLeft1;}
-                }
-                if(throwingRock) { // USE CONDITION THAT HAS A BOOLEAN VARIABLE THAT DEPENDS ON TIME
-                    if(spriteNum == 1) {image = throwLeft1;}
-                }
+                if(spriteNum == 1) {image = left1;}
+                if(spriteNum == 2) {image = left2;}
                 break;
             case "right":
-                if(!raking) {
-                    if(spriteNum == 1) {image = right1;}
-                    if(spriteNum == 2) {image = right2;}
-                }
-                if(raking) {
-                    if(spriteNum == 1) {image = rakeRight1;}
-                }
-                if(throwingRock) { // USE CONDITION THAT HAS A BOOLEAN VARIABLE THAT DEPENDS ON TIME
-                    if(spriteNum == 1) {image = throwRight1;}
-                }
+                if(spriteNum == 1) {image = right1;}
+                if(spriteNum == 2) {image = right2;}
                 break;
         }
 

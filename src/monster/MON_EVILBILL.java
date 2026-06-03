@@ -145,8 +145,8 @@ public class MON_EVILBILL extends Entity {
         if(path) {
             // only when there's no lock activated.
             if(!cloak) {
-                randNum = rand.nextInt(180);
-                if(randNum == 70) {
+                randNum = rand.nextInt(240);
+                if(randNum == 120) {
                     cloak = true;
                     System.out.println("ACTIVATE CLOAK");
                 }

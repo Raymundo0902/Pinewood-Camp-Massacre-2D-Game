@@ -67,9 +67,9 @@ public class Entity {
     // ITEM/PROJECTILE ATTRIBUTES
     public Entity currentItem; // store reference to rake, key, flashlight, etc
     public String description = "";
-    public Projectile projectile;
-    public boolean alive = false;
     public int lightRadius;
+
+    public boolean gateWithLock = false;
 
 
     public Entity(GamePanel gp) {
@@ -84,7 +84,6 @@ public class Entity {
     public void speak() {
 
         if(dialogues[dialogueIndex] == null) { // if there's no more text, go back to first dialogue to prevent "NullPointerException"
-            System.out.println("RESET");
             dialogueIndex = 0;
         }
         gp.ui.currentDialogue = dialogues[dialogueIndex];

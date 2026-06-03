@@ -30,10 +30,12 @@ public class EventHandler {
         else if (cutsceneTrigger() && gp.subMap == gp.SUB_MAIN_WORLD && gp.currentTask == TaskState.INVESTIGATE) {
             monsterAI();
         }
-        else if(hit(24, 17, "any")) {
-            gp.player.exitMap = true;
-            gp.gameState = gp.transitionState;
-        }
+//        else if(hit(24, 17, "any") && gp.subMap == gp.SUB_PLAYER_CABIN) {
+//            gp.player.exitMap = true;
+//            gp.gameState = gp.transitionState;
+//        }
+
+
 
     }
 

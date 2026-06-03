@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int currentMap; // Current map player is in
     public final int GAS_STATION = 0;
     public final int PINEWOOD_CAMP = 1;
-        // sub maps
+        // SUB MAPS
     public final int SUB_GAS_STATION = 0;
     public final int SUB_FRONT_OFFICE = 1;
     public final int SUB_PLAYER_CABIN = 2;
@@ -53,7 +53,6 @@ public class GamePanel extends JPanel implements Runnable {
     // FPS
     int FPS = 60;
 
-    // "this" as the argument is passing the reference to the exact GamePanel object thats currently running. (NOT THE OBJECT, NOT A COPY, NOT A NEW OBJECT)
     public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     public MouseHandler mouseH = new MouseHandler(this);
@@ -82,28 +81,23 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity npc[] = new Entity[maxNpc];
     public Entity monster[] = new Entity[maxMonster];
 
-    public ArrayList<Projectile> projectileList = new ArrayList<>();
-    ArrayList<Entity> entityArrList = new ArrayList<>(); // store all entities: players, npc's, obj in this list.
+    ArrayList<Entity> entityArrList = new ArrayList<>(); // STORE ALL ENTITIES: PLAYER, MONSTER, NPC
 
     // GAME STATES
     public int gameState;
     public final int titleState = 0;
     public final int playState = 1;
-    public final int pauseState = 2;
+    public final int pausedState = 2;
     public final int dialogueState = 3;
-    public final int characterState = 4;
+    public final int inventoryState = 4;
     public final int initialDialogueState = 5;
-    public final int optionsState = 6;
-    public final int gameOverState = 7;
-    public final int transitionMapState = 8;
-    public final int computerState = 9;
-    public final int transitionState = 10;
-    public final int logBookState = 11;
-    public final int cutsceneState = 12;
-    // Substate, not a main state like most above.
+    public final int gameOverState = 6;
+    public final int transitionMapState = 7;
+    public final int computerState = 8;
+    public final int transitionState = 9;
+    public final int logBookState = 10;
+    public final int cutsceneState = 11;
 
-
-    public boolean mapOn = false;
 
     // CONTROL VARIABLES FOR ONE TIME FUNCTIONS - LOADING SCREEN, DIALOGUE, ETC
     public boolean canTypeSound = true;
@@ -123,6 +117,10 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean monChaseOn = false;
     public boolean drawInnerDialogue;
     public boolean hasntUnlockedYet = true;
+    public boolean mapOn = false;
+    public boolean knocking = false;
+    private boolean knockingStarted = false;
+    private long knockingStartTime = 0;
 
 
     public GamePanel () {
@@ -136,13 +134,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() { // created this method so we can add other setup stuff in the future
-        // DELETE INSIDE CODE AND SET BACK CUR MAP TO GAS STATION WHEN DONE
-//        currentMap = PINEWOOD_CAMP;
-//        subMap = SUB_FRONT_OFFICE;
-//        currentTask = TaskState.GO_TO_CABIN;
-//        player.hasKey++;
-//        player.inventory.add(new OBJ_Key(this));
-        // DELETE INSIDE CODE AND SET BACK CUR MAP TO GAS STATION WHEN DONE
         currentMap = GAS_STATION;
         gameState = titleState;
         aSetter.setObject();
@@ -156,8 +147,6 @@ public class GamePanel extends JPanel implements Runnable {
         if(toggleFullScreen) {
             setFullScreen();
         }
-
-//        transitionMap();
     }
 
     // maybe use this for if player reaches a checkpoint in game?
@@ -305,6 +294,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
 
+
         if(gameState == initialDialogueState) {
 
             if(canTypeSound) {
@@ -385,17 +375,6 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
-            // PROJECTILES
-            Iterator<Projectile> cursor = projectileList.iterator(); // CURSOR HOLDS A REFERENCE TO PROJECTILE LIST. NOT THE LIST ITSELF. NEEDS TO RECREATE EVERY FRAME SO IT STARTS THE WALK FROM BEGINNING OF THE LIST.
-
-            while(cursor.hasNext()) { // ITERATOR STARTS BEFORE THE FIRST ELEMENT
-
-                Projectile p = cursor.next(); // GETS THE NEXT PROJECTILE REFERENCE IN THE ARRAYLIST. AT THIS POINT CURSOR TAKES ONE STEP FORWARD.
-
-                if(p.alive) p.update();
-                else cursor.remove(); // IF IT ISN'T ALIVE, REMOVE IT FROM THE CURRENT INDEX CURSOR IS IN
-            }
-
             // OBJECTS - arranged code so the obj doesnt change animations like players and npcs.
             for(int i = 0; i < obj.length; i++) {
                 if(obj[i] != null) {
@@ -405,23 +384,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             eHandler.update();
 
-            // chase music
-            if(chaseMusic) {
-                if(!isChaseMusicPlaying) {
-                    stopMusic();
-                    playMusic(23);
-                    isChaseMusicPlaying = true;
-                }
-                chaseMusic = false;
-            } else if(stopChaseMusic) {
-                if(isChaseMusicPlaying) {
-                    stopMusic();
-                    playSE(24);
-                    playMusic(6); // return back to normal forest ambience
-                    isChaseMusicPlaying = false;
-                }
-                stopChaseMusic = false;
-            }
+
+            handleMusic();
         }
 
         if(gameState == computerState) {
@@ -469,7 +433,7 @@ public class GamePanel extends JPanel implements Runnable {
                     }
                     player.exitMap = false;
                 }
-                // set all variables so time stamp of 3:15 AM can draw, and day cycle begins.
+                // set all variables so time stamp of 3:15 AM can draw.
                 if (player.slept) {
 
                     drawTimeStamp = true;
@@ -479,8 +443,54 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        if(gameState == pauseState) {
-            // nothing, no updating player info while paused
+        if(gameState == pausedState) {}
+    }
+
+    private void handleMusic() {
+
+        if(knocking) {
+
+            // Wait 5 seconds before playing
+            if(!knockingStarted) {
+                knockingStartTime++;
+                if(knockingStartTime >= 200) {
+
+                    if(subMap == SUB_PLAYER_CABIN) {
+                        playMusic(25);
+                        knockingStarted = true;
+                    }
+                    else {
+                        knocking = false;
+                    }
+                }
+            }
+
+            // Stop knocking if player leaves cabin
+            if(knockingStarted && subMap != SUB_PLAYER_CABIN) {
+                stopMusic();
+                knocking = false;
+                knockingStarted = false;
+            }
+
+        }
+
+
+        // chase music
+        if(chaseMusic) {
+            if(!isChaseMusicPlaying) {
+                stopMusic();
+                playMusic(23);
+                isChaseMusicPlaying = true;
+            }
+            chaseMusic = false;
+        } else if(stopChaseMusic) {
+            if(isChaseMusicPlaying) {
+                stopMusic();
+                playSE(24);
+                playMusic(6); // return back to normal forest ambience
+                isChaseMusicPlaying = false;
+            }
+            stopChaseMusic = false;
         }
     }
 
@@ -521,12 +531,6 @@ public class GamePanel extends JPanel implements Runnable {
             for(int i = 0; i < monster.length; i++) {
                 if(monster[i] != null) {
                     entityArrList.add(monster[i]);
-                }
-            }
-
-            for(int i = 0; i < projectileList.size(); i++) {
-                if(projectileList.get(i) != null) {
-                    entityArrList.add(projectileList.get(i));
                 }
             }
 
