@@ -295,10 +295,6 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
                 checkDebugText = false;
             }
         }
-        // for testing
-        if(code == KeyEvent.VK_L) {
-            gp.gameState = gp.transitionState;
-        }
         // FAST REAL-TIME MAP EDIT
         if(code == KeyEvent.VK_B) {
 

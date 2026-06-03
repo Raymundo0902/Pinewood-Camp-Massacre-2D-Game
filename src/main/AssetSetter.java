@@ -102,8 +102,6 @@ public class AssetSetter {
                 gp.obj[22].worldX = 45 * gp.tileSize;
                 gp.obj[22].worldY = (61 * gp.tileSize);
 
-
-
                 // EXIT GATE
                 gp.obj[25] = new OBJ_Gate(gp, 3);
                 gp.obj[25].worldX = 34 * gp.tileSize;
@@ -148,11 +146,23 @@ public class AssetSetter {
 
                 gp.obj[34] = new OBJ_BookShelf(gp);
                 gp.obj[34].worldX = 18 * gp.tileSize;
-                gp.obj[34].worldY = 13 * gp.tileSize;
+                gp.obj[34].worldY = 12 * gp.tileSize;
 
                 gp.obj[35] = new OBJ_Barrel(gp);
                 gp.obj[35].worldX = 16 * gp.tileSize;
-                gp.obj[35].worldY = 14 * gp.tileSize;
+                gp.obj[35].worldY = 13 * gp.tileSize;
+
+                gp.obj[36] = new OBJ_BookShelf(gp);
+                gp.obj[36].worldX = 43 * gp.tileSize;
+                gp.obj[36].worldY = (58 * gp.tileSize) + 30;
+
+                gp.obj[37] = new OBJ_Carpet(gp);
+                gp.obj[37].worldX = 38 * gp.tileSize;
+                gp.obj[37].worldY = 62 * gp.tileSize;
+
+                gp.obj[38] = new OBJ_BookShelf(gp);
+                gp.obj[38].worldX = 37 * gp.tileSize;
+                gp.obj[38].worldY =  (58 * gp.tileSize) + 30;
 
             }
             else if(gp.currentTask == TaskState.INVESTIGATE) {
@@ -170,6 +180,7 @@ public class AssetSetter {
     // Call when entering player cabin — hides outdoor-only objects
     public void hideCabinExteriorAssets() {
         gp.obj[2] = null;   // OBJ_K4Door
+
         // null out all gate slots
         for (int i = 25; i <= 31; i++) {
             gp.obj[i] = null;
@@ -181,6 +192,10 @@ public class AssetSetter {
         gp.obj[2] = new OBJ_K4Door(gp);
         gp.obj[2].worldX = 15 * gp.tileSize;
         gp.obj[2].worldY = 15 * gp.tileSize;
+
+        gp.obj[1] = new OBJ_FrontOfficeCabin(gp);
+        gp.obj[1].worldX = 41 * gp.tileSize;
+        gp.obj[1].worldY = 59 * gp.tileSize;
 
         if(!gp.player.unlockedGate) {
 
@@ -238,6 +253,10 @@ public class AssetSetter {
         gp.obj[29].worldY = 9 * gp.tileSize;
     }
 
+    public void removeNPC() {
+        gp.npc[1] = null;
+    }
+
     public void setNPC() {
 
         if(gp.currentMap == gp.GAS_STATION) {
@@ -262,9 +281,6 @@ public class AssetSetter {
 
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
             // insert all the below entities in here
-            gp.npc[0] = new NPC_Ayden(gp);
-            gp.npc[0].worldX = gp.tileSize*30;
-            gp.npc[0].worldY = gp.tileSize*70;
 
             gp.npc[1] = new NPC_OfficerJames(gp);
             gp.npc[1].worldX = (gp.tileSize*46) + 24;
@@ -277,8 +293,8 @@ public class AssetSetter {
         // disabled for game testing
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
             gp.monster[0] = new MON_EVILBILL(gp);
-            gp.monster[0].worldX = gp.tileSize*18;
-            gp.monster[0].worldY = gp.tileSize*11;
+            gp.monster[0].worldX = gp.tileSize*16;
+            gp.monster[0].worldY = gp.tileSize*9;
         }
     }
 
@@ -298,11 +314,11 @@ public class AssetSetter {
 
         gp.obj[34] = new OBJ_BookShelf(gp);
         gp.obj[34].worldX = 18 * gp.tileSize;
-        gp.obj[34].worldY = 13 * gp.tileSize;
+        gp.obj[34].worldY = 12 * gp.tileSize;
 
         gp.obj[35] = new OBJ_Barrel(gp);
         gp.obj[35].worldX = 16 * gp.tileSize;
-        gp.obj[35].worldY = 14 * gp.tileSize;
+        gp.obj[35].worldY = 13 * gp.tileSize;
 
     }
 
@@ -321,6 +337,9 @@ public class AssetSetter {
         gp.obj[21] = null;
         gp.obj[22] = null;
         gp.obj[5] = null;
+        gp.obj[36] = null;
+        gp.obj[37] = null;
+        gp.obj[38] = null;
 
 
     }

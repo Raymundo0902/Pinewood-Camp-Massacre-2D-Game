@@ -72,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
     Map map = new Map(this);
     public EnvironmentHandler eHandler = new EnvironmentHandler(this);
 
+
     // ENTITIES AND OBJECTS
     public final int maxObj = 40;
     public final int maxNpc = 10;
@@ -109,8 +110,8 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean drawBlackScreen = false;
     float j = 1f;
     public boolean oneTime = false;
-    public boolean startDayCycle = false;
     public boolean drawTimeStamp = false;
+    public boolean setToNight = false;
 
     // Sound control
     public boolean chaseMusic = false;
@@ -135,13 +136,19 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() { // created this method so we can add other setup stuff in the future
+        // DELETE INSIDE CODE AND SET BACK CUR MAP TO GAS STATION WHEN DONE
+//        currentMap = PINEWOOD_CAMP;
+//        subMap = SUB_FRONT_OFFICE;
+//        currentTask = TaskState.GO_TO_CABIN;
+//        player.hasKey++;
+//        player.inventory.add(new OBJ_Key(this));
+        // DELETE INSIDE CODE AND SET BACK CUR MAP TO GAS STATION WHEN DONE
         currentMap = GAS_STATION;
         gameState = titleState;
         aSetter.setObject();
         aSetter.setNPC();
         eHandler.setup();
         playMusic(8); // play main menu music -- VHS 80s-90s MUSIC
-        eHandler.setup();
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -149,6 +156,8 @@ public class GamePanel extends JPanel implements Runnable {
         if(toggleFullScreen) {
             setFullScreen();
         }
+
+//        transitionMap();
     }
 
     // maybe use this for if player reaches a checkpoint in game?
@@ -212,7 +221,6 @@ public class GamePanel extends JPanel implements Runnable {
         long timer = 0;
         int drawCount = 0;
 
-
         while(gameThread != null) { // as-long as gameThread exists, it will repeat the process thats in the while loop
 
             currentTime = System.nanoTime();
@@ -251,8 +259,9 @@ public class GamePanel extends JPanel implements Runnable {
             if(subMap == SUB_PLAYER_CABIN) {
                 player.setPosAfterCabin();
             } else if(subMap == SUB_FRONT_OFFICE) {
-//                playSE(22);  UNCCOMMENT WHEN DONE WITH THE GAME
+//                playSE(22);  UNCOMMENT WHEN DONE WITH THE GAME
                 player.setPosAfterOffice();
+                aSetter.removeNPC();
             }
 
             // load into main map
@@ -462,8 +471,9 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 // set all variables so time stamp of 3:15 AM can draw, and day cycle begins.
                 if (player.slept) {
+
                     drawTimeStamp = true;
-                    ui.setToDay = true;
+                    setToNight = true;
                     player.slept = false;
                 }
             }
@@ -639,7 +649,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if(currentTask == TaskState.INVESTIGATE) {
             ui.taskIndex = 8;
-
         }
         if(currentTask == TaskState.GET_ESCAPE_KEYS) {
             ui.taskIndex = 9;

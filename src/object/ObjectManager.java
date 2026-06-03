@@ -25,16 +25,7 @@ public class ObjectManager {
         // use this to your advantage so when pathfinder setting nodes based on col and row, you can call objectMap and pass in
         // the current col and row of the pathfinder's current node array index and if it encounters the objcampfire then set
         // that node to solid
-//        objectMap[21][56] =  new OBJ_Campfire(gp);
-//        objectMap[13][77] =  new OBJ_Campfire(gp);
-//        objectMap[46][28] = new OBJ_PORTAPOTTY(gp);
-//        objectMap[46][29] = new OBJ_PORTAPOTTY(gp);
-//        objectMap[34][7] = new OBJ_Gate(gp, 5);
-//        objectMap[40][7] = new OBJ_Gate(gp, 5);
-//        objectMap[34][8] = new OBJ_Gate(gp, 5);
-//        objectMap[34][9] = new OBJ_Gate(gp, 5);
-//        objectMap[40][8] = new OBJ_Gate(gp, 5);
-//        objectMap[40][9] = new OBJ_Gate(gp, 5);
+
 
         objectMap[21][56] =  collision;
         objectMap[13][77] =  collision;
@@ -42,10 +33,27 @@ public class ObjectManager {
         objectMap[46][29] = collision;
         objectMap[34][7] = collision;
         objectMap[40][7] = collision;
-//        objectMap[34][8] = collision;
-//        objectMap[34][9] = collision;
-//        objectMap[40][8] = collision;
-//        objectMap[40][9] = collision;
+
+        // front office tiles - spaced individually as its each column
+        objectMap[41][59] = collision;
+        objectMap[41][60] = collision;
+        objectMap[41][61] = collision;
+        objectMap[41][62] = collision;
+
+        objectMap[42][59] = collision;
+        objectMap[42][60] = collision;
+        objectMap[42][61] = collision;
+        objectMap[42][62] = collision;
+
+        objectMap[43][59] = collision;
+        objectMap[43][60] = collision;
+        objectMap[43][61] = collision;
+        objectMap[43][62] = collision;
+
+        objectMap[44][59] = collision;
+        objectMap[44][60] = collision;
+        objectMap[44][61] = collision;
+        objectMap[44][62] = collision;
     }
 
 }

@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class OBJ_Campfire extends Entity {
 
     BufferedImage fire1, fire2;
-    public int lightRadius = 200;
+    public int lightRadius;
 
 
     public OBJ_Campfire(GamePanel gp) {
@@ -19,9 +19,11 @@ public class OBJ_Campfire extends Entity {
         // DEFAULTS & STATES
         name = "Campfire";
         collision = true;
+        type = TYPE_LIGHT;
 
         fire1 = setup("/objects/fire1", gp.tileSize, gp.tileSize);
         fire2 = setup("/objects/fire2", gp.tileSize, gp.tileSize);
+        lightRadius = 150;
 
     }
 

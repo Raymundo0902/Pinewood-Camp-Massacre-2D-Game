@@ -53,6 +53,7 @@ public class Entity {
     public final int TYPE_ROCK = 6;
     public final int TYPE_LIGHT = 7;
 
+
     // CHARACTER ATTRIBUTES
     public String name;
     public int maxLife;

@@ -12,7 +12,6 @@ public class Lighting {
 
     GamePanel gp;
     BufferedImage darknessFilter;
-    int dayCounter;
     float filterAlpha = 0.50f;
 
     // day states
@@ -86,24 +85,30 @@ public class Lighting {
 
     public void update() {
 
-        if(gp.player.lightUpdated == true) {
+        if(gp.player.lightUpdated) {
             setLightSource();
             gp.player.lightUpdated = false;
         }
-
-        // day cycle only starts when player first sleeps after arriving to cabin
 
         if (gp.subMap == gp.SUB_MAIN_WORLD) {
             // Check for different state of the day
 
             if (dayState == sunset) { // transition to night
-                filterAlpha += 0.0001f; // for quick tests
+                filterAlpha += 0.0005f; // for quick tests
                 if (filterAlpha > 0.90f) {
-                    filterAlpha = 0.90f;
+                    filterAlpha = 0.94f;
                     dayState = night;
                 }
             }
+
         }
+
+        if(gp.setToNight) {
+            dayState = night;
+            filterAlpha = 0.94f;
+        }
+
+
     }
 
     public void draw(Graphics2D g2) {

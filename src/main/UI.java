@@ -63,7 +63,6 @@ public class UI {
     int subState = 0;
 
     // EXTRA BOOLEANS/CONDITIONALS/COUNTERS
-    public boolean setToDay = false;
     int innerDialogueCounter = 0;
 
     // COMPUTER OS

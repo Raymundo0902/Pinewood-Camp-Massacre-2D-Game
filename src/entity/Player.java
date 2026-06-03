@@ -122,8 +122,8 @@ public class Player extends Entity{
         direction = "down";
     }
     public void setPosAfterOffice() {
-        worldX = gp.tileSize * 32;
-        worldY = gp.tileSize * 62;
+        worldX = gp.tileSize * 42;
+        worldY = gp.tileSize * 64;
         direction = "down";
     }
 
@@ -831,17 +831,12 @@ public class Player extends Entity{
                 break;
         }
 
-//        // PLAYER'S HEALTH BAR
-//        g2.setColor(new Color(255,0,30));
-//        g2.fillRect(gp.tileSize, gp.tileSize/2, gp.tileSize*4, 20);
-
         if(invincible) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)); // makes player look kinda invincible
         }
-        if(drawing == true) {
+        if(drawing) {
             g2.drawImage(image, tempScreenX, tempScreenY,null);
         }
-
 
         // RESET ALPHA
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -849,9 +844,6 @@ public class Player extends Entity{
         // COLLISION HITBOX VISUAL (DEBUG)
         g2.setColor(Color.red);
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
-        // INVINCIBLE COUNTER (DEBUG)
-//        g2.setFont(new Font("Arial", Font.PLAIN, 25));
-//        g2.setColor(Color.white);
-//        g2.drawString("Invincible: +"+invincibleCounter, 48, 90);
+
     }
 }

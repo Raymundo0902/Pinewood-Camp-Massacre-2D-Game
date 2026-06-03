@@ -14,22 +14,34 @@ public class EventHandler {
         this.gp = gp;
 
         eventRect = new Rectangle();
-        eventRect.x = 23;
-        eventRect.y = 23;
-        eventRect.width = 2;
-        eventRect.height = 2;
+        eventRect.x = 0;
+        eventRect.y = 0;
+        eventRect.width = gp.tileSize;
+        eventRect.height = gp.tileSize;
         eventRectDefaultX = eventRect.x;
         eventRectDefaultY = eventRect.y;
     }
 
     public void checkEvent() {
-        if(hit(20,56, "any") == true) { gp.player.takeDamage(); }
-        else if (hit(18, 18, "any") == true && gp.subMap == gp.SUB_MAIN_WORLD &&
-                 gp.currentTask == TaskState.INVESTIGATE) { monsterAI();}
-        else if(hit(24, 17, "any") == true) {
+
+        if(hit(20, 56, "any")) {
+            gp.player.takeDamage();
+        }
+        else if (cutsceneTrigger() && gp.subMap == gp.SUB_MAIN_WORLD && gp.currentTask == TaskState.INVESTIGATE) {
+            monsterAI();
+        }
+        else if(hit(24, 17, "any")) {
             gp.player.exitMap = true;
             gp.gameState = gp.transitionState;
         }
+
+    }
+
+    private boolean cutsceneTrigger() {
+        return  hit(12, 16, "any") || hit(12, 17, "any") ||
+                hit(13, 17, "any") || hit(14, 17, "any") ||
+                hit(15, 17, "any") || hit(16, 17, "any") ||
+                hit(16, 16, "any");
     }
 
     public boolean hit(int eventCol, int eventRow, String reqDirection) { // checks event collision
@@ -53,8 +65,11 @@ public class EventHandler {
         eventRect.x = eventRectDefaultX;
         eventRect.y = eventRectDefaultY;
 
+
         return hit;
     }
+
+
 
     public void monsterAI() {
 
