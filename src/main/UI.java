@@ -172,6 +172,11 @@ public class UI {
         }
     }
 
+    public void drawStudioLogo() {
+        // DRAW PIXEL STUDIOS LOGO HERE, 80'S STYLE, RETRO, GLOW, BLUE/PURPLE?
+
+    }
+
     public void transitionScreen() {
 
         if(fadingOut == false) {

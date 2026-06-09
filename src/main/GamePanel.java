@@ -170,11 +170,19 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-        // CHASE MUSIC
+        // CHASE
 
         chaseMusic = false;
         stopChaseMusic = false;
         isChaseMusicPlaying = false;
+
+
+        knocking = true;
+        knockingStarted = true;
+        knockingStartTime = 0;
+
+        monChaseOn = false;
+        sceneM.scenePhase = 0;
 
 
 
@@ -468,8 +476,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void update() {
-
-        System.out.println(subMap);
 
 
         if(gameState == initialDialogueState) {
