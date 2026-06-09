@@ -384,16 +384,6 @@ public class Player extends Entity{
                     break;
 
                 case "Door2": // horizontal door
-                    // only can leave door and never go back in.
-//                    if(gp.currentTask == TaskState.GO_TO_CABIN) {
-//                        if (!lockOfficeDoor) {
-//                                exitMap = true;
-//                                gp.gameState = gp.transitionState;
-//                                lockOfficeDoor = true; // prevents going back in ranger office
-//                                gp.playSE(4);
-//                        }
-//                    }
-
                     // Ranger office exit
                     if(gp.subMap == gp.SUB_FRONT_OFFICE) {
 
@@ -592,7 +582,7 @@ public class Player extends Entity{
     }
 
     // Use when you cannot use inventory.remove(currentItem)
-    private void removeFromInventory(Class<?> itemClass) {
+    public void removeFromInventory(Class<?> itemClass) {
         for(int x = 0; x <= inventory.size(); x++) {
             if(itemClass.isInstance(inventory.get(x))){
                 inventory.remove(x);

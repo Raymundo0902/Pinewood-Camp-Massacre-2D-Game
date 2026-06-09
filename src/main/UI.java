@@ -39,10 +39,21 @@ public class UI {
 
     // Other Dialogue Mechanics - inner dialogue, etc
     public int npcIndex = 0;
-    int wordEndTwo = 0;
-    int nextLineTwo = 0;
-    int wordEndTwoDelayer = 0;
+    int innerWordEnd = 0;
+    int innerNextLine = 0;
+    int innerWordDelay = 0;
     int innerDialogueY = 480;
+
+    // INNER DIALOGUE
+
+
+    // TIMESTAMP
+    int timeWordEnd = 0;
+    int timeNextLine = 0;
+    int timeWordDelay = 0;
+
+
+
 
     // Task UI dialogue
     public String[] currentTask = new String[20];
@@ -245,6 +256,7 @@ public class UI {
 
     public void drawPlayerInnerDialogue() {
 
+
         innerDialogueCounter++;
 
         // Styles
@@ -261,33 +273,33 @@ public class UI {
         int baseY = gp.tileSize * 10;
 
         // Main Text - keeps text on screen and aligned
-        for (int i = 0; i < nextLineTwo; i++) {
+        for (int i = 0; i < innerNextLine; i++) {
             middleX = getXforCenteredText(lines[i]);
             drawGlowText(g2, lines[i], middleX, baseY + (i * 40));
         }
 
         if(innerDialogueCounter < 360) {
-            if (nextLineTwo < lines.length) {
+            if (innerNextLine < lines.length) {
 
-                String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+                String curWord = lines[innerNextLine].substring(0, innerWordEnd);
                 middleX = getXforCenteredText(curWord);
-                drawGlowText(g2, curWord, middleX, baseY + (nextLineTwo * 40));
+                drawGlowText(g2, curWord, middleX, baseY + (innerNextLine * 40));
 
-                if (wordEndTwo < lines[nextLineTwo].length()) {
-                    wordEndTwoDelayer++;
-                    if (wordEndTwoDelayer == 3) {
-                        wordEndTwo++;
-                        wordEndTwoDelayer = 0;
+                if (innerWordEnd < lines[innerNextLine].length()) {
+                    innerWordDelay++;
+                    if (innerWordDelay == 3) {
+                        innerWordEnd++;
+                        innerWordDelay = 0;
                     }
                 } else {
-                    nextLineTwo++;
-                    wordEndTwo = 0;
+                    innerNextLine++;
+                    innerWordEnd = 0;
                 }
             }
             // reached end of array, just hold
             else {
-                nextLineTwo = lines.length - 1;
-                wordEndTwo = lines[lines.length - 1].length();
+                innerNextLine = lines.length - 1;
+                innerWordEnd = lines[lines.length - 1].length();
             }
         }
 
@@ -295,36 +307,37 @@ public class UI {
         else {
 
             // clamp in case we enter erase phase with nextLineTwo out of bounds
-            if(nextLineTwo >= lines.length) {
-                nextLineTwo = lines.length - 1;
-                wordEndTwo = lines[nextLineTwo].length();
+            if(innerNextLine >= lines.length) {
+                innerNextLine = lines.length - 1;
+                innerWordEnd = lines[innerNextLine].length();
             }
 
-            if(nextLineTwo >= 0) {
+            if(innerNextLine >= 0) {
 
-                int clampedWordEnd = Math.min(wordEndTwo, lines[nextLineTwo].length());
-                String curWord = lines[nextLineTwo].substring(0, clampedWordEnd);
+                int clampedWordEnd = Math.min(innerWordEnd, lines[innerNextLine].length());
+                String curWord = lines[innerNextLine].substring(0, clampedWordEnd);
                 middleX = getXforCenteredText(curWord);
-                drawGlowText(g2, curWord, middleX, baseY + (nextLineTwo * 40));
+                drawGlowText(g2, curWord, middleX, baseY + (innerNextLine * 40));
 
-                if (wordEndTwo > 0) {
-                    wordEndTwoDelayer++;
-                    if (wordEndTwoDelayer == 3) {
-                        wordEndTwo--;
-                        wordEndTwoDelayer = 0;
+                if (innerWordEnd > 0) {
+                    innerWordDelay++;
+                    if (innerWordDelay == 3) {
+                        innerWordEnd--;
+                        innerWordDelay = 0;
                     }
                 } else {
-                    nextLineTwo--;
-                    if(nextLineTwo >= 0) {
-                        wordEndTwo = lines[nextLineTwo].length();
+                    innerNextLine--;
+                    if(innerNextLine >= 0) {
+                        innerWordEnd = lines[innerNextLine].length();
                     }
                 }
-            } else {
+            }
+            else {
                 gp.drawInnerDialogue = false;
                 gp.player.pInnerDialogueIndex++;
                 innerDialogueY = gp.tileSize * 10;
-                wordEndTwo = 0;
-                nextLineTwo = 0;
+                innerWordEnd = 0;
+                innerNextLine = 0;
             }
         }
     }
@@ -332,7 +345,7 @@ public class UI {
 
     public void drawTime() {
 
-        // Styles
+        // STYLES
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80f));
         String timeStamp = "3:15 AM";
         // lines[0] will just contain: ["3:15 AM"]
@@ -341,41 +354,44 @@ public class UI {
 
         int y = gp.tileSize * 5;
 
-        // Main Text - keeps text on screen and aligned
-        for (int i = 0; i < nextLineTwo; i++) {
+        // MAIN TEXT - KEEPS TEXT ALIGNED ON SCREEN
+        for (int i = 0; i < timeNextLine; i++) {
             middleX = getXforCenteredText(lines[i]);
             drawGlowText(g2, lines[i], middleX, y);
         }
 
-        // Moving text animation
-        // Only do typewriter effect when nextLine(next index) is less than the length. Prevents exception errors.
-        if(blackScreenPause < 360) {
-            if (nextLineTwo < lines.length) {
+        // ****** MOVING TEXT ANIMATION *******
 
-                String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+        if(blackScreenPause < 360) {
+            if (timeNextLine < lines.length) {
+
+                String curWord = lines[timeNextLine].substring(0, timeWordEnd);
                 middleX = getXforCenteredText(curWord);
                 drawGlowText(g2, curWord, middleX, y);
-                if (wordEndTwo < lines[nextLineTwo].length()) {
-                    wordEndTwoDelayer++;
-                    if (wordEndTwoDelayer == 20) {
-                        wordEndTwo++;
-                        wordEndTwoDelayer = 0;
+                if (timeWordEnd < lines[timeNextLine].length()) {
+                    timeWordDelay++;
+                    if (timeWordDelay == 20) {
+                        timeWordEnd++;
+                        timeWordDelay = 0;
                     }
                 }
             }
         }
 
-        // Shorten the word length
+        // ****** SHORTEN WORD LENGTH ******
+
         else {
-                nextLineTwo = 0;
-                String curWord = lines[nextLineTwo].substring(0, wordEndTwo);
+                timeNextLine = 0;
+
+                String curWord = lines[timeNextLine].substring(0, timeWordEnd);
                 middleX = getXforCenteredText(curWord);
                 drawGlowText(g2, curWord, middleX, y);
-                if (wordEndTwo >= 0) {
-                    wordEndTwoDelayer++;
-                    if (wordEndTwoDelayer == 20) {
-                        wordEndTwo--;
-                        wordEndTwoDelayer = 0;
+
+                if (timeWordEnd >= 0) {
+                    timeWordDelay++;
+                    if (timeWordDelay == 20) {
+                        timeWordEnd--;
+                        timeWordDelay = 0;
                     }
                 }
         }

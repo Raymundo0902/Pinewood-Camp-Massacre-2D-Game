@@ -18,15 +18,14 @@ public class CutsceneManager {
     public final int evilBill = 1;
 
     public CutsceneManager(GamePanel gp) {
-
         this.gp = gp;
     }
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
 
-        switch(sceneNum) {
-            case evilBill: scene_monEncounter(); break;
+        if (sceneNum == evilBill) {
+            scene_monEncounter();
         }
     }
 

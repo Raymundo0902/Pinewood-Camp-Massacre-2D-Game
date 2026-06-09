@@ -148,106 +148,210 @@ public class GamePanel extends JPanel implements Runnable {
 
     // maybe use this for if player reaches a checkpoint in game?
     public void retry() {
-        player.setDefaultPositionPinewood();
-        player.restoreLifeAndAttributes();
-        aSetter.setNPC();
+
+        // WORLD
+
+        tileM.loadMap("/maps/playercabin.txt"); // load into player cabin
+        subMap = SUB_PLAYER_CABIN;
+        currentTask = TaskState.INVESTIGATE;
+        aSetter.removeOutsideAssets();
+        aSetter.reseatAssets();
+        aSetter.removeMon();
+        aSetter.hideCabinExteriorAssets(); // ADD THIS
+
+
+        // PLAYER
+        player.setPosInCabin();
+        player.curLife = player.maxLife;
+        if(player.hasKey > 0) {
+            player.hasKey = 0;
+            player.removeFromInventory(OBJ_Key.class);
+        }
+
+
+
+        // CHASE MUSIC
+
+        chaseMusic = false;
+        stopChaseMusic = false;
+        isChaseMusicPlaying = false;
+
+
+
+        // INPUT RESET
+        // ---------------------------
+
+
+
+        // INNER DIALOGUE
+        ui.innerWordEnd = 0;
+        ui.innerNextLine = 0;
+        ui.innerWordDelay = 0;
+        ui.innerDialogueCounter = 0;
+        ui.innerDialogueY = 480;
+        drawInnerDialogue = false;
+
+        stopMusic();
+        playMusic(25);
+
+
+
     }
 
     // NEW GAME AGAIN
     public void restart() {
 
-//        // better to reset this after everything
-//        canTypeSound = true;
-//        drawBlackScreen = true;
-//        ui.introDialogueY = ui.defaultYPosition;
-//        ui.dialogueIndex = 0;
-//        ui.wordEnd = 0;
-//        ui.nextLine = 0;
-//
-//        // World
-//        currentMap = GAS_STATION;
-//
-//        // ENTITY DEFAULTS
-//        player.setDefaultPositionGasStation();
-//        player.restoreLifeAndAttributes();
-//        player.setItems();
-//        aSetter.setObject();
-//        aSetter.setNPC();
-//
-//        music.stop();
-//        playMusic(8);
-
-        //**** TESTING CODE BELOW ****//
-
-        // UI
-        canTypeSound = true;
-        drawBlackScreen = true;
-        j = 1f;
-        ui.introDialogueY = ui.defaultYPosition;
-        ui.dialogueIndex = 0;
-        ui.wordEnd = 0;
-        ui.nextLine = 0;
-        // reset all checkmarks - gives nullpointerexception
-//        for(boolean[] row : ui.checkmarks) {
-//            Arrays.fill(row, false);
-//        }
-
-        // World
+        // ---------------------------
+        // GAME STATE
+        // ---------------------------
         currentMap = GAS_STATION;
         subMap = SUB_GAS_STATION;
-
-        // Task
         currentTask = TaskState.GET_SNACKS;
 
-        // Sound flags
+        gameState = titleState;
+
+        // ---------------------------
+        // GAME FLAGS
+        // ---------------------------
+        canTypeSound = true;
+        drawBlackScreen = true;
+        drawTimeStamp = false;
+        setToNight = false;
+        oneTime = false;
+        closeTaskList = false;
+        mapOn = false;
+
         chaseMusic = false;
         stopChaseMusic = false;
         isChaseMusicPlaying = false;
+
         knocking = false;
         knockingStarted = false;
         knockingStartTime = 0;
 
-        // Misc flags
         hasntUnlockedYet = true;
-        oneTime = false;
-        drawTimeStamp = false;
-        setToNight = false;
 
-        // Player — position, life, booleans, inventory, dialogue
+        // CUTSCENE
+        monChaseOn = false;
+        sceneM.scenePhase = 0;
+
+        // ---------------------------
+        // UI RESET
+        // ---------------------------
+        ui.commandNum = 0;
+        ui.taskIndex = 0;
+        ui.slotCol = 0;
+        ui.slotRow = 0;
+
+        ui.dialogueIndex = 0;
+        ui.wordEnd = 0;
+        ui.nextLine = 0;
+        ui.finishedTyping = false;
+        ui.introDialogueY = ui.defaultYPosition;
+
+        // reset all task checkmarks
+        ui.setTaskList();
+
+
+        // reset computer state
+        ui.osSubState = 0;
+
+        // transition screen variables
+        ui.j = 0f;
+        ui.fadingOut = false;
+        ui.blackScreenPause = 0;
+
+        // ---------------------------
+        // INPUT RESET
+        // ---------------------------
+        keyH.upPressed = false;
+        keyH.downPressed = false;
+        keyH.leftPressed = false;
+        keyH.rightPressed = false;
+        keyH.shiftPressed = false;
+        keyH.enterPressed = false;
+        keyH.ePressed = false;
+
+        keyH.inputText.setLength(0);
+
+        // ---------------------------
+        // MOUSE RESET
+        // ---------------------------
+        mouseH.clickOnAssignButton = false;
+        mouseH.clickOnPasswordBox = false;
+        mouseH.clickOnSignInBox = false;
+
+        // ---------------------------
+        // PLAYER RESET
+        // ---------------------------
         player.setDefaultPositionGasStation();
         player.restoreLifeAndAttributes();
+
         player.hasKey = 0;
+
         player.gotChips = false;
         player.gotDrink = false;
         player.gotBanana = false;
         player.snacksCollected = 0;
+
         player.lockOfficeDoor = false;
         player.exitMap = false;
+        player.slept = false;
+        player.freezePlayer = false;
+        player.interactableCollision = false;
         player.unlockedGate = false;
+
+        player.invincible = false;
+        player.invincibleCounter = 0;
+
+        player.sprintCounter = 0;
+        player.sprinting = false;
+
         player.pDialogueIndex = 0;
+        player.pInnerDialogueIndex = 0;
         player.pConvoIndex = 0;
+
         player.speakIncrement = 0;
         player.speakTimer = 0;
+
+
+        // INNER DIALOGUE
+        ui.innerWordEnd = 0;
+        ui.innerNextLine = 0;
+        ui.innerWordDelay = 0;
+        ui.innerDialogueCounter = 0;
+        ui.innerDialogueY = 480;
+        drawInnerDialogue = false;
+
+        // TIME STAMP
+        ui.timeWordEnd = 0;
+        ui.timeNextLine = 0;
+        ui.timeWordDelay = 0;
+
         player.inventory.clear();
         player.setItems();
         player.setDialogue();
 
-        // Assets
-        aSetter.removeMon();
+        // ---------------------------
+        // WORLD RESET
+        // ---------------------------
+        Arrays.fill(obj, null);
+        Arrays.fill(npc, null);
+        Arrays.fill(monster, null);
+
         aSetter.setObject();
         aSetter.setNPC();
 
-        // Tile map back to gas station
-        tileM.loadMap("/maps/gasstation.txt"); // adjust path if different
+        // ---------------------------
+        // MAP RESET
+        // ---------------------------
+        tileM.loadMap("/maps/gasstation.txt");
 
-        // Music
+        // ---------------------------
+        // AUDIO RESET
+        // ---------------------------
         stopMusic();
         playMusic(8);
-
-        gameState = titleState; // or initialDialogueState if you want to replay intro
-
-        //**** TESTING CODE ABOVE ****//
-
 
 
     }
@@ -364,6 +468,8 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void update() {
+
+        System.out.println(subMap);
 
 
         if(gameState == initialDialogueState) {
