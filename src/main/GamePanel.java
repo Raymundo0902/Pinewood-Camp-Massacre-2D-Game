@@ -14,10 +14,7 @@ import tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -159,26 +156,99 @@ public class GamePanel extends JPanel implements Runnable {
     // NEW GAME AGAIN
     public void restart() {
 
-        // better to reset this after everything
+//        // better to reset this after everything
+//        canTypeSound = true;
+//        drawBlackScreen = true;
+//        ui.introDialogueY = ui.defaultYPosition;
+//        ui.dialogueIndex = 0;
+//        ui.wordEnd = 0;
+//        ui.nextLine = 0;
+//
+//        // World
+//        currentMap = GAS_STATION;
+//
+//        // ENTITY DEFAULTS
+//        player.setDefaultPositionGasStation();
+//        player.restoreLifeAndAttributes();
+//        player.setItems();
+//        aSetter.setObject();
+//        aSetter.setNPC();
+//
+//        music.stop();
+//        playMusic(8);
+
+        //**** TESTING CODE BELOW ****//
+
+        // UI
         canTypeSound = true;
         drawBlackScreen = true;
+        j = 1f;
         ui.introDialogueY = ui.defaultYPosition;
         ui.dialogueIndex = 0;
         ui.wordEnd = 0;
         ui.nextLine = 0;
+        // reset all checkmarks - gives nullpointerexception
+//        for(boolean[] row : ui.checkmarks) {
+//            Arrays.fill(row, false);
+//        }
 
         // World
         currentMap = GAS_STATION;
+        subMap = SUB_GAS_STATION;
 
-        // ENTITY DEFAULTS
+        // Task
+        currentTask = TaskState.GET_SNACKS;
+
+        // Sound flags
+        chaseMusic = false;
+        stopChaseMusic = false;
+        isChaseMusicPlaying = false;
+        knocking = false;
+        knockingStarted = false;
+        knockingStartTime = 0;
+
+        // Misc flags
+        hasntUnlockedYet = true;
+        oneTime = false;
+        drawTimeStamp = false;
+        setToNight = false;
+
+        // Player — position, life, booleans, inventory, dialogue
         player.setDefaultPositionGasStation();
         player.restoreLifeAndAttributes();
+        player.hasKey = 0;
+        player.gotChips = false;
+        player.gotDrink = false;
+        player.gotBanana = false;
+        player.snacksCollected = 0;
+        player.lockOfficeDoor = false;
+        player.exitMap = false;
+        player.unlockedGate = false;
+        player.pDialogueIndex = 0;
+        player.pConvoIndex = 0;
+        player.speakIncrement = 0;
+        player.speakTimer = 0;
+        player.inventory.clear();
         player.setItems();
+        player.setDialogue();
+
+        // Assets
+        aSetter.removeMon();
         aSetter.setObject();
         aSetter.setNPC();
 
-        music.stop();
+        // Tile map back to gas station
+        tileM.loadMap("/maps/gasstation.txt"); // adjust path if different
+
+        // Music
+        stopMusic();
         playMusic(8);
+
+        gameState = titleState; // or initialDialogueState if you want to replay intro
+
+        //**** TESTING CODE ABOVE ****//
+
+
 
     }
 
@@ -269,6 +339,7 @@ public class GamePanel extends JPanel implements Runnable {
             // load in cabin objects
             aSetter.removeOutsideAssets();
             aSetter.reseatAssets();
+            aSetter.removeMon();
             aSetter.hideCabinExteriorAssets(); // ADD THIS
             player.setPosInCabin();
             tileM.loadMap("/maps/playercabin.txt"); // load into player cabin
@@ -383,8 +454,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             eHandler.update();
-
-
 
         }
 

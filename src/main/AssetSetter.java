@@ -299,10 +299,16 @@ public class AssetSetter {
         // disabled for game testing
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
 
-            gp.monster[0] = new MON_EVILBILL(gp);
-            gp.monster[0].worldX = gp.tileSize*16;
-            gp.monster[0].worldY = gp.tileSize*9;
+            if(gp.currentTask == TaskState.INVESTIGATE) {
+                gp.monster[0] = new MON_EVILBILL(gp);
+                gp.monster[0].worldX = gp.tileSize * 16;
+                gp.monster[0].worldY = gp.tileSize * 9;
+            }
         }
+    }
+
+    public void removeMon() {
+        gp.monster[0] = null;
     }
 
     // Call when transitioning maps to reseat obj's that should only show when in a specific map
@@ -335,6 +341,7 @@ public class AssetSetter {
 
     // Call when transitioning maps to remove obj's that shouldn't show in specific maps.
     public void removeAssets() {
+
         // Mostly, from player cabin
         gp.obj[20] = null;
         gp.obj[23] = null;
@@ -351,6 +358,7 @@ public class AssetSetter {
         gp.obj[37] = null;
         gp.obj[38] = null;
     }
+
 
     public void clearArray() {
         gp.npc = new Entity[gp.maxNpc];
