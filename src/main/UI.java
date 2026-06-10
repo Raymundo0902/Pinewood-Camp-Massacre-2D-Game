@@ -18,13 +18,9 @@ public class UI {
     Font maruMonica;
     public boolean messageOn = false;
     public String message = "";
-    public boolean gameFinished = false;
     public String currentDialogue = "";
     public int commandNum = 0; // arrow pointer of selection in main menu
     public int titleScreenState = 0; // 0: the first screen, 1: the second screen
-    public int imgSpriteCounter = 0;
-    public int imgSpriteNum = 1;
-    public int playerType; // 1 for sally, 2 for chad
 
     // INITIAL DIALOGUE MECHANICS
     public int dialogueIndex = 0; // WHEN PRESSING ENTER IT INCREASES TO GO THROUGH THE ARRAY
@@ -44,15 +40,11 @@ public class UI {
     int innerWordDelay = 0;
     int innerDialogueY = 480;
 
-    // INNER DIALOGUE
-
 
     // TIMESTAMP
     int timeWordEnd = 0;
     int timeNextLine = 0;
     int timeWordDelay = 0;
-
-
 
 
     // Task UI dialogue
@@ -75,6 +67,9 @@ public class UI {
 
     // EXTRA BOOLEANS/CONDITIONALS/COUNTERS
     int innerDialogueCounter = 0;
+
+    // ENDING
+    public int creditY;
 
     // COMPUTER OS
     BufferedImage pinewoodIcon, osIcon, recycleIcon, osBackground, speakerIcon, signInIcon, pinewoodHomePage, a1Cabin, j1Cabin, k4Cabin, folderIcon;
@@ -100,6 +95,7 @@ public class UI {
         setTaskList();
 
         defaultYPosition = gp.tileSize * 2;
+        creditY = gp.screenHeight + 50;
     }
 
     public void showMessage(String text) {
@@ -158,7 +154,7 @@ public class UI {
         }
         else if(gp.gameState == gp.computerState) {
             drawOS();
-            if(gp.closeTaskList == false) {
+            if(!gp.closeTaskList) {
                 drawCurrentTask();
             }
         }
@@ -170,7 +166,83 @@ public class UI {
             drawPlayerStamina();
             drawPlayerLife();
         }
+        else if(gp.gameState == gp.finishedGame) {
+            if(!gp.stopFading) {
+                fadeOutScreen();
+            }
+            else if(!gp.finishedCreditScreen) {
+                drawCreditScreen();
+            }
+        }
     }
+
+    public void fadeOutScreen() {
+
+        g2.setColor(Color.black);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, j));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setComposite(AlphaComposite.SrcOver);   // switch back to normal mode - prevents other things to get blended
+        j += 0.01f;
+        // if j = 1f, the screen is entirely black thus, we can now let transitions happen to make smooth transitions, or drawings
+        if(j >= 1f) {
+            j = 1f;
+            gp.stopFading = true;
+
+        }
+    }
+
+    public void drawCreditScreen() {
+        // Keep screen black
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        g2.setColor(Color.white);
+
+        int spacing = 50;
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50f));
+
+        String[] credits = {
+                "YOUR GAME TITLE",
+                "",
+                "Programming",
+                "Your Name",
+                "",
+                "Art",
+                "Placeholder Artist",
+                "",
+                "Music",
+                "Placeholder Composer",
+                "",
+                "Special Thanks",
+                "Family",
+                "Friends",
+                "The Player",
+                "",
+                "Thank you for playing!"
+        };
+
+        for (int i = 0; i < credits.length; i++) {
+
+            String text = credits[i];
+
+            int x = getXforCenteredText(text);
+            int y = creditY + (i * spacing);
+
+            g2.drawString(text, x, y);
+        }
+
+        // Scroll upward
+        creditY--;
+
+        // Credits completely off screen
+        int finalY = creditY + (credits.length * spacing);
+
+        if (finalY < -50) {
+            gp.finishedCreditScreen = true;
+        }
+    }
+
 
     public void drawStudioLogo() {
         // DRAW PIXEL STUDIOS LOGO HERE, 80'S STYLE, RETRO, GLOW, BLUE/PURPLE?
@@ -339,7 +411,7 @@ public class UI {
             }
             else {
                 gp.drawInnerDialogue = false;
-                gp.player.pInnerDialogueIndex++;
+                gp.player.pInnerDialogueIndex = 0;
                 innerDialogueY = gp.tileSize * 10;
                 innerWordEnd = 0;
                 innerNextLine = 0;
@@ -510,12 +582,6 @@ public class UI {
         g2.drawString("Exit", exitX + 10, exitY + 70);
 
 
-        // DEBUG: Mouse interactive buttons
-//        g2.setColor(Color.red);
-//        g2.fillRect(pineWButtonBounds.x, pineWButtonBounds.y, pineWButtonBounds.width, pineWButtonBounds.height);
-//        g2.fillRect(exitButton.x, exitButton.y, exitButton.width, exitButton.height);
-
-
         // Switch between different displays of the opened window.
         switch(osSubState) {
             case 0: drawLoginScreen(); break;
@@ -606,12 +672,6 @@ public class UI {
         // Sign in icon
         g2.drawImage(signInIcon, x, y - gp.tileSize*3, gp.tileSize * 2, gp.tileSize * 2, null);
 
-
-//        DEBUG
-//        g2.setColor(Color.red);
-//        g2.fillRect(passwordButton.x, passwordButton.y, passwordButton.width, passwordButton.height);
-//        g2.setColor(Color.red);
-//        g2.fillRect(signInButton.x, signInButton.y, signInButton.width, signInButton.height);
 
     }
 
@@ -728,9 +788,6 @@ public class UI {
         g2.setColor(Color.red);
         g2.drawString("WARNING: MISSING 19YR OLD NEARBY. REPORT SUSPICIOUS ACTIVITY & STAY SAFE!", gp.tileSize * 2 + 30, gp.tileSize * 9);
 
-//        // DEBUG
-//        g2.setColor(Color.red);
-//        g2.fillRect(assignButton.x, assignButton.y, assignButton.width, assignButton.height);
     }
 
     private void drawLogBook() {
@@ -808,7 +865,6 @@ public class UI {
         if(commandNum == 0) {
             g2.drawString(">", x2 - 15, y);
             if(gp.keyH.enterPressed == true) {
-//                gp.transitionMap();
                 gp.gameState = gp.transitionState;
             }
         }
@@ -852,7 +908,7 @@ public class UI {
         g2.drawString(text, x, y);
         if(commandNum == 0) {
             g2.drawString(">", x-(gp.tileSize/2), y);
-            if(gp.keyH.enterPressed == true) {
+            if(gp.keyH.enterPressed) {
                 gp.gameState = gp.playState;
                 gp.retry();
             }
@@ -865,7 +921,7 @@ public class UI {
         g2.drawString(text, x, y);
         if(commandNum == 1) {
             g2.drawString(">", x-(gp.tileSize/2), y);
-            if(gp.keyH.enterPressed == true) {
+            if(gp.keyH.enterPressed) {
                 gp.gameState = gp.titleState;
                 titleScreenState = 0;
                 gp.restart();
@@ -1000,28 +1056,29 @@ public class UI {
         // DRAW MAIN MENU BACKGROUND IMAGE
         g2.drawImage(menuImage,0, 0, gp.screenWidth, gp.screenHeight, null);
 
-        if(titleScreenState == 0) { // MAIN MENU
+         // MAIN MENU
 
+        if(titleScreenState == 0) {
             // TITLE AND FONT
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 95F));
             String text = "Pinewood Camp";
             int x = getXforCenteredText(text);
-            int y = gp.tileSize*2;
+            int y = gp.tileSize * 2;
 
             // SHADOW
             g2.setColor(Color.darkGray);
-            g2.drawString(text, x+4, y+4);
+            g2.drawString(text, x + 4, y + 4);
             // MAIN COLOR
             g2.setColor(Color.white);
             g2.drawString(text, x, y);
 
             String text2 = "Stalker";
             int x2 = getXforCenteredText(text2);
-            int y2 = gp.tileSize*4;
+            int y2 = gp.tileSize * 4;
 
             // SHADOW
             g2.setColor(Color.darkGray);
-            g2.drawString(text2, x2+3, y2+3);
+            g2.drawString(text2, x2 + 3, y2 + 3);
             // MAIN COLOR
             g2.setColor(Color.red);
             g2.drawString(text2, x2, y2);
@@ -1031,91 +1088,31 @@ public class UI {
             g2.setColor(Color.white);
             text = "NEW GAME";
             x = getXforCenteredText(text);
-            y += gp.tileSize*4;
+            y += gp.tileSize * 4;
             g2.drawString(text, x, y);
-            if(commandNum == 0) {
-                g2.drawString(">", x-gp.tileSize, y);
+            if (commandNum == 0) {
+                g2.drawString(">", x - gp.tileSize, y);
             }
 
-            text = "LOAD GAME";
+            text = "CONTROLS";
             x = getXforCenteredText(text);
             y += gp.tileSize;
             g2.drawString(text, x, y);
-            if(commandNum == 1) {
-                g2.drawString(">", x-gp.tileSize, y);
+            if (commandNum == 1) {
+                g2.drawString(">", x - gp.tileSize, y);
             }
 
             text = "QUIT";
             x = getXforCenteredText(text);
             y += gp.tileSize;
             g2.drawString(text, x, y);
-            if(commandNum == 2) {
-                g2.drawString(">", x-gp.tileSize, y);
+            if (commandNum == 2) {
+                g2.drawString(">", x - gp.tileSize, y);
             }
-
         }
-
-        else if(titleScreenState == 1) { // choose character menu
-            g2.setColor(Color.white);
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD,60F));
-
-            String text = "Select your Character";
-            int x = gp.tileSize/2;
-            int y = gp.tileSize*2;
-            g2.drawString(text, x ,y);
-
-            // PLAYER SELECTION
-            text = "Sally";
-            x = gp.tileSize;
-            y += gp.tileSize*2;
-            g2.drawString(text, x+gp.tileSize, y);
-            if(commandNum == 0) { // IF ARROW POINTING AT SALLY, DO THE BELOW:
-                g2.drawString(">", x, y);
-                playerType = 1;
-                imgSpriteCounter++; // SWITCH SPRITE VARIATIONS EVERY 12 FRAMES
-                if(imgSpriteCounter > 12) {
-                    if(imgSpriteNum == 1) {
-                        imgSpriteNum = 2;
-                    }
-                    else if(imgSpriteNum == 2) {
-                        imgSpriteNum = 1;
-                    }
-                    imgSpriteCounter = 0;
-                }
-                drawSpriteVariation(imgSpriteNum);
-
-            }
-
-            text = "Chad";
-            x = gp.tileSize;
-            y += gp.tileSize+10;
-            g2.drawString(text, x+gp.tileSize, y);
-            if(commandNum == 1) {
-                g2.drawString(">", x, y);
-                playerType = 2;
-                imgSpriteCounter++;
-                if(imgSpriteCounter > 12) {
-                    if(imgSpriteNum == 1) {
-                        imgSpriteNum = 2;
-                    }
-                    else if(imgSpriteNum == 2) {
-                        imgSpriteNum = 1;
-                    }
-                    imgSpriteCounter = 0;
-                }
-                drawSpriteVariation(imgSpriteNum);
-            }
-
-            text = "Back";
-            x = gp.tileSize;
-            y += gp.tileSize*5;
-            g2.drawString(text, x, y);
-            if(commandNum == 2) {
-                g2.drawString(">", x-gp.tileSize, y);
-            }
-
+        else if(titleScreenState == 1) {
+            drawControlMenuTitle();
         }
-
     }
 
     // the float parameter is optional, only used if fading text is needed.
@@ -1211,48 +1208,6 @@ public class UI {
             else {
                 finishedTyping = true;
                 gp.se.stop();
-            }
-        }
-
-    }
-
-    public void drawSpriteVariation(int spriteNum) {
-        int x = gp.tileSize;
-        int y = gp.tileSize*4;
-
-        if(playerType == 1) {
-
-            BufferedImage sallydown1 = null;
-            try{
-                sallydown1 = ImageIO.read(getClass().getResourceAsStream(  "/girl_player/sally_down1.png"));
-
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-
-            BufferedImage sallydown2 = null;
-            try{
-                sallydown2 = ImageIO.read(getClass().getResourceAsStream(  "/girl_player/sally_down2.png"));
-
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-
-            switch(spriteNum) {
-                case 1:
-                    g2.drawImage(sallydown1, x*9, y-30, gp.tileSize*7,gp.tileSize*7, null);
-                    break;
-                case 2:
-                    g2.drawImage(sallydown2, x*9, y-30, gp.tileSize*7, gp.tileSize*7, null);
-            }
-        }
-        else if(playerType == 2) {
-            switch(spriteNum) {
-                case 1:
-                    g2.drawImage(gp.player.down1, x*9, y, gp.tileSize*6,gp.tileSize*6, null);
-                    break;
-                case 2:
-                    g2.drawImage(gp.player.down2, x*9, y, gp.tileSize*6, gp.tileSize*6, null);
             }
         }
 
@@ -1598,6 +1553,74 @@ public class UI {
         g2.fillRect(shapeX, shapeY, volumeWidth, 20);
     }
 
+    public void drawControlMenuTitle() {
+
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(32F));
+
+        // Window
+
+        int frameX = gp.tileSize * 5;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 10;
+        int frameHeight = gp.tileSize * 9;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 28));
+        int textX = (frameX + gp.tileSize) - gp.tileSize/2;
+        int textY = (frameY + gp.tileSize) - 12;
+
+        g2.drawString("Move cursor", textX, textY);
+        g2.drawString("WASD", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Adjust Volume", textX, textY);
+        g2.drawString("A & D", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Pause Game", textX, textY);
+        g2.drawString("Esc", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("View Map", textX, textY);
+        g2.drawString("M", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Interact", textX, textY);
+        g2.drawString("E", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Open / Hide Inventory", textX, textY);
+        g2.drawString("C", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Select Item", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Confirm / Back", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Continue Dialogue", textX, textY);
+        g2.drawString("ENTER", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Sprint", textX, textY);
+        g2.drawString("SHIFT", textX + gp.tileSize * 6, textY);
+
+        textY += 32;
+        g2.drawString("Hide tasks", textX, textY);
+        g2.drawString("G", textX + gp.tileSize * 6, textY);
+
+        textY += 48;
+        g2.setColor(Color.ORANGE);
+        g2.drawString("Back", textX, textY);
+        if(commandNum == 0) {
+            g2.drawString(">", textX - 14, textY);
+        }
+    }
+
     public void drawControlMenu(int frameX, int frameY) {
 
 
@@ -1680,7 +1703,7 @@ public class UI {
         g2.drawString("Yes", middleText, textY);
         if(commandNum == 0) {
             g2.drawString(">", textX+gp.tileSize, textY);
-            if(gp.keyH.enterPressed == true) {
+            if(gp.keyH.enterPressed) {
                 // return to title screen
                 subState = 0;
                 gp.gameState = gp.titleState;

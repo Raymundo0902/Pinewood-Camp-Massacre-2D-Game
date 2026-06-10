@@ -53,90 +53,59 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         else if(gp.gameState == gp.transitionMapState) transitionMapState(code);
         else if(gp.gameState == gp.computerState) computerState(code);
         else if(gp.gameState == gp.logBookState) logBookState(code);
+        else if(gp.gameState == gp.finishedGame) finishedGameState(code);
     }
 
     public void titleState(int code) {
 
-        if(gp.ui.titleScreenState == 0) { // MAIN MENU
-
-            if(code == KeyEvent.VK_W) {
+        // **** MAIN MENU POINTERS ****
+        if(gp.ui.titleScreenState == 0) {
+            if (code == KeyEvent.VK_W) {
                 gp.ui.commandNum--;
-                if(gp.ui.commandNum < 0) { // keeps arrow from disappearing from select menu
+                if (gp.ui.commandNum < 0) { // keeps arrow from disappearing from select menu
                     gp.ui.commandNum = 2;
                 }
             }
 
-            if(code == KeyEvent.VK_S) {
+            if (code == KeyEvent.VK_S) {
                 gp.ui.commandNum++;
-                if(gp.ui.commandNum > 2) {
+                if (gp.ui.commandNum > 2) {
                     gp.ui.commandNum = 0;
                 }
             }
 
-            if(code == KeyEvent.VK_ENTER) {
+            if (code == KeyEvent.VK_ENTER) {
                 // NEW GAME
-                if(gp.ui.commandNum == 0) {
-                    gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
-                    gp.ui.titleScreenState = 1;
-                }
-                // LOAD GAME
-                if(gp.ui.commandNum == 1) {
+                if (gp.ui.commandNum == 0) {
                     gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
 
+                    gp.stopMusic();
+                    gp.gameState = gp.initialDialogueState;
+                    gp.playMusic(6);
+                }
+                // CONTROLS
+                if (gp.ui.commandNum == 1) {
+                    gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
+                    gp.ui.titleScreenState = 1;
+                    gp.ui.commandNum = 0;
                 }
                 // QUIT
-                if(gp.ui.commandNum == 2) {
+                if (gp.ui.commandNum == 2) {
                     System.exit(0);
                 }
             }
-
         }
-
-        else if(gp.ui.titleScreenState == 1) { // CHARACTER PICK MENU
-            if(code == KeyEvent.VK_W) {
-                gp.ui.commandNum--;
-                if(gp.ui.commandNum < 0) { // keeps arrow from disappearing from select menu
-                    gp.ui.commandNum = 2;
-                }
-            }
-
-            if(code == KeyEvent.VK_S) {
-                gp.ui.commandNum++;
-                if(gp.ui.commandNum > 2) {
-                    gp.ui.commandNum = 0;
-                }
-            }
-
+        //  **** POINTERS FOR CONTROLS MENU ****
+        else if(gp.ui.titleScreenState == 1) {
             if(code == KeyEvent.VK_ENTER) {
-
-                // SELECT SALLY
-                gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
-                if (gp.ui.commandNum == 0) {
-                    gp.stopMusic();
-                    gp.gameState = gp.initialDialogueState;
-
-                    gp.ui.dialogueIndex = 0;
-                    enterPressed = false;
-
-//                    gp.gameState = gp.playState;
-                    gp.playMusic(6);
-                }
-                // SELECT CHAD
-                if (gp.ui.commandNum == 1) {
-
-                    gp.stopMusic();
-                    gp.gameState = gp.playState;
-                    gp.playMusic(6);
-                }
-
-                // GO BACK TO MAIN SCREEN
-                if (gp.ui.commandNum == 2) {
-                    gp.ui.titleScreenState = 0;
-                    gp.ui.commandNum = 0; // makes sure the cursor goes back to default pointing at "New Game"
-
-                }
+                gp.ui.titleScreenState = 0;
+                gp.ui.commandNum = 0;
             }
         }
+
+    }
+
+    public void finishedGameState(int code) {
     }
 
     public void initDialogueState(int code) {
@@ -194,10 +163,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
     }
 
     public void logBookState(int code) {
-
-        if(code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.playState;
-        }
+        if(code == KeyEvent.VK_ESCAPE) gp.gameState = gp.playState;
     }
 
 
@@ -256,6 +222,9 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
                 checkDebugText = false;
             }
         }
+
+
+        // DELETE NOW THAT ITS NOT GONNA BE USED!!
         // FAST REAL-TIME MAP EDIT
         if(code == KeyEvent.VK_B) {
 
@@ -347,6 +316,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         }
 
     }
+
 
     public void pausedState(int code) {
 

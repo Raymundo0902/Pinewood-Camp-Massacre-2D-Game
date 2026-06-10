@@ -94,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int transitionState = 9;
     public final int logBookState = 10;
     public final int cutsceneState = 11;
+    public final int finishedGame = 12;
 
 
     // CONTROL VARIABLES FOR ONE TIME FUNCTIONS - LOADING SCREEN, DIALOGUE, ETC
@@ -118,6 +119,11 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean knocking = false;
     private boolean knockingStarted = false;
     private long knockingStartTime = 0;
+
+    // ENDING
+    public int fadeOutTimer = 0;
+    public boolean finishedCreditScreen = false;
+    public boolean stopFading = false;
 
 
     public GamePanel () {
@@ -198,6 +204,7 @@ public class GamePanel extends JPanel implements Runnable {
         ui.innerDialogueCounter = 0;
         ui.innerDialogueY = 480;
         drawInnerDialogue = false;
+        player.pInnerDialogueIndex = 0;
 
         stopMusic();
         playMusic(25);
@@ -361,7 +368,11 @@ public class GamePanel extends JPanel implements Runnable {
         stopMusic();
         playMusic(8);
 
-
+        // RESET ENDING FLAGS AND COUNTERS
+//        fadeOutTimer = 0;
+        finishedCreditScreen = false;
+        stopFading = false;
+        ui.creditY = screenHeight + 50;
     }
 
     public void setFullScreen() {
@@ -476,6 +487,25 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void update() {
+
+        // *** END GAME ***
+        if(!hasntUnlockedYet)  {
+
+            gameState = finishedGame;
+
+            ui.j = 0f;
+            stopFading = false;
+            ui.creditY = screenHeight + 50;
+            finishedCreditScreen = false;
+
+            hasntUnlockedYet = true;
+        }
+
+        if(finishedCreditScreen) {
+            restart();
+            gameState = titleState;
+        }
+
 
 
         if(gameState == initialDialogueState) {
@@ -694,6 +724,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == titleState || gameState == initialDialogueState) {
             ui.draw(g2);
         }
+
 
         // OTHER GAME STATES. START THE MAIN DIALOGUE HERE:
         else{

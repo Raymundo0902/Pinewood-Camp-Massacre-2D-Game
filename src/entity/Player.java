@@ -18,7 +18,6 @@ public class Player extends Entity{
     int standCounter = 0;
     public int sprintCounter = 0; // 2 seconds of sprinting till no more stamina
     public boolean sprinting = false;
-    public boolean rakeCanceled = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 12;
     public Entity defaultCurrentItem;
@@ -64,8 +63,8 @@ public class Player extends Entity{
 
     public Player(GamePanel gp, KeyHandler keyH) { // SAME AS (gamePanel Reference, keyH Reference)
 
-        super(gp); // calling the constructor of the superclass of this class -- and passing this gp.
-        this.keyH = keyH; // now points to the same KeyHandler object
+        super(gp);
+        this.keyH = keyH;
 
         screenX = gp.screenWidth/2 - (gp.tileSize/2); // these two return the halfway point of the screen. subtract a half tile length from both screenX and screenY
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
@@ -77,10 +76,6 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
         solidArea.height = 32;
-
-        // rakeArea larger values = larger range of rake
-        rakeArea.width = 36;
-        rakeArea.height = 36;
 
         setDefaultValues();
         getPlayerImage();
@@ -94,7 +89,7 @@ public class Player extends Entity{
         type = TYPE_PLAYER;
 
         // PLAYER STATUS
-        maxLife = 4; // 2 lifes = one full heart
+        maxLife = 4;
         curLife = maxLife; // players current life
         currentItem = new OBJ_Hands(gp);
         defaultCurrentItem = currentItem;
@@ -142,9 +137,6 @@ public class Player extends Entity{
     public void setDialogue() {
         // Use for internal dialogue
         dialogues[0] = "I need to find the entrance key...\nand escape like now!";
-        dialogues[1] = "n/a";
-        dialogues[2] = "n/a";
-        dialogues[3] = "n/a";
 
         if(gp.currentMap == gp.GAS_STATION) {
 
@@ -518,7 +510,6 @@ public class Player extends Entity{
             System.out.println(gp.currentTask);
 
             if (i != 999) { // from the method that has the default index val, it only will change from 999 if collision was detected - NPC to Player
-                rakeCanceled = true;
                 String name = gp.npc[i].name;
 
                 switch(name) {
@@ -627,11 +618,9 @@ public class Player extends Entity{
 
         if(itemIndex < inventory.size()) { // NOT SELECTING VACANT SLOTS
 
-            Entity selectedItem = inventory.get(itemIndex); // stores a reference to the current object. could be the reference to the Key, Rake, ... object
+            Entity selectedItem = inventory.get(itemIndex); // stores a reference to the current object. could be the reference to the Key, ... object
 
             if(selectedItem.type == TYPE_KEY || selectedItem.type == TYPE_ROCK) currentItem = selectedItem;
-
-            if(selectedItem.type == TYPE_RAKE) currentItem = selectedItem;
 
             if(selectedItem.type == TYPE_LIGHT) {
                 if(currentLight == selectedItem) {

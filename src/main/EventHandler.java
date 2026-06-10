@@ -24,10 +24,7 @@ public class EventHandler {
 
     public void checkEvent() {
 
-        if(hit(20, 56, "any")) {
-            gp.player.takeDamage();
-        }
-        else if (cutsceneTrigger() && gp.subMap == gp.SUB_MAIN_WORLD && gp.currentTask == TaskState.INVESTIGATE) {
+         if (cutsceneTrigger() && gp.subMap == gp.SUB_MAIN_WORLD && gp.currentTask == TaskState.INVESTIGATE) {
             monsterAI();
         }
     }
