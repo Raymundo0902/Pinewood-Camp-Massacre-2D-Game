@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class UI {
 
@@ -16,6 +17,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica;
+    Font gameStudioFont;
     public boolean messageOn = false;
     public String message = "";
     public String currentDialogue = "";
@@ -78,8 +80,33 @@ public class UI {
     // OS WINDOWS STATE - goes from 0 to 1
     int osSubState = 0;
 
+
+    // Logo animation variables
+    private float logoAlpha = 0f;
+    private float streakAlpha = 1f;
+
+    private boolean logoPhase2 = false;
+    private boolean logoPhase3 = false;
+
+    private int logoTimer = 0;
+
+    private int[] lineX;
+    private int[] lineY;
+    private int[] targetX;
+
+    private boolean flicker = false;
+    private int flickerTimer = 0;
+    private float sandwichAlpha = 0f;
+
+
+
     public UI (GamePanel gp) {
         this.gp = gp;
+
+        loadFonts();
+
+        // INITIALIZE LOGO
+        setupLogoAnimation();
 
         // MOUSE INTERACTIVITY - fake os
         pineWButtonBounds = new Rectangle(gp.tileSize * 2, gp.tileSize * 11 + 18, gp.tileSize * 4, 30);
@@ -88,11 +115,14 @@ public class UI {
         signInButton = new Rectangle(gp.tileSize * 7 + 24, gp.tileSize * 5 + 20, gp.tileSize * 2,27);
         assignButton = new Rectangle(gp.tileSize* 11 + 30, gp.tileSize * 6 + 30, gp.tileSize * 2, 27);
 
+
         loadBufferedImage();
+
 
         // INITIALIZE THE INTRODUCTORY DIALOGUE
         setIntroArray();
         setTaskList();
+
 
         defaultYPosition = gp.tileSize * 2;
         creditY = gp.screenHeight + 50;
@@ -108,6 +138,11 @@ public class UI {
         this.g2 = g2;
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
+
+        // STUDIO INTRO STATE
+        if(gp.gameState == gp.studioLogoState) {
+            drawStudioLogo();
+        }
 
         // TITLE STATE
         if(gp.gameState == gp.titleState) {
@@ -175,6 +210,275 @@ public class UI {
             }
         }
     }
+
+    public void setupLogoAnimation() {
+
+        int centerX = gp.screenWidth / 2;
+
+        lineX = new int[8];
+        lineY = new int[8];
+        targetX = new int[8];
+
+        for(int i = 0; i < 8; i++) {
+
+            lineY[i] = gp.screenHeight / 2 - 70 + i * 20;
+
+            // Alternate left/right starts
+            if(i % 2 == 0) {
+                lineX[i] = -250;
+            }
+            else {
+                lineX[i] = gp.screenWidth + 250;
+            }
+
+            targetX[i] = centerX - 120;
+        }
+    }
+
+
+    public void drawStudioLogo() {
+        // DRAW PIXEL STUDIOS LOGO HERE, 80'S STYLE, RETRO, GLOW, BLUE/PURPLE?
+
+        logoTimer++;
+
+        Random rand = new Random();
+
+        if(logoTimer > 1100) {
+            if (rand.nextInt(20) == 10) {
+                if (!flicker) {
+                    flicker = true;
+                }
+            }
+
+            if (flicker) {
+                flickerTimer++;
+                if (flickerTimer >= 5) {
+                    flicker = false;
+                    flickerTimer = 0;
+                }
+            }
+        }
+
+        drawMovingStreaks(g2);
+
+        if(!flicker) {
+            if (logoPhase2) {
+                drawStudioText(g2);
+            }
+
+            if (logoPhase3) {
+                drawSandwichLines(g2);
+            }
+        }
+
+        if(logoTimer >= 1300) {
+            gp.gameState = gp.titleState;
+        }
+
+
+    }
+
+
+    private void drawMovingStreaks(Graphics2D g2) {
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, streakAlpha));
+
+        Color glowColor = new Color(114, 152, 255);
+
+        for(int i = 0; i < lineX.length; i++) {
+
+            if(!logoPhase2) {
+                if(i % 2 == 0) lineX[i] += 2;
+                else lineX[i] -= 2;
+            }
+
+            boolean reached;
+
+            if(i % 2 == 0) reached = lineX[i] >= targetX[i];
+            else reached = lineX[i] <= targetX[i];
+
+            if(reached) {
+
+                lineX[i] = targetX[i];
+                boolean allDone = true;
+
+                for(int j = 0; j < lineX.length; j++) {
+
+                    if(j % 2 == 0 && lineX[j] < targetX[j]) allDone = false;
+
+                    if(j % 2 == 1 && lineX[j] > targetX[j]) allDone = false;
+
+                }
+
+                if(allDone) logoPhase2 = true;
+
+            }
+
+            // fake glow
+            for(int glow = 8; glow >= 1; glow--) {
+                g2.setColor(new Color(glowColor.getRed(), glowColor.getGreen(), glowColor.getBlue(), 20));
+                g2.fillRoundRect(lineX[i] - glow, lineY[i] - glow / 2, 240 + glow * 2, 4 + glow, 10, 10);
+            }
+
+            g2.setColor(new Color(109, 150, 255));
+
+            g2.fillRoundRect(lineX[i], lineY[i], 240, 2, 10, 10);
+        }
+
+        if(logoPhase2) {
+
+            streakAlpha -= 0.02f;
+
+            if(streakAlpha < 0f) {
+                streakAlpha = 0f;
+                logoPhase3 = true;
+            }
+        }
+
+        g2.setComposite(AlphaComposite.SrcOver);
+    }
+
+    private void drawStudioText(Graphics2D g2) {
+
+
+        logoAlpha += 0.02f;
+        if(logoAlpha > 1f) logoAlpha = 1f;
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, logoAlpha));
+
+        String text1 = "PIXELTEC";
+        String text2 = "STUDIOS";
+
+        g2.setFont(new Font("Arial", Font.PLAIN | Font.ITALIC, 48));
+
+        int x1 = getXforCenteredText(text1);
+        int y1 = gp.screenHeight / 2;
+
+        int indent = 48;
+        int x2 = x1 + indent;
+        int y2 = y1 + 55;
+
+        Color glowColor = new Color(83, 115, 192, 119);
+        Color logoColor = new Color(130, 170, 255);
+
+        // text glow
+        for(int glow = 8; glow >= 1; glow--) {
+            g2.setColor(glowColor);
+
+            g2.drawString(text1, x1 - glow / 3, y1);
+            g2.drawString(text1, x1 + glow / 3, y1);
+            g2.drawString(text1, x1, y1 - glow / 3);
+            g2.drawString(text1, x1, y1 + glow / 3);
+
+            g2.drawString(text2, x2 - glow / 3, y2);
+            g2.drawString(text2, x2 + glow / 3, y2);
+            g2.drawString(text2, x2, y2 - glow / 3);
+            g2.drawString(text2, x2, y2 + glow / 3);
+        }
+
+        g2.setColor(logoColor);
+        g2.drawString(text1, x1, y1);
+        g2.drawString(text2, x2, y2);
+
+        g2.setComposite(AlphaComposite.SrcOver);
+    }
+
+    private void drawSandwichLines(Graphics2D g2) {
+
+
+        String text1 = "PIXELTEC";
+
+        g2.setFont(new Font("Arial", Font.PLAIN | Font.ITALIC, 48));
+
+        // Match drawStudioText positioning
+        int x1 = getXforCenteredText(text1);
+        int y1 = (gp.screenHeight / 2) - 12;
+
+        int indent = 48;
+        int x2 = x1 + indent;
+        int y2 = y1 + 67;
+
+        // Fade in
+        sandwichAlpha += 0.015f;
+        if(sandwichAlpha > 1f) {
+            sandwichAlpha = 1f;
+        }
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, sandwichAlpha));
+
+        Color lineColor = new Color(109, 150, 255);
+
+        int thickness = 2;
+        int spacing = 14;
+
+        // ==========================
+        // TOP FULL-WIDTH LINES
+        // ==========================
+        for(int i = 0; i < 3; i++) {
+
+            int y = y1 - 70 + i * spacing;
+            drawGlowLine(g2, 0, y, gp.screenWidth, thickness, lineColor);
+        }
+
+        // ==========================
+        // SPECIAL PIXELTEC LINE
+        // Ends at the P and stretches left
+        // ==========================
+        drawGlowLine(g2, 0, y1 - 15, x1, thickness, lineColor
+        );
+
+        // ==========================
+        // BOTTOM FULL-WIDTH LINES
+        // ==========================
+        for(int i = 0; i < 3; i++) {
+
+            int y = y2 + 25 + i * spacing;
+
+            drawGlowLine(g2, 0, y, gp.screenWidth, thickness, lineColor);
+        }
+
+        // ==========================
+        // SPECIAL STUDIOS LINE
+        // Starts at the S and stretches right
+        // ==========================
+        drawGlowLine(g2, x2, y2 + 12, gp.screenWidth - x2, thickness, lineColor);
+
+        g2.setComposite(AlphaComposite.SrcOver);
+
+
+
+                // play VHS sound here
+//        gp.sound.playSE(vhsGlitchSE);
+
+
+
+    }
+
+    private void drawGlowLine(Graphics2D g2, int x, int y, int width, int thickness, Color color) {
+
+        if(width <= 0) return;
+
+        for(int glow = 8; glow >= 1; glow--) {
+
+            g2.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 18));
+            g2.fillRoundRect(x - glow, y - glow / 2, width + glow * 2, thickness + glow, 10, 10);
+        }
+
+        g2.setColor(color);
+
+        g2.fillRoundRect(
+                x,
+                y,
+                width,
+                thickness,
+                10,
+                10
+        );
+    }
+
+
+
+
 
     public void fadeOutScreen() {
 
@@ -244,10 +548,6 @@ public class UI {
     }
 
 
-    public void drawStudioLogo() {
-        // DRAW PIXEL STUDIOS LOGO HERE, 80'S STYLE, RETRO, GLOW, BLUE/PURPLE?
-
-    }
 
     public void transitionScreen() {
 
@@ -1784,16 +2084,7 @@ public class UI {
         return x;
     }
 
-    private void loadBufferedImage() {
-
-        // TITLE SCREEN IMAGE
-        try{
-            menuImage = ImageIO.read(getClass().getResourceAsStream(  "/titleScreenImage/titleScreen.png"));
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-
+    private void loadFonts() {
         // FONT
         try {
             InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
@@ -1802,6 +2093,19 @@ public class UI {
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void loadBufferedImage() {
+
+        // TITLE SCREEN IMAGE
+        try{
+            menuImage = ImageIO.read(getClass().getResourceAsStream(  "/titleScreenImage/titleScreen.png"));
+
+        }catch (IOException e){
             e.printStackTrace();
         }
 

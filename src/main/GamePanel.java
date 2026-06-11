@@ -95,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int logBookState = 10;
     public final int cutsceneState = 11;
     public final int finishedGame = 12;
+    public final int studioLogoState = 13;
 
 
     // CONTROL VARIABLES FOR ONE TIME FUNCTIONS - LOADING SCREEN, DIALOGUE, ETC
@@ -138,11 +139,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() { // created this method so we can add other setup stuff in the future
         currentMap = GAS_STATION;
-        gameState = titleState;
+        gameState = studioLogoState;
         aSetter.setObject();
         aSetter.setNPC();
         eHandler.setup();
-        playMusic(8); // play main menu music -- VHS 80s-90s MUSIC
+        // INSERT 80'S HORROR SOUND EFFECTS HERE DURING LOGO SHOWCASE
+        playMusic(26);
+//        playMusic(8); play main menu music -- VHS 80s-90s MUSIC ONLY WHEN TITLE STATE STARTS
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -721,7 +724,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // TITLE SCREEN
-        if(gameState == titleState || gameState == initialDialogueState) {
+        if(gameState == titleState || gameState == initialDialogueState || gameState == studioLogoState) {
             ui.draw(g2);
         }
 

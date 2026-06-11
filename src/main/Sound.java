@@ -47,6 +47,9 @@ public class Sound {
         // Loud knocking
         soundURL[25] = getClass().getResource("/sound/loudknocking.wav");
 
+        // GAME INTRO
+        soundURL[26] = getClass().getResource("/sound/gameintro.wav");
+
     }
 
     public void setFile(int i) {
