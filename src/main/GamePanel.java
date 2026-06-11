@@ -145,7 +145,6 @@ public class GamePanel extends JPanel implements Runnable {
         eHandler.setup();
         // INSERT 80'S HORROR SOUND EFFECTS HERE DURING LOGO SHOWCASE
         playMusic(26);
-//        playMusic(8); play main menu music -- VHS 80s-90s MUSIC ONLY WHEN TITLE STATE STARTS
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -178,26 +177,15 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
 
-
         // CHASE
-
         chaseMusic = false;
         stopChaseMusic = false;
         isChaseMusicPlaying = false;
-
-
         knocking = true;
         knockingStarted = true;
         knockingStartTime = 0;
-
         monChaseOn = false;
         sceneM.scenePhase = 0;
-
-
-
-        // INPUT RESET
-        // ---------------------------
-
 
 
         // INNER DIALOGUE
@@ -211,9 +199,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         stopMusic();
         playMusic(25);
-
-
-
     }
 
     // NEW GAME AGAIN
@@ -369,7 +354,7 @@ public class GamePanel extends JPanel implements Runnable {
         // AUDIO RESET
         // ---------------------------
         stopMusic();
-        playMusic(8);
+        playMusic(6);
 
         // RESET ENDING FLAGS AND COUNTERS
 //        fadeOutTimer = 0;
@@ -490,6 +475,19 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void update() {
+
+
+        // *** INTRO ***
+
+        if(gameState == studioLogoState) {
+            if(ui.logoTimer >= 1299) {
+                stopMusic();
+                playMusic(6);
+            }
+        }
+
+
+
 
         // *** END GAME ***
         if(!hasntUnlockedYet)  {

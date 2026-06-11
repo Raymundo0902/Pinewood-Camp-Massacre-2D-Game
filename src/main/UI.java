@@ -84,19 +84,19 @@ public class UI {
     // Logo animation variables
     private float logoAlpha = 0f;
     private float streakAlpha = 1f;
-
     private boolean logoPhase2 = false;
     private boolean logoPhase3 = false;
-
-    private int logoTimer = 0;
-
+    public int logoTimer = 0;
     private int[] lineX;
     private int[] lineY;
     private int[] targetX;
-
     private boolean flicker = false;
     private int flickerTimer = 0;
     private float sandwichAlpha = 0f;
+
+    // FADE OUT LOGO
+    private float fadeAlpha = 0f;
+    private boolean startFadeOut = false;
 
 
 
@@ -271,11 +271,33 @@ public class UI {
             }
         }
 
+        if(logoTimer > 1200) {
+            startFadeOut = true;
+        }
+
+        if(startFadeOut) {
+            fadeOutLogo();
+        }
+
         if(logoTimer >= 1300) {
             gp.gameState = gp.titleState;
         }
 
+    }
 
+    private void fadeOutLogo() {
+
+        fadeAlpha += 0.01f;
+
+        if(fadeAlpha > 1f) fadeAlpha = 1f;
+
+
+        g2.setColor(Color.black);
+
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fadeAlpha));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        g2.setComposite(AlphaComposite.SrcOver);
     }
 
 
@@ -347,7 +369,7 @@ public class UI {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, logoAlpha));
 
         String text1 = "PIXELTEC";
-        String text2 = "STUDIOS";
+        String text2 = "ENTERTAINMENT";
 
         g2.setFont(new Font("Arial", Font.PLAIN | Font.ITALIC, 48));
 
@@ -444,13 +466,6 @@ public class UI {
         drawGlowLine(g2, x2, y2 + 12, gp.screenWidth - x2, thickness, lineColor);
 
         g2.setComposite(AlphaComposite.SrcOver);
-
-
-
-                // play VHS sound here
-//        gp.sound.playSE(vhsGlitchSE);
-
-
 
     }
 
