@@ -335,9 +335,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.setItems();
         player.setDialogue();
 
-        // ---------------------------
         // WORLD RESET
-        // ---------------------------
         Arrays.fill(obj, null);
         Arrays.fill(npc, null);
         Arrays.fill(monster, null);
@@ -345,19 +343,15 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         aSetter.setNPC();
 
-        // ---------------------------
+
         // MAP RESET
-        // ---------------------------
         tileM.loadMap("/maps/gasstation.txt");
 
-        // ---------------------------
         // AUDIO RESET
-        // ---------------------------
         stopMusic();
         playMusic(1);
 
         // RESET ENDING FLAGS AND COUNTERS
-//        fadeOutTimer = 0;
         finishedCreditScreen = false;
         stopFading = false;
         ui.creditY = screenHeight + 50;
@@ -485,12 +479,10 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-
-
-
         // *** END GAME ***
         if(!hasntUnlockedYet)  {
 
+            stopChaseMusic = true;
             gameState = finishedGame;
 
             ui.j = 0f;
@@ -501,12 +493,7 @@ public class GamePanel extends JPanel implements Runnable {
             hasntUnlockedYet = true;
         }
 
-        if(finishedCreditScreen) {
-            restart();
-            gameState = titleState;
-        }
-
-
+        if(finishedCreditScreen) restart();
 
         if(gameState == initialDialogueState) {
 
@@ -525,7 +512,7 @@ public class GamePanel extends JPanel implements Runnable {
                         ui.dialogueIndex++;
                         ui.nextLine = 0;
                         ui.introDialogueY = tileSize * 2;
-                        playSE(16);
+                        playSE(4);
 
                     }
 
@@ -566,8 +553,13 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
 
-            if(mapOn) {player.freezePlayer = true;}
-            else {player.freezePlayer = false;}
+            if (mapOn) {
+                player.freezePlayer = true;
+                // dont allow it to pause during mapOn so it wont be confusing
+            } else {
+                player.freezePlayer = false;
+            }
+
 
 
             player.update(); // it's like a nested updates, when this main update method is called it calls the player update method so the player can be updated thus more organized clean code.
@@ -622,7 +614,7 @@ public class GamePanel extends JPanel implements Runnable {
                     // insert grabbing key SE here
                     playSE(2);
                 }
-                if(npc[ui.npcIndex] instanceof NPC_Melissa) { // works for first time
+                if(npc[ui.npcIndex] instanceof NPC_Ayden) { // works for first time
                     npc[ui.npcIndex].resetPosition = true;
                 }
             }
@@ -878,6 +870,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public void playMusic(int i) { // for music we use loop because it is obviously a continuous sound
+        System.out.println("Playing music: " + i);
         music.setFile(i);
         music.play();
         music.loop();

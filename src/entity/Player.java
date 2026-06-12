@@ -35,12 +35,10 @@ public class Player extends Entity{
     // Helpers, extra conditional handling for dialogues - call setDialogue() when transitioning to different map
         // For gas station map
     public final int cashierIndex = 0;
-    public final int gasStationNpcIndex = 1;
-    public final int melissaIndex = 2;
+    public final int aydenIndex = 1;
 
     // For Pinewood camp map
-    public final int aydenIndex = 0;
-    public final int mainOfficer = 1;
+    public final int mainOfficer = 0;
 
     // EXTRA BOOLEANS
     public boolean lightUpdated = false;
@@ -85,7 +83,7 @@ public class Player extends Entity{
 
     public void setDefaultValues() {
         setDefaultPositionGasStation();
-        speed = 20;
+        speed = 4;
         type = TYPE_PLAYER;
 
         // PLAYER STATUS
@@ -144,14 +142,11 @@ public class Player extends Entity{
             // for cashier
             playerDialogues[cashierIndex] = new String[]{"[pay]", "Yeah just started at Pinewood Camp", "I see..\nYou think it's cool to try to scare me??", "Thanks\n[exit]"};
             // for npc in gas station - replace gasStationNpcIndex npc with a different npc. its currently using ayden which is only for pinewood camp.
-            playerDialogues[gasStationNpcIndex] = new String[]{"What you up to?", "Nice, I like those pants man", "When did I ask.. LOL", "[exit]"};
-
-            playerDialogues[melissaIndex] = new String[]{"What's this about?", "Do you know any useful info?", "I haven't heard much about the killer..", "Eugh, that's creepy.. Well then."};
+            playerDialogues[aydenIndex] = new String[]{"What's this about?", "Do you know any useful info?", "I haven't heard much about the killer..", "Eugh, that's creepy.. Well then."};
         }
         else if(gp.currentMap == gp.PINEWOOD_CAMP) {
             // set different stuff - overlap the playerDialogues indexes with a new response for convos for ex (notice aydenIndex is = 0 like cashierIndex so we're just overidding:
-             playerDialogues[aydenIndex] = new String[] {"hey!", "where at?"};
-            playerDialogues[mainOfficer] = new String[] {"Im sorry...", "okay", "i see", "great", "got it",};
+            playerDialogues[mainOfficer] = new String[] {"I'm really sorry...", "Oh.. uh okay?", "Thank you!", "must've never heard of hackers..", "Alright, sounds good"};
 
         }
     }
@@ -224,7 +219,7 @@ public class Player extends Entity{
                 if(sprintCounter > 0) {
                     sprintCounter--;
                 }
-                speed = 20;
+                speed = 4;
             }
 
             // CHECK TILE COLLISION - collisionOn = false  will be set to true if in the collision methods above detect collision.
@@ -328,7 +323,7 @@ public class Player extends Entity{
             }
         }
         else if(npcIndex != 999) {
-                if(gp.npc[npcIndex] instanceof NPC_OfficerJames || gp.npc[npcIndex] instanceof NPC_Melissa ||
+                if(gp.npc[npcIndex] instanceof NPC_OfficerJames || gp.npc[npcIndex] instanceof NPC_Ayden ||
                    gp.npc[npcIndex] instanceof NPC_Ayden) {
                     if(gp.npc[npcIndex].interactable) {
                         interactableCollision = true;
@@ -350,7 +345,7 @@ public class Player extends Entity{
             switch(objectName) { // objectName is the one being evaluated at which must be one of the following below. e.g. Key, Door, Chest, Boots, etc
 
                 case "Key":
-                    gp.playSE(1);
+                    gp.playSE(2);
                     hasKey++;
                     gp.obj[i] = null;
                     gp.currentTask = TaskState.ESCAPE;
@@ -406,7 +401,7 @@ public class Player extends Entity{
                     if(gp.currentTask != TaskState.GET_ESCAPE_KEYS && gp.currentTask != TaskState.ESCAPE) {
                         exitMap = true;
                         gp.gameState = gp.transitionState;
-                        gp.playSE(7);
+                        gp.playSE(10);
                     }
                     break;
             }
@@ -584,8 +579,8 @@ public class Player extends Entity{
 
     // used to update player's 2d dialogue array & npc's dialogue. makes it memory efficient
     private void updateDialogue(int i) {
-        playerDialogues[mainOfficer] = new String[] {"alright cool", "where at", "sounds easy", "okay then"};
-        gp.npc[i].dialogues = new String[] {"Alright ma'am, you're all set-- here's your keys.", "And remember, you may not make it out alive....", "HAHAHA THE LOOK ON YOUR FACE! it's just a joke...", "Also, make sure to lock the main gate at 8:00pm\nthe keys are usually in one of the 4 tool sheds here..", ""};
+        playerDialogues[mainOfficer] = new String[] {"Thanks", "What do you mean about that??", "Ugh, I despise people like you...", "Thanks man, I don't mess with all that creepy stuff."};
+        gp.npc[i].dialogues = new String[] {"Alright ma'am, you're all set-- here's your keys.", "And remember, you may not make it out alive....", "HAHAHA THE LOOK ON YOUR FACE! it's just a joke...", "Also, here's a lamp.. it gets really dark at night. make sure to use\nit out there.", ""};
     }
 
 

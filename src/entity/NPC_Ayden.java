@@ -3,15 +3,12 @@ package entity;
 import main.GamePanel;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Random;
 
-public class NPC_Ayden extends Entity {
+public class NPC_Ayden extends Entity{
 
-    public NPC_Ayden(GamePanel gp){
+    public NPC_Ayden(GamePanel gp) {
         super(gp);
-
-        direction = "down";
+        direction = "up";
         speed = 2;
         name = "ayden";
         getNPCImage();
@@ -27,8 +24,8 @@ public class NPC_Ayden extends Entity {
 
         type = TYPE_NPC;
     }
-    public void getNPCImage() {
 
+    public void getNPCImage() {
         up1 = setup("/npc/ayden_up1", gp.tileSize, gp.tileSize);
         up2 = setup("/npc/ayden_up2", gp.tileSize, gp.tileSize);
         down1 = setup("/npc/ayden_down1", gp.tileSize, gp.tileSize);
@@ -37,39 +34,26 @@ public class NPC_Ayden extends Entity {
         left2 = setup("/npc/ayden_left2", gp.tileSize, gp.tileSize);
         right1 = setup("/npc/ayden_right1", gp.tileSize, gp.tileSize);
         right2 = setup("/npc/ayden_right2", gp.tileSize, gp.tileSize);
+
     }
 
     public void setDialogue() {
 
-        dialogues[0] = "Yo.";
-        dialogues[1] = "Nothin' much, grabbing some snacky snacks.";
-        dialogues[2] = "Thanks! I got them from coolJeans.com";
-        dialogues[3] = "Screw you!";
+        dialogues[0] = "Hmmm...";
+        dialogues[1] = "There's a missing person that was last seen within\na 10 mile radius from here..";
+        dialogues[2] = "Nah, but I wonder if this is tied to the killer that's on\nthe loose. Hopefully not.";
+        dialogues[3] = "It's a murderer who's been actively killing folks around\nthe area not too far out from here.";
+
     }
 
-    public void setAction() {
+    @Override
+    public void update() {
 
-        actionLockCounter++;
-        if(actionLockCounter == 120) {
-
-            Random random = new Random();
-            int i = random.nextInt(100) + 1; // get random number from 1-100. +1 because it picks from 0-99.
-
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
+        // Allows npc to continue looking at the missing persons poster after finishing convo with player
+        if(resetPosition == true) {
+            direction = "up";
+            resetPosition = false;
         }
-
     }
 
     public void speak() {
@@ -78,5 +62,4 @@ public class NPC_Ayden extends Entity {
         super.speak();
 
     }
-
 }

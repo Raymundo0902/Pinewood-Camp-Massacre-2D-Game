@@ -492,9 +492,6 @@ public class UI {
     }
 
 
-
-
-
     public void fadeOutScreen() {
 
         g2.setColor(Color.black);
@@ -519,24 +516,33 @@ public class UI {
 
         int spacing = 50;
 
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50f));
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40f));
 
         String[] credits = {
-                "YOUR GAME TITLE",
+                "PINEWOOD CAMP MASSACRE",
                 "",
                 "Programming",
-                "Your Name",
+                "Ray Portillo",
                 "",
                 "Art",
-                "Placeholder Artist",
+                "Grocery store assets by gurokitty (itch.io)",
                 "",
                 "Music",
-                "Placeholder Composer",
+                "Intro:",
+                "80's vhs bell ring - RA Music (uppbeat)",
+                "80's drums FL studio - EKVelika (Freesound)",
+                "80's Funk Pop Style PART A picking Git - FunkRick",
+                "Convenience store music:",
+                "Relaxed elevator lounge cafe music by tunetank (pixabay)",
+                "Chase music:",
+                "Monster heat - David Fesliyan",
+                "",
+                "Sound Effects:",
+                "soundeffects folder by RyiSnow",
                 "",
                 "Special Thanks",
-                "Family",
-                "Friends",
-                "The Player",
+                "RyiSnow",
+                "You guys :)",
                 "",
                 "Thank you for playing!"
         };
@@ -1387,7 +1393,7 @@ public class UI {
             g2.setColor(Color.white);
             g2.drawString(text, x, y);
 
-            String text2 = "Stalker";
+            String text2 = "Massacre";
             int x2 = getXforCenteredText(text2);
             int y2 = gp.tileSize * 4;
 
@@ -1491,7 +1497,7 @@ public class UI {
 
 
         // Skip dialogue
-        if(skipDialogue == true) {
+        if(skipDialogue) {
             gp.gameState = gp.playState;
             gp.se.stop();
             gp.stopMusic();
@@ -1586,8 +1592,6 @@ public class UI {
         int textX = dFrameX + 20;
         int textY = dFrameY + gp.tileSize;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20));
-        String interactItem = " 'G' to drop ";
-
 
         int itemIndex = getItemIndexOnSlot();
 
@@ -1601,8 +1605,6 @@ public class UI {
                 g2.drawString(line, textX, textY);
                 textY += 32; // MOVE DOWN TO THE NEXT LINE
             }
-
-            g2.drawString(interactItem, textX, textY);
 
         }
 
@@ -1819,20 +1821,21 @@ public class UI {
                                         // INDEX 0
         introDialogues = new String[] {"Hello. I decided it's finally time to open up\n" +
                                        "about a story that happened to me\n"+
-                                       "in 2003.\n\n" +
+                                       "in 2001.\n\n" +
                                        "When I was 19, I had wanted to get\n" +
                                        "away from home.. and I mean far away\n\n" +
                                        "So, I found a job as a park ranger in\n" +
-                                       "Pinewood Camp. This is where the story turns",
+                                       "Pinewood Camp.",
                                         // INDEX 1
-                                       "The first few weeks of work was\n" +
-                                       "exciting, I made some good\n" +
-                                       "friends and explored the wilderness.\n\n" +
-                                       "It was therapeutic coming from\n" +
-                                       "a chaotic home.\n" +
-                                       " It was good until a specific night shift.",
+                                       "Arriving there was nice scenery\n" +
+                                       "of trees, plants, and more.\n" +
+                                       "I actually made a friend that works\n\n" +
+                                       "there so I was excited to get to\n" +
+                                       "hangout with her.\n",
                                         // INDEX 2
-                                       "I will never forget about this moment"};
+                                       "I just wish I had never\n" +
+                                       "Made the decision to go there."
+                                     };
 
     }
 

@@ -37,9 +37,9 @@ public class NPC_OfficerJames extends Entity{
         dialogueSize++;
         dialogues[2] = "Anywho, welcome to Pinewood Camp!";
         dialogueSize++;
-        dialogues[3] = "Before giving you the keys to your cabin, sign in to the\ncomputer to the top left of you. Password is.. password..";
+        dialogues[3] = "Before giving you the keys to your cabin, sign in to the computer to\nthe top left of you. Password is.. password..";
         dialogueSize++;
-        dialogues[4] = "Once you login, you'll select the cabin available and\ni'll hand you the keys.";
+        dialogues[4] = "Once you login, you'll select the cabin available and i'll hand you the keys.";
         dialogueSize++;
     }
 

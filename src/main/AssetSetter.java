@@ -260,7 +260,7 @@ public class AssetSetter {
     }
 
     public void removeNPC() {
-        gp.npc[1] = null;
+        gp.npc[0] = null;
     }
 
     public void setNPC() {
@@ -273,30 +273,21 @@ public class AssetSetter {
             gp.npc[i].worldY = (59 * gp.tileSize) - 12;
             i++;
 
-            // a tester, use a different npc's and replace it with this one because melissa will be a npc from pinewood camp not gas station.
             gp.npc[i] = new NPC_Ayden(gp);
-            gp.npc[i].worldX = 44 * gp.tileSize;
-            gp.npc[i].worldY = 61 * gp.tileSize;
-            i++;
-
-            gp.npc[i] = new NPC_Melissa(gp);
             gp.npc[i].worldX = 47 * gp.tileSize;
             gp.npc[i].worldY = (56 * gp.tileSize) + 30;
             i++;
         }
 
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
-            // insert all the below entities in here
-
-            gp.npc[1] = new NPC_OfficerJames(gp);
-            gp.npc[1].worldX = (gp.tileSize*46) + 24;
-            gp.npc[1].worldY = gp.tileSize*62;
+            gp.npc[0] = new NPC_OfficerJames(gp);
+            gp.npc[0].worldX = (gp.tileSize*46) + 24;
+            gp.npc[0].worldY = gp.tileSize*62;
         }
     }
 
     public void spawnMon() {
 
-        // disabled for game testing
         if(gp.currentMap == gp.PINEWOOD_CAMP) {
 
             if(gp.currentTask == TaskState.INVESTIGATE) {
