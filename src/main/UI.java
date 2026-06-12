@@ -1495,7 +1495,7 @@ public class UI {
             gp.gameState = gp.playState;
             gp.se.stop();
             gp.stopMusic();
-            gp.playMusic(17);
+            gp.playMusic(11);
             gp.drawBlackScreen = true;
             skipDialogue = false;
         }

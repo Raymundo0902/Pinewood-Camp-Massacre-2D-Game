@@ -366,7 +366,7 @@ public class Player extends Entity{
                         currentItem.use(this);
 
                         currentItem = defaultCurrentItem; // SET BACK TO HANDS
-                        gp.playSE(4);
+                        gp.playSE(10);
                         gp.obj[i] = null; // DISAPPEAR FROM MAP
                         hasKey--; // MAKES IT WHERE I CANNOT OPEN DOORS IF hasKey < 1
                     }
@@ -383,14 +383,14 @@ public class Player extends Entity{
                             exitMap = true;
                             gp.gameState = gp.transitionState;
                             lockOfficeDoor = true;
-                            gp.playSE(4);
+                            gp.playSE(10);
                         }
                     }
                     // Player cabin exit
                     else if(gp.subMap == gp.SUB_PLAYER_CABIN) {
                         exitMap = true;
                         gp.gameState = gp.transitionState;
-                        gp.playSE(4);
+                        gp.playSE(10);
                     }
                     break;
 
@@ -406,7 +406,7 @@ public class Player extends Entity{
                     if(gp.currentTask != TaskState.GET_ESCAPE_KEYS && gp.currentTask != TaskState.ESCAPE) {
                         exitMap = true;
                         gp.gameState = gp.transitionState;
-                        gp.playSE(20);
+                        gp.playSE(7);
                     }
                     break;
             }
@@ -432,7 +432,7 @@ public class Player extends Entity{
                                         gp.obj[e].interactable = false;
                                     }
                                 }
-                                gp.playSE(18);
+                                gp.playSE(9);
                                 snacksCollected++;
                                 gotChips = true; // stops spam
                                 gp.ui.checkmarks[0][1] = gotChips;
@@ -443,7 +443,7 @@ public class Player extends Entity{
                     case "fruitBox2":
                         if(gp.currentTask == TaskState.GET_SNACKS) {
                             if(!gotBanana) {
-                                gp.playSE(18);
+                                gp.playSE(9);
                                 gp.obj[i].interactable = false;
                                 snacksCollected++;
                                 gotBanana = true;
@@ -455,7 +455,7 @@ public class Player extends Entity{
                     case "fridge1":
                         if(gp.currentTask == TaskState.GET_SNACKS) {
                             if(!gotDrink) {
-                                gp.playSE(18);
+                                gp.playSE(9);
                                 for(int e = 0; e < gp.obj.length; e++) {
                                     if(gp.obj[e] instanceof OBJ_Fridge) {
                                         gp.obj[e].interactable = false;
@@ -470,13 +470,13 @@ public class Player extends Entity{
                         break;
                     case "glassDoor":
                         if(gp.currentTask == TaskState.EXIT_STORE) {
-                            gp.playSE(12);
+                            gp.playSE(5);
                             exitMap = true;
                             gp.gameState = gp.transitionMapState;
                         }
                         break;
                     case "computer":
-                        gp.playSE(19);
+                        gp.playSE(3);
                         gp.gameState = gp.computerState;
                         break;
                     case "bed":
@@ -519,7 +519,7 @@ public class Player extends Entity{
                         gp.ui.npcIndex = i;
                         getResponseForNpc();
                         gp.npc[i].speak();
-                        gp.playSE(12);
+                        gp.playSE(5);
                         gp.gameState = gp.dialogueState;
                         break;
                     case "cashier":
@@ -532,7 +532,7 @@ public class Player extends Entity{
                             gp.ui.npcIndex = i;
                             getResponseForNpc();
                             gp.npc[i].speak();
-                            gp.playSE(12);
+                            gp.playSE(5);
                             gp.gameState = gp.dialogueState;
                             gp.currentTask = TaskState.EXIT_STORE;
                         }
@@ -542,7 +542,7 @@ public class Player extends Entity{
                             gp.ui.npcIndex = i;
                             getResponseForNpc();
                             gp.npc[i].speak();
-                            gp.playSE(12);
+                            gp.playSE(5);
                             gp.gameState = gp.dialogueState;
                             if(gp.currentTask == TaskState.CHECK_IN_FRONT_OFFICE) {
                                 gp.currentTask = TaskState.GO_TO_COMPUTER;
@@ -554,7 +554,7 @@ public class Player extends Entity{
                             gp.ui.npcIndex = i;
                             getResponseForNpc();
                             gp.npc[i].speak();
-                            gp.playSE(12);
+                            gp.playSE(5);
                             gp.gameState = gp.dialogueState;
 
                             gp.npc[i].interactable = false;

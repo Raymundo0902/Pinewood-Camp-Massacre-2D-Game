@@ -143,8 +143,8 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setObject();
         aSetter.setNPC();
         eHandler.setup();
-        // INSERT 80'S HORROR SOUND EFFECTS HERE DURING LOGO SHOWCASE
-        playMusic(26);
+        // GAME INTRO MUSIC
+        playMusic(0);
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
@@ -198,7 +198,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.pInnerDialogueIndex = 0;
 
         stopMusic();
-        playMusic(25);
+        playMusic(15);
     }
 
     // NEW GAME AGAIN
@@ -354,7 +354,7 @@ public class GamePanel extends JPanel implements Runnable {
         // AUDIO RESET
         // ---------------------------
         stopMusic();
-        playMusic(6);
+        playMusic(1);
 
         // RESET ENDING FLAGS AND COUNTERS
 //        fadeOutTimer = 0;
@@ -429,7 +429,6 @@ public class GamePanel extends JPanel implements Runnable {
             if(subMap == SUB_PLAYER_CABIN) {
                 player.setPosAfterCabin();
             } else if(subMap == SUB_FRONT_OFFICE) {
-//                playSE(22);  UNCOMMENT WHEN DONE WITH THE GAME
                 player.setPosAfterOffice();
                 aSetter.removeNPC();
             }
@@ -466,7 +465,7 @@ public class GamePanel extends JPanel implements Runnable {
             aSetter.setNPC();
             player.setDialogue();
             stopMusic();
-            playMusic(6);
+            playMusic(1);
             tileM.loadMap("/maps/frontoffice.txt");
             currentTask = TaskState.CHECK_IN_FRONT_OFFICE;
             subMap = SUB_FRONT_OFFICE;
@@ -482,7 +481,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == studioLogoState) {
             if(ui.logoTimer >= 1299) {
                 stopMusic();
-                playMusic(6);
+                playMusic(1);
             }
         }
 
@@ -512,7 +511,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(gameState == initialDialogueState) {
 
             if(canTypeSound) {
-                playSE(16);
+                playSE(4);
                 canTypeSound = false;
             }
 
@@ -537,7 +536,7 @@ public class GamePanel extends JPanel implements Runnable {
                         gameState = playState;
                         drawBlackScreen = true;
                         stopMusic();
-                        playMusic(17);
+                        playMusic(11);
                     }
                 }
             }
@@ -621,7 +620,7 @@ public class GamePanel extends JPanel implements Runnable {
                 if(npc[ui.npcIndex] instanceof NPC_OfficerJames && currentTask == TaskState.GO_TO_CABIN) {
 
                     // insert grabbing key SE here
-                    playSE(21);
+                    playSE(2);
                 }
                 if(npc[ui.npcIndex] instanceof NPC_Melissa) { // works for first time
                     npc[ui.npcIndex].resetPosition = true;
@@ -670,7 +669,7 @@ public class GamePanel extends JPanel implements Runnable {
                 if(knockingStartTime > 140) {
 
                     if(subMap == SUB_PLAYER_CABIN) {
-                        playMusic(25);
+                        playMusic(15);
                         knockingStarted = true;
                     }
                     else {
@@ -693,15 +692,15 @@ public class GamePanel extends JPanel implements Runnable {
         if(chaseMusic) {
             if(!isChaseMusicPlaying) {
                 stopMusic();
-                playMusic(23);
+                playMusic(13);
                 isChaseMusicPlaying = true;
             }
             chaseMusic = false;
         } else if(stopChaseMusic) {
             if(isChaseMusicPlaying) {
                 stopMusic();
-                playSE(24);
-                playMusic(6); // return back to normal forest ambience
+                playSE(14);
+                playMusic(1); // return back to normal forest ambience
                 isChaseMusicPlaying = false;
             }
             stopChaseMusic = false;

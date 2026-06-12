@@ -16,40 +16,25 @@ public class Sound {
 
     public Sound() {
 
-        soundURL[0] = getClass().getResource("/sound/BlueBoyAdventure.wav");
-        soundURL[1] = getClass().getResource("/sound/coin.wav");
-        soundURL[2] = getClass().getResource("/sound/fanfare.wav");
-        soundURL[3] = getClass().getResource("/sound/powerup.wav");
-        soundURL[4] = getClass().getResource("/sound/unlock.wav");
-        soundURL[5] = getClass().getResource("/sound/horrorAmbience.wav"); // make this for horror sound
-        soundURL[6] = getClass().getResource("/sound/nightAmbience.wav"); // forest night ambience se
-        soundURL[7] = getClass().getResource("/sound/arcadeSelect.wav");
-        soundURL[8] = getClass().getResource("/sound/themesong.wav"); // main menu music
-        soundURL[9] = getClass().getResource("/sound/rakeSwing.wav");
-        soundURL[10] = getClass().getResource("/sound/grassCut.wav");
-        soundURL[11] = getClass().getResource("/sound/receiveDamage.wav");
-        soundURL[12] = getClass().getResource("/sound/dialogueBox.wav");
-        soundURL[13] = getClass().getResource("/sound/cursorMovement.wav");
-        soundURL[14] = getClass().getResource("/sound/cursorSelect.wav");
-        soundURL[15] = getClass().getResource("/sound/pickupRock.wav");
-        soundURL[16] = getClass().getResource("/sound/typingSE.wav");
-        soundURL[17] = getClass().getResource("/sound/Elevatormusic.wav");
-        soundURL[18] = getClass().getResource("/sound/grabBag.wav");
-        soundURL[19] = getClass().getResource("/sound/osstartup.wav");
-        soundURL[20] = getClass().getResource("/sound/err.wav");
-        soundURL[21] = getClass().getResource("/sound/grabkeys.wav");
-        soundURL[22] = getClass().getResource("/sound/80s-scaryse.wav");
+        // NEW CONFIGURATION
 
-        // Monster chasing
-        soundURL[23] = getClass().getResource("/sound/monchase.wav");
-        soundURL[24] = getClass().getResource("/sound/monchaseclose.wav");
-
-        // Loud knocking
-        soundURL[25] = getClass().getResource("/sound/loudknocking.wav");
-
-        // GAME INTRO
-        soundURL[26] = getClass().getResource("/sound/gameintro.wav");
-
+        soundURL[0] = getClass().getResource("/sound/gameintro.wav");
+        soundURL[1] = getClass().getResource("/sound/nightAmbience.wav");
+        soundURL[2] = getClass().getResource("/sound/grabkeys.wav");
+        soundURL[3] = getClass().getResource("/sound/osstartup.wav");
+        soundURL[4] = getClass().getResource("/sound/typingSE.wav");
+        soundURL[5] = getClass().getResource("/sound/dialogueBox.wav");
+        soundURL[6] = getClass().getResource("/sound/arcadeSelect.wav");
+        soundURL[7] = getClass().getResource("/sound/err.wav");
+        soundURL[8] = getClass().getResource("/sound/receiveDamage.wav");
+        soundURL[9] = getClass().getResource("/sound/grabBag.wav");
+        soundURL[10] = getClass().getResource("/sound/unlock.wav");
+        soundURL[11] = getClass().getResource("/sound/Elevatormusic.wav");
+        soundURL[12] = getClass().getResource("/sound/cursorSelect.wav");
+        soundURL[13] = getClass().getResource("/sound/monchase.wav");
+        soundURL[14] = getClass().getResource("/sound/monchaseclose.wav");
+        soundURL[15] = getClass().getResource("/sound/loudknocking.wav");
+        soundURL[16] = getClass().getResource("/sound/cursorMovement.wav");
     }
 
     public void setFile(int i) {

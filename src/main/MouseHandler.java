@@ -5,11 +5,8 @@ import java.awt.event.MouseListener;
 
 public class MouseHandler implements MouseListener {
 
-    public boolean mouseClicked, mousePressed, mouseReleased, mouseEntered, clickOnPasswordBox, clickOnSignInBox, clickOnAssignButton;
+    public boolean mouseClicked, clickOnPasswordBox, clickOnSignInBox, clickOnAssignButton;
     GamePanel gp;
-
-    // Tools
-
 
     public MouseHandler(GamePanel gp) {
         this.gp = gp;
@@ -30,23 +27,23 @@ public class MouseHandler implements MouseListener {
                 clickOnPasswordBox = false;
                 clickOnSignInBox = false;
                 mouseClicked = true;
-                gp.playSE(14);
+                gp.playSE(12);
             } else if (gp.ui.exitButton.contains(adjustedX, adjustedY)) {
                 clickOnPasswordBox = false;
                 clickOnSignInBox = false;
                 mouseClicked = true;
                 gp.gameState = gp.playState;
-                gp.playSE(14);
+                gp.playSE(12);
             } else if (gp.ui.passwordButton.contains(adjustedX, adjustedY)) {
                 clickOnPasswordBox = true;
                 clickOnSignInBox = false;
                 mouseClicked = true;
-                gp.playSE(14);
+                gp.playSE(12);
             } else if (gp.ui.signInButton.contains(adjustedX, adjustedY)) {
                 clickOnPasswordBox = false;
                 clickOnSignInBox = true;
                 mouseClicked = true;
-                gp.playSE(14);
+                gp.playSE(12);
             } else if(gp.ui.assignButton.contains(adjustedX, adjustedY)) {
                 if(gp.ui.osSubState == 1) {
                     clickOnAssignButton = true;

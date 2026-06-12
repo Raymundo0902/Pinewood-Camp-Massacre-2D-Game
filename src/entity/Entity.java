@@ -247,7 +247,7 @@ public class Entity {
 
         if(!gp.player.invincible) {
             // GIVE PLAYER DAMAGE
-            gp.playSE(11);
+            gp.playSE(8);
             gp.player.curLife -= 1;
             gp.player.invincible = true;
         }

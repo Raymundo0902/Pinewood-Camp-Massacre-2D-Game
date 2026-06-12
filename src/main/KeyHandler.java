@@ -77,7 +77,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
             if (code == KeyEvent.VK_ENTER) {
                 // NEW GAME
                 if (gp.ui.commandNum == 0) {
-                    gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
+                    gp.playSE(6); // SOUND EFFECT WHEN PRESSING ENTER
 
                     gp.stopMusic();
                     gp.gameState = gp.initialDialogueState;
@@ -85,7 +85,7 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
                 }
                 // CONTROLS
                 if (gp.ui.commandNum == 1) {
-                    gp.playSE(7); // SOUND EFFECT WHEN PRESSING ENTER
+                    gp.playSE(6); // SOUND EFFECT WHEN PRESSING ENTER
                     gp.ui.titleScreenState = 1;
                     gp.ui.commandNum = 0;
                 }
@@ -286,32 +286,32 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         }
         if(code == KeyEvent.VK_W) {
             if(gp.ui.slotRow != 0) {
-                gp.playSE(13);
+                gp.playSE(16);
                 gp.ui.slotRow--;
             }
         }
         if(code == KeyEvent.VK_A) {
             if(gp.ui.slotCol != 0) {
-                gp.playSE(13);
+                gp.playSE(16);
                 gp.ui.slotCol--;
             }
         }
         if(code == KeyEvent.VK_S) {
             if(gp.ui.slotRow != 2) {
-                gp.playSE(13);
+                gp.playSE(16);
                 gp.ui.slotRow++;
             }
         }
         if(code == KeyEvent.VK_D) {
             if(gp.ui.slotCol != 3) {
-                gp.playSE(13);
+                gp.playSE(16);
                 gp.ui.slotCol++;
             }
         }
 
         if(code == KeyEvent.VK_ENTER) { // SELECTING AN ITEM FROM INVENTORY - NEED TO FIND A BETTER WAY TO HANDLE THE IF STATEMENTS
                                         // INSTEAD OF JUST USING ITEM POSITION. PERHAPS A BOOLEAN ENABLED IN FOR LOOP WHERE INVENTORY IS DRAWN?
-            gp.playSE(14);
+            gp.playSE(12);
             gp.player.selectItem();
         }
 
