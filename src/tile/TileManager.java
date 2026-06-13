@@ -153,8 +153,17 @@ public class TileManager {
 
     public void loadMap(String filePath) {
 
+
+        System.out.println("Trying to load: " + filePath);
+
         try{
             InputStream is = getClass().getResourceAsStream(filePath); // loads the txt file
+
+            if(is == null) {
+                System.out.println("MAP FILE IS NULL: " + filePath);
+                return;
+            }
+
             BufferedReader br = new BufferedReader(new InputStreamReader(is)); // prepared to read and will read one line of text when .readLine() is called
 
             int col = 0;
@@ -181,6 +190,7 @@ public class TileManager {
             br.close();
 
         }catch(Exception e) {
+            e.printStackTrace();
 
         }
     }
@@ -217,20 +227,22 @@ public class TileManager {
                 worldRow++;
             }
         }
-        if(drawPath == true) {
-            g2.setColor(new Color(12, 200, 200, 70));
 
-            for(int i = 0; i < gp.pFinder.pathList.size(); i++) {
-                // WORLD POSITION
-                int worldX = gp.pFinder.pathList.get(i).col * gp.tileSize;
-                int worldY = gp.pFinder.pathList.get(i).row * gp.tileSize;
-                // SCREEN POSITION
-                int screenX = worldX - gp.player.worldX + gp.player.screenX;
-                int screenY = worldY - gp.player.worldY + gp.player.screenY;
-
-                g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
-            }
-        }
+        // DEBUG PATHFINDING
+//        if(drawPath == true) {
+//            g2.setColor(new Color(12, 200, 200, 70));
+//
+//            for(int i = 0; i < gp.pFinder.pathList.size(); i++) {
+//                // WORLD POSITION
+//                int worldX = gp.pFinder.pathList.get(i).col * gp.tileSize;
+//                int worldY = gp.pFinder.pathList.get(i).row * gp.tileSize;
+//                // SCREEN POSITION
+//                int screenX = worldX - gp.player.worldX + gp.player.screenX;
+//                int screenY = worldY - gp.player.worldY + gp.player.screenY;
+//
+//                g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
+//            }
+//        }
 
     }
 }

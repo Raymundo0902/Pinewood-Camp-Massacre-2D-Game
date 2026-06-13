@@ -345,7 +345,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         // MAP RESET
-        tileM.loadMap("/maps/gasstation.txt");
+        tileM.loadMap("/maps/gasStation.txt");
 
         // AUDIO RESET
         stopMusic();
