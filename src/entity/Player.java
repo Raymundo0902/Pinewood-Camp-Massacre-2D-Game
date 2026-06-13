@@ -178,7 +178,7 @@ public class Player extends Entity{
         right2 = setup("/girl_player/sally_right2", gp.tileSize, gp.tileSize);
     }
 
-    public void update() { // this method gets called 60x per second
+    public void update() {
 
         // without this, player will move without stopping && enterPressed here is for the purpose of checking npc collision when we just press enter key for dialogue without having to simultaneously move to npc and press enter.
         if (keyH.upPressed || keyH.downPressed ||
@@ -304,9 +304,6 @@ public class Player extends Entity{
         if(curLife <= 0) gp.gameState = gp.gameOverState;
     }
 
-    public void takeDamage() {
-        curLife--;
-    }
 
     // Update boolean - set to true if colliding with npc or objects below.
     public void objectInteractable(int objIndex, int npcIndex) {
@@ -315,16 +312,15 @@ public class Player extends Entity{
             if (gp.obj[objIndex] instanceof OBJ_Fridge || gp.obj[objIndex] instanceof OBJ_CabinDesk ||
                 gp.obj[objIndex] instanceof OBJ_SnackShelf || gp.obj[objIndex] instanceof OBJ_GlassDoor ||
                 gp.obj[objIndex] instanceof OBJ_Bed || gp.obj[objIndex] instanceof OBJ_FruitBox2 ||
-                gp.obj[objIndex] instanceof OBJ_Chest || gp.obj[objIndex] instanceof OBJ_Desk ||
-                gp.obj[objIndex] instanceof OBJ_CheckoutCounter || (gp.obj[objIndex] instanceof OBJ_Gate && gp.obj[objIndex].gateWithLock)) {
+                gp.obj[objIndex] instanceof OBJ_Desk || gp.obj[objIndex] instanceof OBJ_CheckoutCounter ||
+                (gp.obj[objIndex] instanceof OBJ_Gate && gp.obj[objIndex].gateWithLock)) {
                 if(gp.obj[objIndex].interactable) {
                     interactableCollision = true;
                 }
             }
         }
         else if(npcIndex != 999) {
-                if(gp.npc[npcIndex] instanceof NPC_OfficerJames || gp.npc[npcIndex] instanceof NPC_Ayden ||
-                   gp.npc[npcIndex] instanceof NPC_Ayden) {
+                if(gp.npc[npcIndex] instanceof NPC_OfficerJames || gp.npc[npcIndex] instanceof NPC_Ayden) {
                     if(gp.npc[npcIndex].interactable) {
                         interactableCollision = true;
                     }
@@ -488,9 +484,11 @@ public class Player extends Entity{
                         gp.gameState = gp.logBookState;
                         break;
                     case "gate2":
-                        if(hasKey > 0) {
-                            hasKey--;
-                            unlockedGate = true;
+                        if(gp.currentTask == TaskState.ESCAPE) {
+                            if (hasKey > 0) {
+                                hasKey--;
+                                unlockedGate = true;
+                            }
                         }
                         break;
                 }
@@ -510,7 +508,6 @@ public class Player extends Entity{
                 switch(name) {
 
                     case "ayden":
-                    case "melissa":
                         gp.ui.npcIndex = i;
                         getResponseForNpc();
                         gp.npc[i].speak();
@@ -669,8 +666,8 @@ public class Player extends Entity{
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         // COLLISION HITBOX VISUAL (DEBUG)
-        g2.setColor(Color.red);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+//        g2.setColor(Color.red);
+//        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
     }
 }

@@ -78,8 +78,6 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
                 // NEW GAME
                 if (gp.ui.commandNum == 0) {
                     gp.playSE(6); // SOUND EFFECT WHEN PRESSING ENTER
-
-//                    gp.stopMusic();
                     gp.gameState = gp.initialDialogueState;
                 }
                 // CONTROLS

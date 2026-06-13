@@ -17,7 +17,6 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica;
-    Font gameStudioFont;
     public boolean messageOn = false;
     public String message = "";
     public String currentDialogue = "";
@@ -433,7 +432,6 @@ public class UI {
         int thickness = 2;
         int spacing = 14;
 
-        // ==========================
         // TOP FULL-WIDTH LINES
         // ==========================
         for(int i = 0; i < 3; i++) {
@@ -442,14 +440,13 @@ public class UI {
             drawGlowLine(g2, 0, y, gp.screenWidth, thickness, lineColor);
         }
 
-        // ==========================
         // SPECIAL PIXELTEC LINE
         // Ends at the P and stretches left
         // ==========================
         drawGlowLine(g2, 0, y1 - 15, x1, thickness, lineColor
         );
 
-        // ==========================
+
         // BOTTOM FULL-WIDTH LINES
         // ==========================
         for(int i = 0; i < 3; i++) {
@@ -459,7 +456,6 @@ public class UI {
             drawGlowLine(g2, 0, y, gp.screenWidth, thickness, lineColor);
         }
 
-        // ==========================
         // SPECIAL STUDIOS LINE
         // Starts at the S and stretches right
         // ==========================

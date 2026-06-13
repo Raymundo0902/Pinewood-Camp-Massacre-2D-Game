@@ -646,7 +646,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        if(gameState == pausedState) {}
+        if(gameState == pausedState) {
+            if(mapOn) mapOn = false;
+        }
 
         handleMusic();
     }

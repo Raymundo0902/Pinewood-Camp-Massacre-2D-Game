@@ -60,8 +60,8 @@ public class OBJ_Gate extends Entity {
             g2.drawImage(down1, screenX, screenY, null);
 
             // COLLISION VISUALS (DEBUG)
-            g2.setColor(Color.red);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+//            g2.setColor(Color.red);
+//            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
         }
 
     }

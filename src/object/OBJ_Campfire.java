@@ -61,8 +61,8 @@ public class OBJ_Campfire extends Entity {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
             // COLLISION HITBOX VISUAL (DEBUG)
-            g2.setColor(Color.red);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+//            g2.setColor(Color.red);
+//            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
 
         }
     }
