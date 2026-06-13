@@ -1,6 +1,7 @@
 package main;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -11,7 +12,15 @@ public class Main {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // lets the window properly close when user clicks the "x" button
         window.setResizable(false); // false = cannot resize the window. stays one size
-        window.setTitle("Pinewood Camp Stalker");
+        window.setTitle("Pinewood Camp Massacre");
+
+        try {
+            ImageIcon icon = new ImageIcon(Main.class.getResource("/images/pinewoodassociates.png"));
+            Image logoImage = icon.getImage();
+            window.setIconImage(logoImage); // Sets the window/taskbar logo
+        } catch (Exception e) {
+            System.out.println("Logo image could not be loaded: " + e.getMessage());
+        }
 
         GamePanel gamePanel = new GamePanel(); // GamePanel object is created on the heap
         window.add(gamePanel);
