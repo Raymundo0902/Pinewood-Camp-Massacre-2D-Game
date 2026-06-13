@@ -211,17 +211,16 @@ public class KeyHandler implements KeyListener { // must add the key: typed, pre
         }
 
         // DEBUG
-        if(code == KeyEvent.VK_T) {
-            if(checkDebugText == false) {
-                checkDebugText = true;
-            }
-            else if(checkDebugText == true) {
-                checkDebugText = false;
-            }
-        }
+//        if(code == KeyEvent.VK_T) {
+//            if(checkDebugText == false) {
+//                checkDebugText = true;
+//            }
+//            else if(checkDebugText == true) {
+//                checkDebugText = false;
+//            }
+//        }
 
 
-        // DELETE NOW THAT ITS NOT GONNA BE USED!!
         // FAST REAL-TIME MAP EDIT
         if(code == KeyEvent.VK_B) {
 
